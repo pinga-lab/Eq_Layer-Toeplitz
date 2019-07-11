@@ -1,0 +1,386 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.2.22)  30 APR 2019 14:55
+entering extended mode
+**./toeplitz_manuscript_rev.tex
+(toeplitz_manuscript_rev.tex
+LaTeX2e <2016/02/01>
+Babel <3.9n> and hyphenation patterns for 69 languages loaded.
+(geophysics.cls
+Document Class: geophysics 2007/02/14 v3.0 Geophysics paper
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\ifthen.sty"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\size11.clo"
+File: size11.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (seg.sty
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2016/01/03 v1.0q Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 95.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\tools\verbatim.sty"
+Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks15
+\verbatim@line=\toks16
+\verbatim@in@stream=\read1
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\moreverb\moreverb.sty"
+Package: moreverb 2008/06/03 v2.3a `more' verbatim facilities
+\tab@position=\count88
+\tab@size=\count89
+\listing@line=\count90
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\rotating\rotating.sty"
+Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
+\c@r@tfl@t=\count91
+\rotFPtop=\skip43
+\rotFPbot=\skip44
+\rot@float@box=\box26
+\rot@mess@toks=\toks17
+)
+\c@@plots=\count92
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\subfig\subfig.sty"
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2016/02/02 v3.3-136 Customizing captions (AR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2016/02/02 v1.7-136 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen105
+\captionmargin@=\dimen106
+\captionwidth=\dimen107
+\caption@tempdima=\dimen108
+\caption@indent=\dimen109
+\caption@parindent=\dimen110
+\caption@hangindent=\dimen111
+)
+\c@ContinuedFloat=\count93
+Package caption Info: rotating package is loaded.
+)
+\c@KVtest=\count94
+\sf@farskip=\skip45
+\sf@captopadj=\dimen112
+\sf@capskip=\skip46
+\sf@nearskip=\skip47
+\c@subfigure=\count95
+\c@subfigure@save=\count96
+\c@lofdepth=\count97
+\c@subtable=\count98
+\c@subtable@save=\count99
+\c@lotdepth=\count100
+\sf@top=\skip48
+\sf@bottom=\skip49
+)
+\c@sub@fig=\count101
+\c@@tabls=\count102
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\natbib\natbib.sty"
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip50
+\bibsep=\skip51
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count103
+)
+LaTeX Info: Redefining \refname on input line 328.
+\seg@abstract=\box27
+\c@@append=\count104
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
+\lst@mode=\count105
+\lst@gtempboxa=\box28
+\lst@token=\toks18
+\lst@length=\count106
+\lst@currlwidth=\dimen113
+\lst@column=\count107
+\lst@pos=\count108
+\lst@lostspace=\dimen114
+\lst@width=\dimen115
+\lst@newlines=\count109
+\lst@lineno=\count110
+\lst@maxwidth=\dimen116
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count111
+\lst@skipnumbers=\count112
+\lst@framebox=\box29
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+
+(toeplitz_manuscript_rev.aux)
+\openout1 = `toeplitz_manuscript_rev.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count113
+\scratchdimen=\dimen117
+\scratchbox=\box30
+\nofMPsegments=\count114
+\nofMParguments=\count115
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count116
+\MPscratchDim=\dimen118
+\MPnumerator=\count117
+\makeMPintoPDFobject=\count118
+\everyMPtoPDFconversion=\toks20
+) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty"
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grfext.sty"
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvdefinekeys.sty"
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvsetkeys.sty"
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: End \AtBeginDocument code.
+\c@lstlisting=\count119
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 30.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 30.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 30.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 30.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 30.
+ [1
+
+{C:/Users/diego_000/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2] [3]
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) [4]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <9> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 154.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 156.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 156.
+ [5]
+[6] [7] [8] [9] [10] [11] <./Fig/float.png, id=52, 722.7pt x 433.62pt>
+File: ./Fig/float.png Graphic file (type png)
+
+<use ./Fig/float.png>
+Package pdftex.def Info: ./Fig/float.png used on input line 420.
+(pdftex.def)             Requested size: 433.62pt x 260.17401pt.
+ [12 <./Fig/float.png>]
+<./Fig/time_comparison.png, id=58, 722.7pt x 433.62pt>
+File: ./Fig/time_comparison.png Graphic file (type png)
+
+<use ./Fig/time_comparison.png>
+Package pdftex.def Info: ./Fig/time_comparison.png used on input line 426.
+(pdftex.def)             Requested size: 284.52756pt x 170.71892pt.
+
+<./Fig/time_bccb.png, id=59, 722.7pt x 433.62pt>
+File: ./Fig/time_bccb.png Graphic file (type png)
+ <use ./Fig/time_bccb.png>
+Package pdftex.def Info: ./Fig/time_bccb.png used on input line 431.
+(pdftex.def)             Requested size: 284.52756pt x 170.71892pt.
+
+[13 <./Fig/time_comparison.png> <./Fig/time_bccb.png>]
+<./Fig/synthetic_data.png, id=66, 433.62pt x 433.62pt>
+File: ./Fig/synthetic_data.png Graphic file (type png)
+
+<use ./Fig/synthetic_data.png>
+Package pdftex.def Info: ./Fig/synthetic_data.png used on input line 437.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [14 <./Fig/synthetic_data.png>]
+<./Fig/classic_fast.png, id=71, 397.485pt x 1084.05pt>
+File: ./Fig/classic_fast.png Graphic file (type png)
+
+<use ./Fig/classic_fast.png>
+Package pdftex.def Info: ./Fig/classic_fast.png used on input line 443.
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+ [15 <./Fig/classic_fast.png>]
+<./Fig/bccb_fast.png, id=76, 397.485pt x 1084.05pt>
+File: ./Fig/bccb_fast.png Graphic file (type png)
+ <use ./Fig/bccb_fast.png>
+Package pdftex.def Info: ./Fig/bccb_fast.png used on input line 449.
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+
+[16 <./Fig/bccb_fast.png>]
+<./Fig/delta_comparison.png, id=81, 433.62pt x 433.62pt>
+File: ./Fig/delta_comparison.png Graphic file (type png)
+
+<use ./Fig/delta_comparison.png>
+Package pdftex.def Info: ./Fig/delta_comparison.png used on input line 455.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [17 <./Fig/delta_comparison.png>]
+<./Fig/delta_rho.png, id=86, 433.62pt x 433.62pt>
+File: ./Fig/delta_rho.png Graphic file (type png)
+ <use ./Fig/delta_rho.png>
+Package pdftex.def Info: ./Fig/delta_rho.png used on input line 461.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+
+[18 <./Fig/delta_rho.png>]
+<./Fig/upward_comparison.png, id=91, 397.485pt x 1084.05pt>
+File: ./Fig/upward_comparison.png Graphic file (type png)
+
+<use ./Fig/upward_comparison.png>
+Package pdftex.def Info: ./Fig/upward_comparison.png used on input line 467.
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+ [19 <./Fig/upward_comparison.png>]
+<./Fig/downward_comparison.png, id=97, 397.485pt x 1084.05pt>
+File: ./Fig/downward_comparison.png Graphic file (type png)
+
+<use ./Fig/downward_comparison.png>
+Package pdftex.def Info: ./Fig/downward_comparison.png used on input line 473.
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+ [20 <./Fig/downward_comparison.png>]
+<./Fig/carajas_real_data.png, id=102, 433.62pt x 433.62pt>
+File: ./Fig/carajas_real_data.png Graphic file (type png)
+
+<use ./Fig/carajas_real_data.png>
+Package pdftex.def Info: ./Fig/carajas_real_data.png used on input line 479.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [21 <./Fig/carajas_real_data.png>]
+<./Fig/carajas_gz_predito.png, id=107, 397.485pt x 1084.05pt>
+File: ./Fig/carajas_gz_predito.png Graphic file (type png)
+
+<use ./Fig/carajas_gz_predito.png>
+Package pdftex.def Info: ./Fig/carajas_gz_predito.png used on input line 485.
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+ [22 <./Fig/carajas_gz_predito.png>]
+<./Fig/up2000_carajas_500x500.png, id=112, 433.62pt x 433.62pt>
+File: ./Fig/up2000_carajas_500x500.png Graphic file (type png)
+
+<use ./Fig/up2000_carajas_500x500.png>
+Package pdftex.def Info: ./Fig/up2000_carajas_500x500.png used on input line 49
+1.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [23 <./Fig/up2000_carajas_500x500.png>]
+Overfull \hbox (0.98923pt too wide) in paragraph at lines 511--532
+ [] 
+ []
+
+[24] (toeplitz_manuscript_rev.bbl [25]) [26] (toeplitz_manuscript_rev.aux) ) 
+Here is how much of TeX's memory you used:
+ 4972 strings out of 493622
+ 75669 string characters out of 3143632
+ 160067 words of memory out of 3000000
+ 8307 multiletter control sequences out of 15000+200000
+ 10095 words of font info for 35 fonts, out of 3000000 for 9000
+ 1025 hyphenation exceptions out of 8191
+ 53i,10n,47p,1600b,1100s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:
+/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx8.pfb><C:/Program Files/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+mi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><
+C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmsy9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmti10.pfb>
+Output written on toeplitz_manuscript_rev.pdf (26 pages, 4228504 bytes).
+PDF statistics:
+ 177 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+

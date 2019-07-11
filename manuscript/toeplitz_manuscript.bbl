@@ -1,0 +1,146 @@
+\begin{thebibliography}{}
+\itemsep0pt
+
+\bibitem[Barnes and Lumley, 2011]{barnes-lumley2011}
+Barnes, G., and J. Lumley,  2011, Processing gravity gradient data: GEOPHYSICS,
+  {\bf 76}, I33--I47.
+
+\bibitem[Boggs and Dransfield, 2004]{boggs-dransfield2004}
+Boggs, D., and M. Dransfield,  2004, Analysis of errors in gravity derived from
+  the falcon airborne gravity gradiometer: ASEG-PESA Airborne Gravity 2004
+  Workshop, Geoscience Australia Record, 135--141.
+
+\bibitem[Brigham and Brigham, 1988]{brigham1988fast}
+Brigham, E.~O., and E.~O. Brigham,  1988, The fast fourier transform and its
+  applications: prentice Hall Englewood Cliffs, NJ, {\bf 448}.
+
+\bibitem[Chan et~al., 1999]{chan1999cosine}
+Chan, R.~H., T.~F. Chan, and C.-K. Wong,  1999, Cosine transform based
+  preconditioners for total variation deblurring: IEEE transactions on Image
+  Processing, {\bf 8}, 1472--1478.
+
+\bibitem[Chan and Jin, 2007]{chan2007introduction}
+Chan, R. H.-F., and X.-Q. Jin,  2007, An introduction to iterative toeplitz
+  solvers: SIAM, {\bf 5}.
+
+\bibitem[Cordell, 1992]{cordell1992}
+Cordell, L.,  1992, A scattered equivalent-source method for interpolation and
+  gridding of potential-field data in three dimensions: GEOPHYSICS, {\bf 57},
+  629--636.
+
+\bibitem[Dampney, 1969]{dampney1969equivalent}
+Dampney, C.,  1969, The equivalent source technique: Geophysics, {\bf 34},
+  39--53.
+
+\bibitem[Emilia, 1973]{emilia1973}
+Emilia, D.~A.,  1973, Equivalent sources used as an analytic base for
+  processing total magnetic field profiles: GEOPHYSICS, {\bf 38}, 339--348.
+
+\bibitem[Golub and Loan, 2013]{golub2013}
+Golub, G.~H., and C.~F.~V. Loan,  2013, Matrix computations (johns hopkins
+  studies in the mathematical sciences), 4 ed.: Johns Hopkins University Press.
+
+\bibitem[Grenander, 1984]{grenander1984szeg}
+Grenander, U.,  1984, Szeg o g.(1958), toeplitz forms and their applications:
+  California Monographs in Mathematical Sciences. University of California
+  Press, Berkeley, CA.
+
+\bibitem[Gusp\'{i} and Novara, 2009]{guspi-novara2009}
+Gusp\'{i}, F., and I. Novara,  2009, Reduction to the pole and transformations
+  of scattered magnetic data using newtonian equivalent sources: GEOPHYSICS,
+  {\bf 74}, L67--L73.
+
+\bibitem[Hansen and Miyazaki, 1984]{hansen-miyazaki1984}
+Hansen, R.~O., and Y. Miyazaki,  1984, Continuation of potential fields between
+  arbitrary surfaces: GEOPHYSICS, {\bf 49}, 787--795.
+
+\bibitem[Heiskanen and Moritz, 1967]{heiskanen1967physical}
+Heiskanen, W.~A., and H. Moritz,  1967, Physical geodesy: Bulletin
+  G{\'e}od{\'e}sique (1946-1975), {\bf 86}, 491--492.
+
+\bibitem[Henderson, 1960]{henderson1960comprehensive}
+Henderson, R.~G.,  1960, A comprehensive system of automatic computation in
+  magnetic and gravity interpretation: Geophysics, {\bf 25}, 569--585.
+
+\bibitem[Henderson, 1970]{henderson1970validity}
+--------, 1970, On the validity of the use of the upward continuation integral
+  for total magnetic intensity data: Geophysics, {\bf 35}, 916--919.
+
+\bibitem[Jin, 2003]{jin2003developments}
+Jin, X.-Q.,  2003, Developments and applications of block toeplitz iterative
+  solvers: Springer Science \& Business Media, {\bf 2}.
+
+\bibitem[Kellogg, 1929]{kellogg1929}
+Kellogg, O.~D.,  1929, Foundations of potential theory: Frederick Ungar
+  Publishing Company.
+
+\bibitem[Le\~{a}o and Silva, 1989]{leao-silva1989}
+Le\~{a}o, J. W.~D., and J.~B.~C. Silva,  1989, Discrete linear transformations
+  of potential field data: GEOPHYSICS, {\bf 54}, 497--507.
+
+\bibitem[Levinson, 1946]{levinson1946wiener}
+Levinson, N.,  1946, The wiener (root mean square) error criterion in filter
+  design and prediction: Journal of Mathematics and Physics, {\bf 25},
+  261--278.
+
+\bibitem[Li and Oldenburg, 2010]{li-oldenburg2010}
+Li, Y., and D.~W. Oldenburg,  2010, Rapid construction of equivalent sources
+  using wavelets: GEOPHYSICS, {\bf 75}, L51--L59.
+
+\bibitem[Lin et~al., 2003]{lin2003strang}
+Lin, F., X. Jin, and S. Lei,  2003, Strang-type preconditioners for solving
+  linear systems from delay differential equations: BIT Numerical Mathematics,
+  {\bf 43}, 139--152.
+
+\bibitem[Mendon\c{c}a and Silva, 1994]{mendonca-silva1994}
+Mendon\c{c}a, C.~A., and J.~B.~C. Silva,  1994, The equivalent data concept
+  applied to the interpolation of potential field data: GEOPHYSICS, {\bf 59},
+  722--732.
+
+\bibitem[Oliveira{ }Jr. et~al., 2013]{oliveirajr-etal2013}
+Oliveira{ }Jr., V.~C., V.~C.~F. Barbosa, and L. Uieda,  2013, Polynomial
+  equivalent layer: GEOPHYSICS, {\bf 78}, G1--G13.
+
+\bibitem[Olkin, 1986]{olkin1986linear}
+Olkin, J.~A.,  1986, Linear and nonlinear deconvolution problems: PhD thesis,
+  Rice University.
+
+\bibitem[Press et~al., 2007]{press2007numerical}
+Press, W.~H., S.~A. Teukolsky, W.~T. Vetterling, and B.~P. Flannery,  2007,
+  Numerical recipes 3rd edition: The art of scientific computing: Cambridge
+  university press.
+
+\bibitem[Silva, 1986]{silva1986}
+Silva, J. B.~C.,  1986, Reduction to the pole as an inverse problem and its
+  application to low-latitude anomalies: GEOPHYSICS, {\bf 51}, 369--382.
+
+\bibitem[Siqueira et~al., 2017]{siqueira2017fast}
+Siqueira, F.~C., V.~C. Oliveira~Jr, and V.~C. Barbosa,  2017, Fast iterative
+  equivalent-layer technique for gravity data processing: A method grounded on
+  excess mass constraint: Geophysics, {\bf 82}, G57--G69.
+
+\bibitem[Strang and Aarikka, 1986]{strang1986introduction}
+Strang, G., and K. Aarikka,  1986, Introduction to applied mathematics:
+  Wellesley-Cambridge Press Wellesley, MA, {\bf 16}.
+
+\bibitem[Trench, 1964]{trench1964algorithm}
+Trench, W.~F.,  1964, An algorithm for the inversion of finite toeplitz
+  matrices: Journal of the Society for Industrial and Applied Mathematics, {\bf
+  12}, 515--522.
+
+\bibitem[Wray and Green, 1994]{wray1994calculation}
+Wray, J., and G.~G. Green,  1994, Calculation of the volterra kernels of
+  non-linear dynamic systems using an artificial neural network: Biological
+  Cybernetics, {\bf 71}, 187--195.
+
+\bibitem[Zhang and Wong, 2015]{zhang2015bttb}
+Zhang, Y., and Y.~S. Wong,  2015, Bttb-based numerical schemes for
+  three-dimensional gravity field inversion: Geophysical Journal International,
+  {\bf 203}, 243--256.
+
+\bibitem[Zhang et~al., 2016]{zhang2016bttb}
+Zhang, Y., Y.~S. Wong, and Y. Lin,  2016, Bttb--rrcg method for downward
+  continuation of potential field data: Journal of applied Geophysics, {\bf
+  126}, 74--86.
+
+\end{thebibliography}

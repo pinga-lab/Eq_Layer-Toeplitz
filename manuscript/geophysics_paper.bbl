@@ -1,0 +1,20 @@
+\newcommand{\SortNoop}[1]{}
+\begin{thebibliography}{}
+\itemsep0pt
+
+\bibitem[{\SortNoop{Cerveny}}\v{C}erven\'{y}, 2000]{Cerveny}
+{\SortNoop{Cerveny}}\v{C}erven\'{y}, V.,  2000, Seismic ray method: Cambridge
+  University Press.
+
+\bibitem[Forgues, 1996]{forgues96}
+Forgues, E.,  1996, Inversion linearis\'ee multi-param\`etres via la th\'eorie
+  des rais: PhD thesis, Institut Fran\c{c}ais du P\'etrole - University Paris
+  VII.
+
+\bibitem[Kopka and Daly, 2004]{kopka}
+Kopka, H., and P.~W. Daly,  2004, Guide to {\LaTeX}: Addison-Wesley.
+
+\bibitem[Lamport, 1994]{lamport}
+Lamport, L.,  1994, {\LaTeX: A} document preparation system: Addison-Wesley.
+
+\end{thebibliography}
