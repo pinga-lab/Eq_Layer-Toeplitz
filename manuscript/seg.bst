@@ -439,7 +439,7 @@ FUNCTION {format.doi.access}
   if$
   doi empty$
     { }
-    {  "; \verb+http://dx.doi.org/" * doi * "+" * }
+    {  "; \verb+https://doi.org/" * doi * "+" * }
   if$
 }
 
