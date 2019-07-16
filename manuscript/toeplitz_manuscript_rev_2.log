@@ -1,0 +1,399 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930 64-bit) (preloaded format=pdflatex 2019.1.7)  1 JUL 2019 21:34
+entering extended mode
+**./toeplitz_manuscript_rev_2.tex
+(toeplitz_manuscript_rev_2.tex
+LaTeX2e <2018-12-01>
+(geophysics.cls
+Document Class: geophysics 2007/02/14 v3.0 Geophysics paper
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen.sty"
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size11.clo"
+File: size11.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (seg.sty
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifpdf.s
+ty"
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphicx.
+sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.st
+y"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics.
+sty"
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.sty"
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\graph
+ics.cfg"
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\pdfte
+x.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\verbatim.sty
+"
+Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks15
+\verbatim@line=\toks16
+\verbatim@in@stream=\read1
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/moreverb\moreverb.
+sty"
+Package: moreverb 2008/06/03 v2.3a `more' verbatim facilities
+\tab@position=\count88
+\tab@size=\count89
+\listing@line=\count90
+))
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\rotating.
+sty"
+Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
+\c@r@tfl@t=\count91
+\rotFPtop=\skip43
+\rotFPbot=\skip44
+\rot@float@box=\box27
+\rot@mess@toks=\toks17
+)
+\c@@plots=\count92
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/subfig\subfig.sty"
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\caption.st
+y"
+Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/caption\caption3.s
+ty"
+Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+\captionmargin=\dimen105
+\captionmargin@=\dimen106
+\captionwidth=\dimen107
+\caption@tempdima=\dimen108
+\caption@indent=\dimen109
+\caption@parindent=\dimen110
+\caption@hangindent=\dimen111
+)
+\c@caption@flags=\count93
+\c@ContinuedFloat=\count94
+Package caption Info: rotating package is loaded.
+)
+\c@KVtest=\count95
+\sf@farskip=\skip45
+\sf@captopadj=\dimen112
+\sf@capskip=\skip46
+\sf@nearskip=\skip47
+\c@subfigure=\count96
+\c@subfigure@save=\count97
+\c@lofdepth=\count98
+\c@subtable=\count99
+\c@subtable@save=\count100
+\c@lotdepth=\count101
+\sf@top=\skip48
+\sf@bottom=\skip49
+)
+\c@sub@fig=\count102
+\c@@tabls=\count103
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/natbib\natbib.sty"
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip50
+\bibsep=\skip51
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count104
+)
+LaTeX Info: Redefining \refname on input line 328.
+\seg@abstract=\box28
+\c@@append=\count105
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\listings.
+sty"
+\lst@mode=\count106
+\lst@gtempboxa=\box29
+\lst@token=\toks18
+\lst@length=\count107
+\lst@currlwidth=\dimen113
+\lst@column=\count108
+\lst@pos=\count109
+\lst@lostspace=\dimen114
+\lst@width=\dimen115
+\lst@newlines=\count110
+\lst@lineno=\count111
+\lst@maxwidth=\dimen116
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\lstmisc.s
+ty"
+File: lstmisc.sty 2019/02/27 1.8b (Carsten Heinz)
+\c@lstnumber=\count112
+\lst@skipnumbers=\count113
+\lst@framebox=\box30
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/listings\listings.
+cfg"
+File: listings.cfg 2019/02/27 1.8b listings configuration
+))
+Package: listings 2019/02/27 1.8b (Carsten Heinz)
+ (toeplitz_manuscript_rev_2.aux)
+\openout1 = `toeplitz_manuscript_rev_2.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/context/base\supp-pdf.mk
+ii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count114
+\scratchdimen=\dimen117
+\scratchbox=\box31
+\nofMPsegments=\count115
+\nofMParguments=\count116
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count117
+\MPscratchDim=\dimen118
+\MPnumerator=\count118
+\makeMPintoPDFobject=\count119
+\everyMPtoPDFconversion=\toks20
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\epstopdf-
+base.sty"
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\infware
+rr.sty"
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\grfext.st
+y"
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvdefin
+ekeys.sty"
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ltxcmds
+.sty"
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\kvoptions
+.sty"
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\kvsetke
+ys.sty"
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\etexcmd
+s.sty"
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifluate
+x.sty"
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+))))
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\pdftexc
+mds.sty"
+Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: End \AtBeginDocument code.
+\c@lstlisting=\count120
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 30.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 30.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 30.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 30.
+
+("C:\Users\diego\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 30.
+
+Overfull \hbox (3.92126pt too wide) in paragraph at lines 40--41
+[]\OT1/cmr/m/n/10.95 Many pre-vi-ous works have used the equiv-a-lent layer as 
+a pro-cess-ing tech-nique of potential-
+ []
+
+[1
+
+{C:/Users/diego/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+[3]
+Overfull \hbox (2.41956pt too wide) in paragraph at lines 118--119
+[]\OT1/cmr/m/n/10.95 The func-tion $\OML/cmm/m/it/10.95 []\OT1/cmr/m/n/10.95 (
+\OT1/cmr/bx/n/10.95 p\OT1/cmr/m/n/10.95 )$ is the reg-u-lar-iza-tion func-tion,
+ for ex-am-ple, the zeroth-order Tikhonov
+ []
+
+[4] [5] [6] [7] [8] [9] [10] [11] [12]
+<./Fig/float.png, id=52, 722.7pt x 433.62pt>
+File: ./Fig/float.png Graphic file (type png)
+<use ./Fig/float.png>
+Package pdftex.def Info: ./Fig/float.png  used on input line 481.
+(pdftex.def)             Requested size: 433.62pt x 260.17401pt.
+ [13 <./Fig/float.png>]
+<./Fig/time_comparison.png, id=59, 722.7pt x 433.62pt>
+File: ./Fig/time_comparison.png Graphic file (type png)
+<use ./Fig/time_comparison.png>
+Package pdftex.def Info: ./Fig/time_comparison.png  used on input line 487.
+(pdftex.def)             Requested size: 284.52756pt x 170.71892pt.
+<./Fig/time_bccb.png, id=60, 722.7pt x 433.62pt>
+File: ./Fig/time_bccb.png Graphic file (type png)
+<use ./Fig/time_bccb.png>
+Package pdftex.def Info: ./Fig/time_bccb.png  used on input line 492.
+(pdftex.def)             Requested size: 284.52756pt x 170.71892pt.
+ [14 <./Fig/time_comparison.png> <./Fig/time_bccb.png>]
+<./Fig/synthetic_data.png, id=66, 433.62pt x 433.62pt>
+File: ./Fig/synthetic_data.png Graphic file (type png)
+<use ./Fig/synthetic_data.png>
+Package pdftex.def Info: ./Fig/synthetic_data.png  used on input line 498.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [15 <./Fig/synthetic_data.png>]
+<./Fig/classic_fast_val.png, id=71, 397.485pt x 722.7pt>
+File: ./Fig/classic_fast_val.png Graphic file (type png)
+<use ./Fig/classic_fast_val.png>
+Package pdftex.def Info: ./Fig/classic_fast_val.png  used on input line 504.
+(pdftex.def)             Requested size: 227.62204pt x 413.8731pt.
+ [16 <./Fig/classic_fast_val.png>]
+<./Fig/bccb_fast_val.png, id=76, 397.485pt x 722.7pt>
+File: ./Fig/bccb_fast_val.png Graphic file (type png)
+<use ./Fig/bccb_fast_val.png>
+Package pdftex.def Info: ./Fig/bccb_fast_val.png  used on input line 510.
+(pdftex.def)             Requested size: 227.62204pt x 413.8731pt.
+ [17 <./Fig/bccb_fast_val.png>]
+<./Fig/delta_comparison.png, id=81, 433.62pt x 433.62pt>
+File: ./Fig/delta_comparison.png Graphic file (type png)
+<use ./Fig/delta_comparison.png>
+Package pdftex.def Info: ./Fig/delta_comparison.png  used on input line 516.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [18 <./Fig/delta_comparison.png>]
+<./Fig/delta_rho.png, id=86, 433.62pt x 433.62pt>
+File: ./Fig/delta_rho.png Graphic file (type png)
+<use ./Fig/delta_rho.png>
+Package pdftex.def Info: ./Fig/delta_rho.png  used on input line 522.
+(pdftex.def)             Requested size: 384.1122pt x 384.13412pt.
+ [19 <./Fig/delta_rho.png>]
+<./Fig/upward_comparison.png, id=92, 397.485pt x 1084.05pt>
+File: ./Fig/upward_comparison.png Graphic file (type png)
+<use ./Fig/upward_comparison.png>
+Package pdftex.def Info: ./Fig/upward_comparison.png  used on input line 528.
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+ [20 <./Fig/upward_comparison.png>]
+<./Fig/downward_comparison.png, id=97, 397.485pt x 1084.05pt>
+File: ./Fig/downward_comparison.png Graphic file (type png)
+<use ./Fig/downward_comparison.png>
+Package pdftex.def Info: ./Fig/downward_comparison.png  used on input line 534.
+
+(pdftex.def)             Requested size: 142.26378pt x 387.99155pt.
+
+[21 <./Fig/downward_comparison.png>]
+<./Fig/carajas_real_data.png, id=102, 722.7pt x 542.025pt>
+File: ./Fig/carajas_real_data.png Graphic file (type png)
+<use ./Fig/carajas_real_data.png>
+Package pdftex.def Info: ./Fig/carajas_real_data.png  used on input line 540.
+(pdftex.def)             Requested size: 384.1122pt x 288.0824pt.
+ [22 <./Fig/carajas_real_data.png>]
+<./Fig/carajas_gz_predito_val.png, id=107, 505.89pt x 722.7pt>
+File: ./Fig/carajas_gz_predito_val.png Graphic file (type png)
+<use ./Fig/carajas_gz_predito_val.png>
+Package pdftex.def Info: ./Fig/carajas_gz_predito_val.png  used on input line 5
+46.
+(pdftex.def)             Requested size: 227.62204pt x 325.17891pt.
+
+[23 <./Fig/carajas_gz_predito_val.png>]
+<./Fig/up2000_carajas_500x500.png, id=112, 578.16pt x 433.62pt>
+File: ./Fig/up2000_carajas_500x500.png Graphic file (type png)
+<use ./Fig/up2000_carajas_500x500.png>
+Package pdftex.def Info: ./Fig/up2000_carajas_500x500.png  used on input line 5
+52.
+(pdftex.def)             Requested size: 384.1122pt x 288.0824pt.
+ [24 <./Fig/up2000_carajas_500x500.png>]
+Overfull \hbox (0.98923pt too wide) in paragraph at lines 572--593
+ [] 
+ []
+
+[25] (toeplitz_manuscript_rev_2.bbl [26]) [27] (toeplitz_manuscript_rev_2.aux) 
+) 
+Here is how much of TeX's memory you used:
+ 4909 strings out of 492946
+ 77236 string characters out of 3126267
+ 149148 words of memory out of 3000000
+ 8752 multiletter control sequences out of 15000+200000
+ 8566 words of font info for 30 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 53i,10n,47p,2201b,323s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Users/diego/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmbx10.pfb><C:/Users/diego/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmbx12.pfb><C:/Users/diego/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmbx8.pfb><C:/Users/diego/AppData/Local/Programs/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/diego/AppData/Loc
+al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/dieg
+o/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C
+:/Users/diego/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
+cmmi8.pfb><C:/Users/diego/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmr10.pfb><C:/Users/diego/AppData/Local/Programs/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmr6.pfb><C:/Users/diego/AppData/Local/Programs/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/diego/AppData/Local/Progr
+ams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/diego/AppDat
+a/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/
+diego/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.p
+fb>
+Output written on toeplitz_manuscript_rev_2.pdf (27 pages, 3956005 bytes).
+PDF statistics:
+ 168 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+
