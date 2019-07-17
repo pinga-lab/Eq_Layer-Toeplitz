@@ -126,26 +126,37 @@ a_{ij}= \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
-Let us consider that $z_{i} = z_{1}$, $\forall \, i$, where 
-$z_{1} < z_{0}$. As a consequence, the elements $a_{ij}$ (equation \ref{eq:aij}) may be conveniently rewritten as follows:
+Consider that the observed data are located on an $N_{x} \times N_{y}$ regular grid of
+points regularly spaced from $\Delta x$ and $\Delta y$ along the $x$ and $y$ directions,
+respectively, on a horizontal plane defined by the constant vertical coordinate $z_{1} < z_{0}$. 
+
+As a consequence, the $i$-th observation point $(x_{i}, y_{i}, z_{1})$, $i = 1, \dots, N = N_{x} N_{y}$, 
+is equivalent to a point $(x_{k}, y_{l}, z_{1})$ defined in terms of the \textit{grid coordinates}
+\begin{equation}
+x_{k} = x_{1} + (k - 1) \, \Delta x \: , \quad k = 1, \dots, N_{x} \: ,
+\label{eq:xk}
+\end{equation}
+and
+\begin{equation}
+y_{l} = y_{1} + (l - 1) \, \Delta y \: , \quad l = 1, \dots, N_{y} \: .
+\label{eq:yl}
+\end{equation}
+Similarly, the point $(x_{j}, y_{j}, z_{0})$ associated with the $j$-th equivalent source,
+$j = 1, \dots, N = N_{x}N_{y}$, is equivalent to a point $(x_{k}, y_{l}, z_{1})$ defined
+in term of \textit{grid indices} $k$ and $l$.
+
+
+The elements $a_{ij}$ (equation \ref{eq:aij}) may be conveniently rewritten as follows:
+
 \begin{equation}
 a_{ij} = \frac{G \, \Delta z \, 10^{-5}}
 {\left( r_{ij}^{2} + \Delta z^{2} \right)^{\frac{3}{2}}} \: ,
 \label{eq:aij-regular-grids}
 \end{equation}
-where 
-$r_{ij}^{2} = \left( x_{i} - x_{j} \right)^{2} + 
+where $r_{ij}^{2} = \left( x_{i} - x_{j} \right)^{2} + 
 \left( y_{i} - y_{j} \right)^{2}$ and $\Delta z = z_{0} - z_{1}$. 
 
-\begin{equation}
-x_{k} = x_{1} + (k - 1) \, \Delta x \: , \quad k = 1, \dots, Nx_{x}
-\label{eq:xk}
-\end{equation}
 
-\begin{equation}
-y_{l} = y_{1} + (l - 1) \, \Delta y \: , \quad l = 1, \dots, N_{y} \: .
-\label{eq:yl}
-\end{equation}
 
 \subsubsection{$x$-oriented grids}
 
@@ -192,6 +203,54 @@ k = \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil
 l = i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{x} - N_{x} \quad .
 \label{eq:l-y-oriented}
 \end{equation}
+
+\begin{equation}
+x_{i} = x_{1} + \left( \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil - 1 \right) \Delta x
+\label{eq:xi-y-oriented}
+\end{equation}
+
+\begin{equation}
+y_{i} = y_{1} + \left( i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{y} - N_{y} - 1 \right) \Delta y \quad .
+\label{eq:yi-y-oriented}
+\end{equation}
+
+\subsubsection{Elements $a_{ij}$ for $x$- and $y$-oriented grids}
+
+\begin{equation}
+a_{ij}^{(\gamma)} = \frac{G \, \Delta z \, 10^{-5}}
+{\left[ (\alpha_{ij}^{(\gamma)} \, \Delta x)^{2} + (\beta_{ij}^{(\gamma)} \, \Delta y)^{2} + \Delta z^{2} \right]^{\frac{3}{2}}} \: ,
+\quad \gamma = x, y \: ,
+\label{eq:aij-gamma}
+\end{equation}
+
+\begin{equation}
+\alpha_{ij}^{(\gamma)} = \begin{cases}
+(i - j) - \Delta_{ij}^{(x)} \, N_{x} \: , \quad & \gamma = x \\
+\Delta_{ij}^{(y)} \: , \quad & \gamma = y
+\end{cases}
+\label{eq:alphaij-gamma}
+\end{equation}
+
+\begin{equation}
+\beta_{ij}^{(\gamma)} = \begin{cases}
+\Delta_{ij}^{(x)} \: , \quad & \gamma = x \\
+(i - j) - \Delta_{ij}^{(y)} \, N_{y} \: , \quad & \gamma = y
+\end{cases}
+\label{eq:betaij-gamma}
+\end{equation}
+
+\begin{equation}
+\Delta_{ij}^{(\gamma)} = \begin{cases}
+\Big\lceil \frac{i}{N_{x}} \Big\rceil - \Big\lceil \frac{j}{N_{x}} \Big\rceil \: , \quad & \gamma = x \\
+\Big\lceil \frac{i}{N_{y}} \Big\rceil - \Big\lceil \frac{j}{N_{y}} \Big\rceil \: , \quad & \gamma = y
+\end{cases}
+\label{eq:deltaij-gamma}
+\end{equation}
+
+Function $\Delta_{ij}^{(\gamma)}$ (equation \ref{eq:deltaij-gamma}) represents the element $ij$ of
+an $N \times N$ Block Toeplitz matrix \citep[][ p. 217]{golub-vanloan2013}.
+Each block is formed by $N_{\gamma} \times N_{\gamma}$ elements and the whole matrix
+is composed of $(N/N_{\gamma} \times N/N_{\gamma})$ blocks.
 
 
 %\subsection{BCCB matrix-vector product}
