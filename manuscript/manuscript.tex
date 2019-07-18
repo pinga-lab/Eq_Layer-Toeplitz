@@ -129,7 +129,6 @@ a_{ij}= \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
 Consider that the observed data are located on an $N_{x} \times N_{y}$ regular grid of
 points regularly spaced from $\Delta x$ and $\Delta y$ along the $x$ and $y$ directions,
 respectively, on a horizontal plane defined by the constant vertical coordinate $z_{1} < z_{0}$. 
-
 As a consequence, the $i$-th observation point $(x_{i}, y_{i}, z_{1})$, $i = 1, \dots, N = N_{x} N_{y}$, 
 is equivalent to a point $(x_{k}, y_{l}, z_{1})$ defined in terms of the \textit{grid coordinates}
 \begin{equation}
@@ -143,94 +142,106 @@ y_{l} = y_{1} + (l - 1) \, \Delta y \: , \quad l = 1, \dots, N_{y} \: .
 \end{equation}
 Similarly, the point $(x_{j}, y_{j}, z_{0})$ associated with the $j$-th equivalent source,
 $j = 1, \dots, N = N_{x}N_{y}$, is equivalent to a point $(x_{k}, y_{l}, z_{1})$ defined
-in term of \textit{grid indices} $k$ and $l$.
-
-
-The elements $a_{ij}$ (equation \ref{eq:aij}) may be conveniently rewritten as follows:
-
-\begin{equation}
-a_{ij} = \frac{G \, \Delta z \, 10^{-5}}
-{\left( r_{ij}^{2} + \Delta z^{2} \right)^{\frac{3}{2}}} \: ,
-\label{eq:aij-regular-grids}
-\end{equation}
-where $r_{ij}^{2} = \left( x_{i} - x_{j} \right)^{2} + 
-\left( y_{i} - y_{j} \right)^{2}$ and $\Delta z = z_{0} - z_{1}$. 
-
+in term of the indices $k$ and $l$.
+For convenience, we denote the indices $k$ and $l$ as \textit{grid indices}.
+Notice that the elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
+$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
+coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$.
+Based on this, we denote these coordinates as \textit{matrix coordinates} and their 
+indices $i$ and $j$ as \textit{matrix indices}.
+In order to investigate the structure of this matrix for the case in which the data are disposed at a 
+regular grid on a horizontal plane, we define the elements $a_{ij}$ in terms of
+the grid indices and grid coordinates.
 
 
 \subsubsection{$x$-oriented grids}
 
+Consider the case in which the regular grid of observation points is oriented along the
+$x$-axis (Figure XXa). For convenience, we denote grids like this as $x$-\textit{oriented grids}.
+For these grids, the relationship between the matrix indices and grid indices are defined
+by the following integer functions:
 \begin{equation}
-i = (l - 1) \, N_{x} + k \quad ,
+i(k, l) = (l - 1) \, N_{x} + k \quad ,
 \label{eq:i-x-oriented}
 \end{equation}
-
 \begin{equation}
-l = \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil
+l(i) = \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil
 \label{eq:l-x-oriented}
 \end{equation}
-
+and
 \begin{equation}
-k = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} - N_{x} \quad ,
+k(i)  = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} - N_{x} \quad ,
 \label{eq:k-x-oriented}
 \end{equation}
-
+where $\lceil \cdot \rceil$ denotes the ceiling function \citep[][ p. 67]{graham-etal1994}.
+These integer functions are defined in the same way for the matrix index $j$.
+They show that a given pair of grid indices $(k, l)$ generates a unique matrix index $i$ (or $j$)
+and also that a given matrix index $i$ (or $j$) generates a unique grid index $k$ or $l$.
+By using these integer functions, the matrix coordinates $x_{i}$ and $y_{i}$ (or $x_{j}$ and $y_{j}$)
+can be defined as follows:
 \begin{equation}
 x_{i} = x_{1} + \left( i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} - 
 N_{x} - 1 \right) \Delta x
 \label{eq:xi-x-oriented}
 \end{equation}
-
+and
 \begin{equation}
 y_{i} = y_{1} + \left( \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil - 1 \right)
-\Delta y \quad .
+\Delta y \quad ,
 \label{eq:yi-x-oriented}
 \end{equation}
+where $i \equiv i(k, l)$ (equation \ref{eq:i-x-oriented}).
 
 \subsubsection{$y$-oriented grids}
 
+Consider the case in which the regular grid of observation points is oriented along the
+$y$-axis (Figure XXb). For convenience, we denote grids like this as $y$-\textit{oriented grids}.
+Similarly to $x$-oriented grids, we have the following integer functions defining the relationship
+between the grid and matrix indices:
 \begin{equation}
-i = (k - 1) \, N_{y} + l \quad ,
+i(k, l) = (k - 1) \, N_{y} + l \quad ,
 \label{eq:i-y-oriented}
 \end{equation}
-
 \begin{equation}
-k = \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil
+k(i) = \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil
 \label{eq:k-y-oriented}
 \end{equation}
-
+and
 \begin{equation}
-l = i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{x} - N_{x} \quad .
+l(i) = i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{y} - N_{y} \quad .
 \label{eq:l-y-oriented}
 \end{equation}
-
+By using these integer functions, we can write the matrix coordinates as follows:
 \begin{equation}
 x_{i} = x_{1} + \left( \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil - 1 \right) \Delta x
 \label{eq:xi-y-oriented}
 \end{equation}
-
+and
 \begin{equation}
-y_{i} = y_{1} + \left( i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{y} - N_{y} - 1 \right) \Delta y \quad .
+y_{i} = y_{1} + \left( i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{y} - N_{y} - 1 \right) \Delta y \quad ,
 \label{eq:yi-y-oriented}
 \end{equation}
+where $i \equiv i(k, l)$ (equation \ref{eq:i-y-oriented}).
 
 \subsubsection{Elements $a_{ij}$ for $x$- and $y$-oriented grids}
 
+By using the expressions defining $x_{i}$ (equations \ref{eq:xi-x-oriented} and \ref{eq:xi-y-oriented}) and 
+$y_{i}$ (equations \ref{eq:yi-x-oriented} and \ref{eq:yi-y-oriented}), 
+the elements $a_{ij}$ (equation \ref{eq:aij}) can be rewritten as follows:
 \begin{equation}
 a_{ij}^{(\gamma)} = \frac{G \, \Delta z \, 10^{-5}}
 {\left[ (\alpha_{ij}^{(\gamma)} \, \Delta x)^{2} + (\beta_{ij}^{(\gamma)} \, \Delta y)^{2} + \Delta z^{2} \right]^{\frac{3}{2}}} \: ,
 \quad \gamma = x, y \: ,
 \label{eq:aij-gamma}
 \end{equation}
-
+where $\Delta z = z_{0} - z_{1}$,
 \begin{equation}
 \alpha_{ij}^{(\gamma)} = \begin{cases}
 (i - j) - \Delta_{ij}^{(x)} \, N_{x} \: , \quad & \gamma = x \\
 \Delta_{ij}^{(y)} \: , \quad & \gamma = y
-\end{cases}
+\end{cases} \quad ,
 \label{eq:alphaij-gamma}
 \end{equation}
-
 \begin{equation}
 \beta_{ij}^{(\gamma)} = \begin{cases}
 \Delta_{ij}^{(x)} \: , \quad & \gamma = x \\
@@ -238,19 +249,87 @@ a_{ij}^{(\gamma)} = \frac{G \, \Delta z \, 10^{-5}}
 \end{cases}
 \label{eq:betaij-gamma}
 \end{equation}
-
+and
 \begin{equation}
 \Delta_{ij}^{(\gamma)} = \begin{cases}
 \Big\lceil \frac{i}{N_{x}} \Big\rceil - \Big\lceil \frac{j}{N_{x}} \Big\rceil \: , \quad & \gamma = x \\
 \Big\lceil \frac{i}{N_{y}} \Big\rceil - \Big\lceil \frac{j}{N_{y}} \Big\rceil \: , \quad & \gamma = y
-\end{cases}
+\end{cases} \quad .
 \label{eq:deltaij-gamma}
 \end{equation}
+These integer functions are defined in terms of the matrix indices $i$ and $j$, but they can also be
+written in terms of the grid indices $k$ and $l$. This can be easily made by properly using 
+equations \ref{eq:i-x-oriented}, \ref{eq:l-x-oriented}, \ref{eq:i-y-oriented} and \ref{eq:k-y-oriented}
+to convert the matrix indices into grid indices.
 
-Function $\Delta_{ij}^{(\gamma)}$ (equation \ref{eq:deltaij-gamma}) represents the element $ij$ of
-an $N \times N$ Block Toeplitz matrix \citep[][ p. 217]{golub-vanloan2013}.
-Each block is formed by $N_{\gamma} \times N_{\gamma}$ elements and the whole matrix
-is composed of $(N/N_{\gamma} \times N/N_{\gamma})$ blocks.
+The structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), for the case in which
+its elements are defined by $a_{ij}^{(\gamma)}$ (equation \ref{eq:aij-gamma}), is defined by 
+the integer functions $\alpha_{ij}^{(\gamma)}$ (equation \ref{eq:alphaij-gamma}),
+$\beta_{ij}^{(\gamma)}$ (equation \ref{eq:betaij-gamma}) and $\Delta_{ij}^{(\gamma)}$
+(equation \ref{eq:deltaij-gamma}).
+
+The function $\Delta_{ij}^{(\gamma)}$ represents the element $ij$ of
+an $N \times N$ Skew-Symmetric Block Toeplitz matrix 
+\citep[][ p. 161 and 217]{golub-vanloan2013}.
+The whole matrix is composed of $(N/N_{\gamma} \times N/N_{\gamma})$ blocks,
+where each block is formed by $N_{\gamma} \times N_{\gamma}$ elements, $\gamma = x, y$.
+Since our this matrix is Block Toeplitz, it is convenient to label the 
+blocks lying at the same diagonal by an index $m$,
+$m = -N/N_{\gamma} + 1, \dots, N/N_{\gamma} - 1$. 
+The blocks lying at the main diagonal have index
+$m = 0$. Those above the main diagonal have indices $m = 1$, $m = 2$ and so on.
+Similarly, those below the main diagonal have indices $m = -1$, $m = -2$ and so on.
+This notation is also convenient to represent the skew symmetry. 
+The elements forming a given block $m$ above the main diagonal are equal to those 
+forming another block $-m$ below the main diagonal, but with the opposed signal.
+All elements forming a given block $m$ have the same constant value.
+For $\gamma = x$, this value is defined as the difference between the 
+grid indices $l \equiv l(i)$ (equation \ref{eq:l-x-oriented}) associated with the matrix 
+indices $i$ and $j$. This can be seen by comparing equations $\ref{eq:l-x-oriented}$
+and \ref{eq:deltaij-gamma}. Similarly, equations \ref{eq:k-y-oriented}
+and \ref{eq:deltaij-gamma} show that the constant value within each block,
+for $\gamma = y$, is defined as the difference between the grid indices 
+$k \equiv k(i)$ (equation \ref{eq:k-y-oriented}).
+The blocks lying at the main diagonal ($m = 0$) are matrices formed by zeros because 
+all their elements have the same grid indices $l \equiv l(i)$ (equation \ref{eq:l-x-oriented})
+and $k \equiv k(i)$ (equation \ref{eq:k-y-oriented}).
+
+Another import term defining the integer functions $\alpha_{ij}^{(\gamma)}$ 
+(equation \ref{eq:alphaij-gamma}) and $\beta_{ij}^{(\gamma)}$ (equation \ref{eq:betaij-gamma})
+is the difference $(i - j)$ between the matrix indices. This difference represents the 
+element $ij$ of an $N \times N$ Skew-Symmetric Toeplitz matrix 
+\citep[][ p. 161 and 208]{golub-vanloan2013}.
+This can be easily verified by noting that $(i - j) = [(i+1) - (j+1)]$, which defines
+the Toeplitz pattern, and $(i - j) = -(j - i)$, which defines the skew-symmetric pattern.
+
+Notice that the integer functions $\alpha_{ij}^{(\gamma)}$ 
+(equation \ref{eq:alphaij-gamma}) and $\beta_{ij}^{(\gamma)}$ (equation \ref{eq:betaij-gamma})
+are combinations of the function $\Delta_{ij}^{(\gamma)}$ (equation \ref{eq:deltaij-gamma})
+and the difference $(i - j)$. 
+It means that $\alpha_{ij}^{(\gamma)}$ and 
+$\beta_{ij}^{(\gamma)}$ represent the elements $ij$ of two $N \times N$ matrices
+defined by the combination of a Skew-Symmetric Block Toeplitz matrix and
+a Skew-Symmetric Toeplitz matrix.
+The structure of these resultant matrices is better visualized by rewriting
+$\alpha_{ij}^{(\gamma)}$ and $\beta_{ij}^{(\gamma)}$ in terms of grid indices.
+
+For $\gamma = x$, the matrix formed by $\alpha_{ij}^{(x)}$ is a Block 
+matrix composed of $N_{y} \times N_{y}$ blocks, all of them equal to each other.
+The elements forming this matrix are defined by the difference between the 
+grid indices $k \equiv k(i)$ (equation \ref{eq:k-x-oriented}) associated with
+the matrix indices $i$ and $j$. In this case, the matrix formed by 
+$\beta_{ij}^{(x)}$ is the Skew-Symmetric Block Toeplitz matrix
+formed by the integer function $\Delta_{ij}^{(x)}$. 
+
+For $\gamma = y$, the matrix formed by $\alpha_{ij}^{(y)}$ is the 
+Skew-Symmetric Block Toeplitz matrix
+formed by the integer function $\Delta_{ij}^{(y)}$. 
+The matrix formed by $\beta_{ij}^{(x)}$ is a Block 
+matrix composed of $N_{x} \times N_{x}$ blocks, all of them equal to each other.
+The elements forming this matrix are defined by the difference between the 
+grid indices $l \equiv l(i)$ (equation \ref{eq:l-y-oriented}) associated with
+the matrix indices $i$ and $j$. 
+
 
 
 %\subsection{BCCB matrix-vector product}
