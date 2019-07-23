@@ -142,23 +142,37 @@ y_{l} = y_{1} + (l - 1) \, \Delta y \: , \quad l = 1, \dots, N_{y} \: .
 \end{equation}
 Similarly, the point $(x_{j}, y_{j}, z_{0})$ associated with the $j$-th equivalent source,
 $j = 1, \dots, N = N_{x}N_{y}$, is equivalent to a point $(x_{k}, y_{l}, z_{1})$ defined
-in term of the indices $k$ and $l$.
+in terms of another pair of grid coordinates $x_{k}$ and $y_{l}$.
 For convenience, we denote the indices $k$ and $l$ as \textit{grid indices}.
+
 Notice that the elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
 $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
 coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$.
-Based on this, we denote these coordinates as \textit{matrix coordinates} and their 
+Based on this, we designate these coordinates as \textit{matrix coordinates} and the 
 indices $i$ and $j$ as \textit{matrix indices}.
-In order to investigate the structure of this matrix for the case in which the data are disposed at a 
-regular grid on a horizontal plane, we define the elements $a_{ij}$ in terms of
-the grid indices and grid coordinates.
+
+Equations \ref{eq:xk} and \ref{eq:yl} show that the grid coordinates $x_{k}$ and $y_{l}$ 
+are functions of the grid indices $k$ and $l$.
+
+In the same way, the matrix coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$ are defined
+in terms of the matrix indices $i$ and $j$. However, the relationship between these
+quantities are more complicated than those for grid coordinates 
+(equations \ref{eq:xk} and \ref{eq:yl}).
+
+In order to investigate the structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}),
+it is necessary to define equations 
+
+for the case in which the data 
+are disposed at a regular grid on a horizontal plane, we analyze the relationship 
+between the matrix and grid coordinates/indices.
 
 
 \subsubsection{$x$-oriented grids}
 
+
 Consider the case in which the regular grid of observation points is oriented along the
-$x$-axis (Figure XXa). For convenience, we denote grids like this as $x$-\textit{oriented grids}.
-For these grids, the relationship between the matrix indices and grid indices are defined
+$x$-axis (Figure XXa). For convenience, we designate these grids as $x$-\textit{oriented grids}.
+For them, the relationship between the matrix and grid indices are defined
 by the following integer functions:
 \begin{equation}
 i(k, l) = (l - 1) \, N_{x} + k \quad ,
@@ -174,9 +188,6 @@ k(i)  = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} - N_{x} \quad ,
 \label{eq:k-x-oriented}
 \end{equation}
 where $\lceil \cdot \rceil$ denotes the ceiling function \citep[][ p. 67]{graham-etal1994}.
-These integer functions are defined in the same way for the matrix index $j$.
-They show that a given pair of grid indices $(k, l)$ generates a unique matrix index $i$ (or $j$)
-and also that a given matrix index $i$ (or $j$) generates a unique grid index $k$ or $l$.
 By using these integer functions, the matrix coordinates $x_{i}$ and $y_{i}$ (or $x_{j}$ and $y_{j}$)
 can be defined as follows:
 \begin{equation}
@@ -195,7 +206,7 @@ where $i \equiv i(k, l)$ (equation \ref{eq:i-x-oriented}).
 \subsubsection{$y$-oriented grids}
 
 Consider the case in which the regular grid of observation points is oriented along the
-$y$-axis (Figure XXb). For convenience, we denote grids like this as $y$-\textit{oriented grids}.
+$y$-axis (Figure XXb). For convenience, we call them $y$-\textit{oriented grids}.
 Similarly to $x$-oriented grids, we have the following integer functions defining the relationship
 between the grid and matrix indices:
 \begin{equation}
@@ -258,9 +269,12 @@ and
 \label{eq:deltaij-gamma}
 \end{equation}
 These integer functions are defined in terms of the matrix indices $i$ and $j$, but they can also be
-written in terms of the grid indices $k$ and $l$. This can be easily made by properly using 
-equations \ref{eq:i-x-oriented}, \ref{eq:l-x-oriented}, \ref{eq:i-y-oriented} and \ref{eq:k-y-oriented}
-to convert the matrix indices into grid indices.
+written in terms of the grid indices $k$ and $l$ by properly using 
+equations \ref{eq:i-x-oriented}, \ref{eq:l-x-oriented}, \ref{eq:i-y-oriented} and \ref{eq:k-y-oriented},
+as follows:
+
+
+\subsubsection{Structure of matrix $\mathbf{A}$}
 
 The structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), for the case in which
 its elements are defined by $a_{ij}^{(\gamma)}$ (equation \ref{eq:aij-gamma}), is defined by 
@@ -273,7 +287,7 @@ an $N \times N$ Skew-Symmetric Block Toeplitz matrix
 \citep[][ p. 161 and 217]{golub-vanloan2013}.
 The whole matrix is composed of $(N/N_{\gamma} \times N/N_{\gamma})$ blocks,
 where each block is formed by $N_{\gamma} \times N_{\gamma}$ elements, $\gamma = x, y$.
-Since our this matrix is Block Toeplitz, it is convenient to label the 
+Since this matrix is Block Toeplitz, it is convenient to label the 
 blocks lying at the same diagonal by an index $m$,
 $m = -N/N_{\gamma} + 1, \dots, N/N_{\gamma} - 1$. 
 The blocks lying at the main diagonal have index
