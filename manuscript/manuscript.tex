@@ -110,6 +110,13 @@ a_{ij}= \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
 \label{eq:predicted-data-vector}
 \end{equation}
 
+The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
+$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
+coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
+observed data and the equivalent sources.
+Based on this, we designate these coordinates as \textit{matrix coordinates} and the 
+indices $i$ and $j$ as \textit{matrix indices}.
+
 \begin{equation}
 \Psi(\mathbf{p}) = \| \mathbf{d}^{o} - \mathbf{d(p)} \|_{2}^{2} + 
 \mu \, \| \mathbf{p} \|_{2}^{2} \: ,
@@ -125,13 +132,6 @@ a_{ij}= \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
 
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
-
-The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
-$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
-coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
-observed data and the equivalent sources.
-Based on this, we designate these coordinates as \textit{matrix coordinates} and the 
-indices $i$ and $j$ as \textit{matrix indices}.
 
 Consider that the observed data are located on an $N_{x} \times N_{y}$ regular grid of
 points regularly spaced from $\Delta x$ and $\Delta y$ along the $x$ and $y$ directions,
@@ -179,7 +179,7 @@ where $\lceil \cdot \rceil$ denotes the ceiling function \citep[][ p. 67]{graham
 Notice that these integer functions are defined in terms of the matrix index $i$, but they can 
 be defined in the same way by using the index $j$ instead of $i$.
 Figure 1a illustrates an $x$-oriented grid defined by $N_{x} = 4$ and $N_{y} = 3$.
-In this case, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index $i = 7$ (or $j = 7$), 
+In this example, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index $i = 7$ (or $j = 7$), 
 are equivalent to the grid coordinates $x_{3}$ and $y_{2}$, which are defined by the grid indices
 $k = 3$ and $l = 2$, respectively. These indices are computed with equations \ref{eq:l-x-oriented}
 and \ref{eq:k-x-oriented}, by using the matrix index $i = 7$ (or $j = 7$).
@@ -209,8 +209,8 @@ of $x$-oriented grid shown in Figure 1a, the grid indices of the present example
 computed with equations \ref{eq:l-y-oriented} and \ref{eq:k-y-oriented}, by using the 
 matrix index $i = 7$ (or $j = 7$).
 
-By using the matrix coordinates $x_{i}$ (equation \ref{eq:xi}) and $y_{i}$ (equation \ref{eq:yi}) 
-defined for regular grids, the elements $a_{ij}$ (equation \ref{eq:aij}) can be rewritten as follows:
+The elements $a_{ij}$ (equation \ref{eq:aij}) written in terms of the matrix coordinates 
+$x_{i}$ (equation \ref{eq:xi}) and $y_{i}$ (equation \ref{eq:yi}) are given by:
 \begin{equation}
 a_{ij} = \frac{G \, \Delta z \, 10^{-5}}{ \left[ 
 \left( \Delta k_{ij} \, \Delta x \right)^{2} + 
@@ -224,43 +224,50 @@ $\Delta l_{ij} = l(i) - l(j)$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-o
 The structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), for the case 
 in which its elements are given by $a_{ij}$ (equation \ref{eq:aij-regular-grids}), is defined 
 by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
+
 For $x$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}, respectively.
 In this case, the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-Block-Toeplitz Toeplitz-Block matrix (CITAR QUEM DEFINE ESSE TIPO DE MATRIZ)
+Block-Toeplitz Toeplitz-Block (BTTB) matrix \citep[][ p. 67]{chan-jin2007}
 composed of $N_{y} \times N_{y}$ blocks, where each block is formed by 
 $N_{x} \times N_{x}$ elements.
+In this kind of matrix, blocks lying at the same diagonal are equal to each other
+and they are themselves Toeplitz matrices.
+We follow the common notation found in the literature and represent 
+the blocks lying at the same diagonal as $\mathbf{A}_{m}$, where $m$ is an
+index that we conveniently call \textit{block index}.
+The block indices $m$ associated with the blocks $\mathbf{A}_{m}$ lying at, above 
+and below the main diagonal of $\mathbf{A}$ assume the values $m = 0$, $m > 0$ and $m < 0$,
+respectively.
+Those above the main diagonal have $m$ varying from $1$, close to the main diagonal, 
+to $N_{y} - 1$, at the upper right corner of $\mathbf{A}$.
+On the other hand, those below the main diagonal have $m$ 
+varying from $-1$, close to the main diagonal, 
+to $-N_{y} + 1$, at the bottom left corner of $\mathbf{A}$.
 For $y$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, respectively.
-In this case, the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-Block-Toeplitz Toeplitz-Block matrix (CITAR QUEM DEFINE ESSE TIPO DE MATRIZ)
-composed of $N_{x} \times N_{x}$ blocks, where each block is formed by 
+In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
+BTTB matrix composed of $N_{x} \times N_{x}$ blocks, where each block is formed by 
 $N_{y} \times N_{y}$ elements.
+The block index $m$ associated with $y$-oriented grids vary from $-N_{x} + 1$,
+at the bottom left, to $N_{x} - 1$, at the upper right corner of $\mathbf{A}$.
 
-For convenience, we represent the blocks lying at the same diagonal by 
-using the notation $\mathbf{A}_{m}$.
-The blocks lying at the main diagonal have index
-$m = 0$. Those above the main diagonal have indices $m = 1$, $m = 2$ and so on.
-On the other hand, those below the main diagonal have indices $m = -1$, $m = -2$ and so on.
-
-For $x$-oriented grids, the block index $m$ varies from $-N_{y} + 1$ to
-$N_{y} - 1$. Similarly, the block index $m$ varies from $-N_{x} + 1$ to
-$N_{x} - 1$ for $y$-oriented grids. In both cases ($x$- and $y$-oriented grids),
-the blocks above the main diagonal (with block index $m > 0$) are equal to those
-below the main diagonal (with block index $m < 0$), i. e., 
-$\mathbf{A}_{m} = \mathbf{A}_{-m}$.
-
-Consider a given block $\mathbf{A}_{m}$ that composes the matrix $\mathbf{A}$
-obtained from an $x$-oriented grid. In this case, the coefficients $\Delta k_{ij}$ 
+Consider a given block $\mathbf{A}_{m}$ of the matrix $\mathbf{A}$
+(equation \ref{eq:predicted-data-vector}) defined by elements $a_{ij}$ 
+(equation \ref{eq:aij-regular-grids}) that are computed in an $x$-oriented grid. 
+In this case, the coefficients $\Delta k_{ij}$ 
 (equation \ref{eq:k-x-oriented}) associated with the elements $ij$ within 
 $\mathbf{A}_{m}$ form a Skew-Symmetric Toeplitz matrix $\mathbf{\Delta K}_{m}$ 
-\citep[][ p. 161]{golub-vanloan2013}, whose first column is formed by the integer 
-elements $0, 1, \dots, N_{x} - 1$.
+\citep[][ p. 161]{golub-vanloan2013}. The first column of this matrix is formed 
+by the integer elements $0, 1, \dots, N_{x} - 1$.
 On the other hand, all the coefficients $\Delta l_{ij}$ (equation \ref{eq:l-x-oriented})
-defining the elements $ij$ within $\mathbf{A}_{m}$ have the same value $-m$, which
-corresponds to a matrix $\mathbf{\Delta L}_{m} = -m \, \mathbf{1}$, where $\mathbf{1}$ is
-a matrix with all elements equal to $1$.
-
+that define the elements $ij$ within $\mathbf{A}_{m}$ have the same value $-m$. 
+As a consequence, they form a matrix $\mathbf{\Delta L}_{m} = -m \, \mathbf{1}$, 
+where $\mathbf{1}$ is a matrix with all elements equal to $1$. 
+This well-defined pattern of matrices 
+$\mathbf{\Delta K}_{m}$ and $\mathbf{\Delta L}_{m}$ can be easily verified by computing
+the coefficients $\Delta k_{ij}$ (equation \ref{eq:k-x-oriented}) and
+$\Delta l_{ij}$ (equation \ref{eq:l-x-oriented}) for all matrix indices $i$ and $j$.
 By using the $x$-oriented grid shown in Figure 1a, the matrices $\mathbf{\Delta K}_{m}$
 and $\mathbf{\Delta L}_{m}$ defined by using, for example, the block index $m = 1$, are
 given by:
@@ -284,19 +291,23 @@ and
 \label{eq:L1-x-oriented-example}
 \end{equation}
 
-Consider now a given block $\mathbf{A}_{m}$ forming the matrix $\mathbf{A}$
-obtained from an $y$-oriented grid. In this case, the coefficients $\Delta k_{ij}$ 
+Consider now a given block $\mathbf{A}_{m}$ of the matrix $\mathbf{A}$
+(equation \ref{eq:predicted-data-vector}) defined by elements $a_{ij}$ 
+(equation \ref{eq:aij-regular-grids}) that are computed in an $y$-oriented grid. 
+In this case, the coefficients $\Delta k_{ij}$ 
 (equation \ref{eq:k-y-oriented}) associated with the elements $ij$ within 
-$\mathbf{A}_{m}$ form a matrix $\mathbf{\Delta K}_{m} = -m \, \mathbf{1}$,
-where $\mathbf{1}$ is a matrix with all elements equal to $1$.
+$\mathbf{A}_{m}$ form a matrix $\mathbf{\Delta K}_{m} = -m \, \mathbf{1}$.
 On the other hand, the matrix $\mathbf{\Delta L}_{m}$ formed by the coefficients
 $\Delta l_{ij}$ (equation \ref{eq:l-x-oriented}) that define the elements $ij$ 
-within $\mathbf{A}_{m}$ is another Skew-Symmetric Toeplitz matrix,
-whose first column is formed by the integer elements $0, 1, \dots, N_{y} - 1$.
-
-By using the $y$-oriented grid shown in Figure 1b, the matrices $\mathbf{\Delta K}_{m}$
-and $\mathbf{\Delta L}_{m}$ defined by using, for example, the block index $m = 1$, are
-given by:
+within $\mathbf{A}_{m}$ is a Skew-Symmetric Toeplitz matrix.
+The first column of this matrix is formed 
+by the integer elements $0, 1, \dots, N_{y} - 1$.
+This well-defined pattern of matrices 
+$\mathbf{\Delta K}_{m}$ and $\mathbf{\Delta L}_{m}$ can also be verified by computing
+the coefficients $\Delta k_{ij}$ (equation \ref{eq:k-y-oriented}) and
+$\Delta l_{ij}$ (equation \ref{eq:l-y-oriented}) for all matrix indices $i$ and $j$.
+To illustrate these matrices, we compute them by using the $y$-oriented grid shown in Figure 1b
+and a block index $m = 1$. The results are given by:
 \begin{equation}
 \mathbf{\Delta K}_{1} = \begin{bmatrix}
 -1 & -1 & -1 \\
@@ -315,6 +326,16 @@ and
 \label{eq:L1-y-oriented-example}
 \end{equation}
 
+From these examples (equations \ref{eq:K1-x-oriented-example}, \ref{eq:L1-x-oriented-example}, 
+\ref{eq:K1-y-oriented-example} and \ref{eq:L1-y-oriented-example}), we conclude that,
+in both cases ($x$- and $y$-oriented grids),
+the blocks $\mathbf{A}_{m}$ above the main diagonal (with block index $m > 0$) are equal to those
+below the main diagonal (with block index $m < 0$), i. e., 
+$\mathbf{A}_{m} = \mathbf{A}_{-m}$. Besides, we can see that each block $\mathbf{A}_{m}$ is
+a symmetric Toeplitz matrix. These symmetries come from the fact that the coefficients
+$\Delta k_{ij}$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
+$\Delta l_{ij}$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}) are
+squared at the denominator of $a_{ij}$ (equation \ref{eq:aij-regular-grids}).
 
 %\subsection{BCCB matrix-vector product}
 %
