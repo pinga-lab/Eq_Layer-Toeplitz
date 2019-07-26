@@ -152,7 +152,7 @@ where $k(i)$ and $l(i)$ are integer functions of the matrix index $i$.
 These equations can also be used to define the horizontal coordinates 
 $x_{j}$ and $y_{j}$ associated with the $j$-th equivalent source,
 $j = 1, \dots, N = N_{x}N_{y}$. In this case, the integer functions
-$k(j)$ and $l(j)$ are evaluated by using the index $j$ instead of $i$.
+are evaluated by using the index $j$ instead of $i$.
 For convenience, we designate $x_{k}$ and $y_{l}$ as \textit{grid coordinates}
 and the indices $k$ and $l$, defined by the integer functions, as
 \textit{grid indices}.
@@ -176,7 +176,7 @@ k(i)  = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} + N_{x} \quad ,
 \label{eq:k-x-oriented}
 \end{equation}
 where $\lceil \cdot \rceil$ denotes the ceiling function \citep[][ p. 67]{graham-etal1994}.
-Notice that these integer functions are defined in terms of the matrix index $i$, but they can 
+These integer functions are defined in terms of the matrix index $i$, but they can 
 be defined in the same way by using the index $j$ instead of $i$.
 Figure 1a illustrates an $x$-oriented grid defined by $N_{x} = 4$ and $N_{y} = 3$.
 In this example, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index $i = 7$ (or $j = 7$), 
@@ -187,7 +187,7 @@ and \ref{eq:k-x-oriented}, by using the matrix index $i = 7$ (or $j = 7$).
 Now, consider the case in which the regular grid of data is oriented along 
 the $y$-axis (Figure 1b). For convenience, we call them $y$-\textit{oriented grids}.
 Similarly to $x$-oriented grids, we have the following integer functions associated with
-the $y$-oriented grids:
+$y$-oriented grids:
 \begin{equation}
 i(k, l) = (k - 1) \, N_{y} + l \quad ,
 \label{eq:i-y-oriented}
@@ -205,12 +205,14 @@ Figure 1b illustrates an $y$-oriented grid defined by $N_{x} = 4$ and $N_{y} = 3
 In this example, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index 
 $i = 7$ (or $j = 7$), are equivalent to the grid coordinates $x_{3}$ and $y_{1}$, which are 
 defined by the grid indices $k = 3$ and $l = 1$, respectively. Differently from the example
-of $x$-oriented grid shown in Figure 1a, the grid indices of the present example are 
-computed with equations \ref{eq:l-y-oriented} and \ref{eq:k-y-oriented}, by using the 
+shown in Figure 1a, the grid indices of the present example are 
+computed with equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, by using the 
 matrix index $i = 7$ (or $j = 7$).
 
-The elements $a_{ij}$ (equation \ref{eq:aij}) written in terms of the matrix coordinates 
-$x_{i}$ (equation \ref{eq:xi}) and $y_{i}$ (equation \ref{eq:yi}) are given by:
+The element $a_{ij}$ (equation \ref{eq:aij}) can be rewritten by using equations 
+\ref{eq:xi} and \ref{eq:yi} to define the matrix coordinates
+$x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$. 
+In this way, they are defined in terms of the integer function as follows:
 \begin{equation}
 a_{ij} = \frac{G \, \Delta z \, 10^{-5}}{ \left[ 
 \left( \Delta k_{ij} \, \Delta x \right)^{2} + 
@@ -227,14 +229,14 @@ by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
 
 For $x$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}, respectively.
-In this case, the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
+In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
 Block-Toeplitz Toeplitz-Block (BTTB) matrix \citep[][ p. 67]{chan-jin2007}
 composed of $N_{y} \times N_{y}$ blocks, where each block is formed by 
 $N_{x} \times N_{x}$ elements.
 In this kind of matrix, blocks lying at the same diagonal are equal to each other
 and they are themselves Toeplitz matrices.
-We follow the common notation found in the literature and represent 
-the blocks lying at the same diagonal as $\mathbf{A}_{m}$, where $m$ is an
+We follow the common notation found in the literature to represent 
+blocks lying at the same diagonal as $\mathbf{A}_{m}$, where $m$ is an
 index that we conveniently call \textit{block index}.
 The block indices $m$ associated with the blocks $\mathbf{A}_{m}$ lying at, above 
 and below the main diagonal of $\mathbf{A}$ assume the values $m = 0$, $m > 0$ and $m < 0$,
@@ -298,7 +300,7 @@ In this case, the coefficients $\Delta k_{ij}$
 (equation \ref{eq:k-y-oriented}) associated with the elements $ij$ within 
 $\mathbf{A}_{m}$ form a matrix $\mathbf{\Delta K}_{m} = -m \, \mathbf{1}$.
 On the other hand, the matrix $\mathbf{\Delta L}_{m}$ formed by the coefficients
-$\Delta l_{ij}$ (equation \ref{eq:l-x-oriented}) that define the elements $ij$ 
+$\Delta l_{ij}$ (equation \ref{eq:l-y-oriented}) that define the elements $ij$ 
 within $\mathbf{A}_{m}$ is a Skew-Symmetric Toeplitz matrix.
 The first column of this matrix is formed 
 by the integer elements $0, 1, \dots, N_{y} - 1$.
