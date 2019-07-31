@@ -20,7 +20,7 @@
 
 \begin{document}
 
-\title{Fast equivalent layer technique for gravity data processing with Block-Toeplitz Toeplitz-Block matrix systems}
+\title{Fast equivalent layer technique for gravity data processing with BTTB matrix systems}
 
 \renewcommand{\thefootnote}{\fnsymbol{footnote}} 
 
@@ -114,7 +114,7 @@ The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix
 $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
 coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
 observed data and the equivalent sources.
-Based on this, we designate these coordinates as \textit{matrix coordinates} and the 
+For convenience, we designate these coordinates as \textit{matrix coordinates} and the 
 indices $i$ and $j$ as \textit{matrix indices}.
 
 \begin{equation}
@@ -149,7 +149,7 @@ y_{i} \equiv y_{l} = y_{1} + \left[ l(i) - 1 \right] \, \Delta y \: ,
 \label{eq:yi}
 \end{equation}
 where $k(i)$ and $l(i)$ are integer functions of the matrix index $i$.
-These equations can also be used to define the horizontal coordinates 
+These equations can also be used to define the matrix coordinates 
 $x_{j}$ and $y_{j}$ associated with the $j$-th equivalent source,
 $j = 1, \dots, N = N_{x}N_{y}$. In this case, the integer functions
 are evaluated by using the index $j$ instead of $i$.
@@ -177,7 +177,7 @@ k(i)  = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} + N_{x} \quad ,
 \end{equation}
 where $\lceil \cdot \rceil$ denotes the ceiling function \citep[][ p. 67]{graham-etal1994}.
 These integer functions are defined in terms of the matrix index $i$, but they can 
-be defined in the same way by using the index $j$ instead of $i$.
+be defined in the same way by using the index $j$.
 Figure 1a illustrates an $x$-oriented grid defined by $N_{x} = 4$ and $N_{y} = 3$.
 In this example, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index $i = 7$ (or $j = 7$), 
 are equivalent to the grid coordinates $x_{3}$ and $y_{2}$, which are defined by the grid indices
@@ -212,7 +212,7 @@ matrix index $i = 7$ (or $j = 7$).
 The element $a_{ij}$ (equation \ref{eq:aij}) can be rewritten by using equations 
 \ref{eq:xi} and \ref{eq:yi} to define the matrix coordinates
 $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$. 
-In this way, they are defined in terms of the integer function as follows:
+In this way, they are defined in terms of the integer functions as follows:
 \begin{equation}
 a_{ij} = \frac{G \, \Delta z \, 10^{-5}}{ \left[ 
 \left( \Delta k_{ij} \, \Delta x \right)^{2} + 
@@ -223,36 +223,109 @@ a_{ij} = \frac{G \, \Delta z \, 10^{-5}}{ \left[
 where $\Delta z = z_{0} - z_{1}$, 
 $\Delta k_{ij} = k(i) - k(j)$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
 $\Delta l_{ij} = l(i) - l(j)$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}).
-The structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), for the case 
-in which its elements are given by $a_{ij}$ (equation \ref{eq:aij-regular-grids}), is defined 
-by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
+Notice that the structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for 
+the case in which its elements are given by $a_{ij}$ (equation \ref{eq:aij-regular-grids}) is 
+defined by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
 
 For $x$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}, respectively.
 In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-Block-Toeplitz Toeplitz-Block (BTTB) matrix \citep[][ p. 67]{chan-jin2007}
+symmetric Block-Toeplitz Toeplitz-Block (BTTB) matrix \citep[][ p. 67]{chan-jin2007}
 composed of $N_{y} \times N_{y}$ blocks, where each block is formed by 
 $N_{x} \times N_{x}$ elements.
-In this kind of matrix, blocks lying at the same diagonal are equal to each other
-and they are themselves Toeplitz matrices.
-We follow the common notation found in the literature to represent 
-blocks lying at the same diagonal as $\mathbf{A}_{m}$, where $m$ is an
-index that we conveniently call \textit{block index}.
-The block indices $m$ associated with the blocks $\mathbf{A}_{m}$ lying at, above 
-and below the main diagonal of $\mathbf{A}$ assume the values $m = 0$, $m > 0$ and $m < 0$,
-respectively.
-Those above the main diagonal have $m$ varying from $1$, close to the main diagonal, 
-to $N_{y} - 1$, at the upper right corner of $\mathbf{A}$.
-On the other hand, those below the main diagonal have $m$ 
-varying from $-1$, close to the main diagonal, 
-to $-N_{y} + 1$, at the bottom left corner of $\mathbf{A}$.
 For $y$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, respectively.
 In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-BTTB matrix composed of $N_{x} \times N_{x}$ blocks, where each block is formed by 
+symmetric BTTB matrix composed of $N_{x} \times N_{x}$ blocks, where each block is formed by 
 $N_{y} \times N_{y}$ elements.
-The block index $m$ associated with $y$-oriented grids vary from $-N_{x} + 1$,
-at the bottom left, to $N_{x} - 1$, at the upper right corner of $\mathbf{A}$.
+In both cases, the blocks lying at the same diagonal are equal to each other
+and they are themselves symmetric Toeplitz matrices.
+Besides, the blocks located above the main diagonal are equal to  
+those located below.
+These symmetries come from the fact that the coefficients
+$\Delta k_{ij}$ and $\Delta l_{ij}$ are squared at the denominator of 
+$a_{ij}$ (equation \ref{eq:aij-regular-grids}).
+
+We follow the common notation found in the literature and represent the 
+blocks of $\mathbf{A}$ as $\mathbf{A}_{m}$.
+For $x$-oriented grids, the index $m$ varies from $0$, at the main diagonal,
+to $N_{y} - 1$, at the corners of $\mathbf{A}$.
+In this case, the index $m$ is defined as an integer function
+of the matrix indices $i$ and $j$ as follows:
+\begin{equation}
+m(i, j) = \; \mid l(i) - l(j) \mid \quad ,
+\label{eq:m-x-oriented}
+\end{equation}
+where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-x-oriented}.
+The elements forming the first column of $\mathbf{A}_{m}$ are conveniently 
+represented as $a^{m}_{n}$, $n = 0, \dots, N_{x} - 1$, where $m \equiv m(i, j)$ 
+(equation \ref{eq:m-x-oriented}) and the subscript index $n$ is defined by the following
+integer function:
+\begin{equation}
+n(i, j) = \; \mid k(i) - k(j) \mid \quad ,
+\label{eq:n-x-oriented}
+\end{equation}
+where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-x-oriented}.
+For $y$-oriented grids, the index $m$ varies from $0$, at the main diagonal,
+to $N_{x} - 1$, at the corners of $\mathbf{A}$.
+The block index $m$ vary from $0$, at the main diagonal, to $N_{x} - 1$, at the 
+corners of $\mathbf{A}$.
+In such grids, $m$ is given by:
+\begin{equation}
+m(i, j) = \; \mid k(i) - k(j) \mid \quad ,
+\label{eq:m-y-oriented}
+\end{equation}
+where the integer functions $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}.
+In this case, the elements forming the first column of $\mathbf{A}_{m}$ are 
+represented as $a^{m}_{n}$, $n = 0, \dots, N_{y} - 1$, where $m \equiv m(i, j)$ 
+(equation \ref{eq:m-y-oriented}) and the subscript index $n$ is defined by:
+\begin{equation}
+n(i, j) = \; \mid l(i) - l(j) \mid \quad ,
+\label{eq:n-y-oriented}
+\end{equation}
+where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
+For convenience, we designate the indices $m$ and $n$ as \textit{block indices}.
+
+According to equations \ref{eq:m-x-oriented}, \ref{eq:n-x-oriented}, \ref{eq:m-y-oriented} 
+and \ref{eq:n-y-oriented}, different pairs of matrix indices $i$ and $j$ generate
+the same pair of block indices $m$ and $n$. This can be verified by computing the
+block indices $m$ and $n$ produced by all matrix indices $i$ and $j$ of a given 
+$x$- or $y$-oriented grid.
+For example, the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) 
+associated with the $x$-oriented grid shown in Figure 1a is given by:
+\begin{equation}
+\mathbf{A} = \begin{bmatrix}
+\mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
+\mathbf{A}_{1} & \mathbf{A}_{0} & \mathbf{A}_{1} \\
+\mathbf{A}_{2} & \mathbf{A}_{1} & \mathbf{A}_{2}
+\end{bmatrix} \quad ,
+\label{eq:A-x-oriented-example}
+\end{equation}
+where $\mathbf{A}_{m}$, $m = 0, 1, 2$, are $4 \times 4$ Toeplitz matrices.
+The blocks $\mathbf{A}_{m}$ are given by:
+\begin{equation}
+\mathbf{A}_{m} = \begin{bmatrix}
+a^{m}_{0} & a^{m}_{1} & a^{m}_{2} & a^{m}_{3} \\
+a^{m}_{1} & a^{m}_{0} & a^{m}_{1} & a^{m}_{2} \\
+a^{m}_{2} & a^{m}_{1} & a^{m}_{0} & a^{m}_{1} \\
+a^{m}_{3} & a^{m}_{2} & a^{m}_{1} & a^{m}_{0}
+\end{bmatrix} \quad .
+\label{eq:Am-x-oriented}
+\end{equation}
+
+
+For example, the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) obtained
+from the $y$-oriented grid shown Figure 1b is given by:
+\begin{equation}
+\mathbf{A} = \begin{bmatrix}
+\mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} & \mathbf{A}_{3} \\
+\mathbf{A}_{1} & \mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
+\mathbf{A}_{2} & \mathbf{A}_{1} & \mathbf{A}_{0} & \mathbf{A}_{1} \\
+\mathbf{A}_{3} & \mathbf{A}_{2} & \mathbf{A}_{1} & \mathbf{A}_{0} 
+\end{bmatrix} \quad ,
+\label{eq:A-y-oriented-example}
+\end{equation}
+where $\mathbf{A}_{m}$, $m = 0, 1, 2, 3$, are $3 \times 3$ Toeplitz matrices.
 
 Consider a given block $\mathbf{A}_{m}$ of the matrix $\mathbf{A}$
 (equation \ref{eq:predicted-data-vector}) defined by elements $a_{ij}$ 
@@ -263,13 +336,15 @@ $\mathbf{A}_{m}$ form a Skew-Symmetric Toeplitz matrix $\mathbf{\Delta K}_{m}$
 \citep[][ p. 161]{golub-vanloan2013}. The first column of this matrix is formed 
 by the integer elements $0, 1, \dots, N_{x} - 1$.
 On the other hand, all the coefficients $\Delta l_{ij}$ (equation \ref{eq:l-x-oriented})
-that define the elements $ij$ within $\mathbf{A}_{m}$ have the same value $-m$. 
+that define the elements $ij$ within $\mathbf{A}_{m}$ have the same value $-m$,
+which is the opposite of the corresponding block index. 
 As a consequence, they form a matrix $\mathbf{\Delta L}_{m} = -m \, \mathbf{1}$, 
 where $\mathbf{1}$ is a matrix with all elements equal to $1$. 
 This well-defined pattern of matrices 
 $\mathbf{\Delta K}_{m}$ and $\mathbf{\Delta L}_{m}$ can be easily verified by computing
 the coefficients $\Delta k_{ij}$ (equation \ref{eq:k-x-oriented}) and
 $\Delta l_{ij}$ (equation \ref{eq:l-x-oriented}) for all matrix indices $i$ and $j$.
+
 By using the $x$-oriented grid shown in Figure 1a, the matrices $\mathbf{\Delta K}_{m}$
 and $\mathbf{\Delta L}_{m}$ defined by using, for example, the block index $m = 1$, are
 given by:
@@ -292,6 +367,34 @@ and
 \end{bmatrix} \quad .
 \label{eq:L1-x-oriented-example}
 \end{equation}
+Matrices $\mathbf{\Delta K}_{1}$ (equation \ref{eq:K1-x-oriented-example}) and 
+$\mathbf{\Delta L}_{1}$ (equation \ref{eq:L1-x-oriented-example})
+contain the coefficients $\Delta k_{ij}$ (equation \ref{eq:k-x-oriented}) and
+$\Delta l_{ij}$ (equation \ref{eq:l-x-oriented}), respectively, used to compute the elements
+$a_{ij}$ (equation \ref{eq:aij-regular-grids}) of the blocks $\mathbf{A}_{1}$
+illustrated in equation \ref{eq:A-x-oriented-example}.
+%\begin{equation}
+%\mathbf{A}_{1} = G \, \Delta z \, 10^{-5} \, 
+%\begin{bmatrix}
+%\frac{1}{ \left[ \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ 4 \, \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ 9 \, \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} \\
+%\frac{1}{ \left[ \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ 4 \, \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} \\
+%\frac{1}{ \left[ 4 \, \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} \\
+%\frac{1}{ \left[ 9 \, \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ 4 \, \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta x \right)^{2} + \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} &
+%\frac{1}{ \left[ \left(\Delta y \right)^{2} + \left( \Delta z \right)^{2} \right]^{\frac{3}{2}}}
+%\end{bmatrix} \quad .
+%\label{eq:A1-x-oriented-example}
+%\end{equation}
 
 Consider now a given block $\mathbf{A}_{m}$ of the matrix $\mathbf{A}$
 (equation \ref{eq:predicted-data-vector}) defined by elements $a_{ij}$ 
@@ -327,21 +430,37 @@ and
 \end{bmatrix} \quad .
 \label{eq:L1-y-oriented-example}
 \end{equation}
+Matrices $\mathbf{\Delta K}_{1}$ (equation \ref{eq:K1-y-oriented-example}) and 
+$\mathbf{\Delta L}_{1}$ (equation \ref{eq:L1-y-oriented-example})
+contain the coefficients $\Delta k_{ij}$ (equation \ref{eq:k-y-oriented}) and
+$\Delta l_{ij}$ (equation \ref{eq:l-y-oriented}), respectively, used to compute the elements
+$a_{ij}$ (equation \ref{eq:aij-regular-grids}) of the blocks $\mathbf{A}_{1}$
+illustrated in equation \ref{eq:A-y-oriented-example}.
 
-From these examples (equations \ref{eq:K1-x-oriented-example}, \ref{eq:L1-x-oriented-example}, 
-\ref{eq:K1-y-oriented-example} and \ref{eq:L1-y-oriented-example}), we conclude that,
-in both cases ($x$- and $y$-oriented grids),
+From these examples (equations \ref{eq:K1-x-oriented-example} to \ref{eq:L1-y-oriented-example}), 
+we conclude that, in both cases ($x$- and $y$-oriented grids),
 the blocks $\mathbf{A}_{m}$ above the main diagonal (with block index $m > 0$) are equal to those
 below the main diagonal (with block index $m < 0$), i. e., 
-$\mathbf{A}_{m} = \mathbf{A}_{-m}$. Besides, we can see that each block $\mathbf{A}_{m}$ is
+$\mathbf{A}_{m} = \mathbf{A}_{-m}$. 
+Besides, we can see that each block $\mathbf{A}_{m}$ is
 a symmetric Toeplitz matrix. These symmetries come from the fact that the coefficients
 $\Delta k_{ij}$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
 $\Delta l_{ij}$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}) are
 squared at the denominator of $a_{ij}$ (equation \ref{eq:aij-regular-grids}).
 
-%\subsection{BCCB matrix-vector product}
+
+
+
+
+%\subsection{BTTB matrix-vector product}
 %
-%As previous discussed in the  fast equivalent layer technique section, the matrix-vector product accounts for most of the computational cost. When large data sets are used, this operation can take some time and even be prohibited by memory RAM shortage. In order to lessen this problem we transform the BTTB matrix $\mathbf{A}$ into a Block-Circulating Circulating-Block (BCCB) matrix $\mathbf{C}$ and use its eigenvalues to carry the product of $\mathbf{A}$ and an arbitrary vector $\mathbf{p}$. This strategy has been successfully applied by Zhang and Wong (2015) and Zhang et al. (2016) for optimizing the computational cost of 3D gravity inversion and downward continuation of potential field, respectively. Here, we use this strategy for improving the computational efficiency of the fast equivalent layer method proposed by \citet{siqueira-etal2017}.
+%As previous discussed in the  fast equivalent layer technique section, the matrix-vector product accounts for most of the computational cost. 
+%
+%When large data sets are used, this operation can take some time and even be prohibited by memory RAM shortage. 
+%
+%In order to lessen this problem we transform the BTTB matrix $\mathbf{A}$ into a Block-Circulating Circulating-Block (BCCB) matrix $\mathbf{C}$ and use its eigenvalues to carry the product of $\mathbf{A}$ and an arbitrary vector $\mathbf{p}$. 
+%
+%This strategy has been successfully applied by \citet{zhang-wong2015} and \citet{zhang-etal2016} for optimizing the computational cost of 3D gravity inversion and downward continuation of potential field, respectively. Here, we use this strategy for improving the computational efficiency of the fast equivalent layer method proposed by \citet{siqueira-etal2017}.
 %
 %Following the example of our BTTB matrix $\mathbf{A}$ (equation \ref{eq:toeplitz_block_T}), its transformation into a BCCB matrix $\mathbf{C}$ is given by:
 %
@@ -504,22 +623,23 @@ squared at the denominator of $a_{ij}$ (equation \ref{eq:aij-regular-grids}).
 %\end{equation}
 %
 %To complete the process, after calculating the inverse to obtain $\mathbf{Q}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{q}$ and also rearrange the elements of $\mathbf{q}$ to obtain the wanted vector $\mathbf{d(p)}$.
-
+%
 %The algorithm for computing the matrix-vector product $\mathbf{A}\mathbf{p}$ and obtaining the resulting vector $\mathbf{d(p)}$ can be summarized in the following steps:
-
+%
 %1. Compute the first column of the embedded $4N_x N_y \times 4N_x N_y$ BCCB matrix $\mathbf{C}$ by using the first column of the $N_x N_y \times N_x N_y$ BTTB matrix $\mathbf{A}$;
-
+%
 %2. Compute the eigenvalues of $\mathbf{C}$ rearranging them in rows of the $2N_x \times 2N_y$ matrix $\mathbf{L}$;
-
+%
 %3. Rearrange the vector $\mathbf{v}$ in the rows of the $2N_x \times 2N_y$ matrix $\mathbf{V}$;
-
+%
 %4. Compute the Hadammard product $\mathbf{L} \circ \tilde{\mathbf{P}}$, where $\tilde{\mathbf{P}} = \mathbf{F}_{(2N_x)} \mathbf{P} \, \mathbf{F}_{(2N_y)}$ is computed by using a fast algorithm for 2D DFT;
-
+%
 %5. Compute the resulting $2N_x \times 2N_y$ matrix $\mathbf{Q} = \mathbf{F}_{(2N_x)}^{\ast} \left[ \mathbf{L} \circ \tilde{\mathbf{P}}\right] \mathbf{F}_{(2N_y)}^{\ast}$ by using a fast algorithm for inverse 2D DFT;
-
+%
 %6. Rearrange the rows of $\mathbf{Q}$ to obtain the vector $\mathbf{q}$;
-
+%
 %7. Rearrange the elements of $\mathbf{q}$ to obtain the vector $\mathbf{d(p)}$.
+
 
 \subsection{Computational performance}
 In a normal procedure of the fast equivalent layer proposed by \citet{siqueira-etal2017}, at each iteration a full matrix $\tensor{A}$ (equation \ref{eq:predicted-data-vector}) is multiplied by the estimated mass distribution parameter vector $\hat{\mathbf{p}}^k$ producing the predicted gravity data $\mathbf{d(p)}$  iteratively . As pointed in \citet{siqueira-etal2017} the number of flops (floating-point operations) necessary to estimate the $N$-dimensional parameter vector inside the iteration loop is:
