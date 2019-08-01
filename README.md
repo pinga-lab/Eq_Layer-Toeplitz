@@ -41,15 +41,15 @@ equivalent sources.*
 
 **Figure 2:** *floating points to estimate the parameter vector using the fast equivalent 
 layer with Siqueira et al.'s method and our approach versus the numbers of observation 
-points varyig from $N = 5000$ to $N = 1000000$ with $50$ iterations. The number of operations 
+points varyig from N = 5000 to N = 1000000 with $50$ iterations. The number of operations 
 is drastically decreased.*
 
 
 ![](manuscript/Fig/time_comparison.png)
 
 **Figure 3:** *time necessary to run 50 iterations of the Siqueira et al.'s method and the 
-one presented in this work. With the limitation of $16$ Gb of memory RAM in our system, we 
-chose to test only up to $22500$ obervation points.*
+one presented in this work. With the limitation of 16 Gb of memory RAM in our system, we 
+chose to test only up to 22500 obervation points.*
 
 
 ## Reproducing the results
@@ -92,11 +92,11 @@ is located):
 
 To activate the conda environment, run
 
-    source activate ellipsoids
+    source activate bttb
 
 or, if you're on Windows,
 
-    activate ellipsoids
+    activate bttb
 
 This will enable the environment for your current terminal session.
 After running the code, deactivate the environment with the following
