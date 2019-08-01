@@ -1,5 +1,0 @@
-from rsftex import *
-
-Paper('test',options='short')
-
-End(lclass='segabs',use='listings')
