@@ -89,8 +89,8 @@ the $z$ axis pointing downward.
 %hackney-featherstone2003, hinze-etal2005} and 
 %\citet{vajda-etal2006, vajda-etal2007, vajda-etal2008}, for example.
 Let us consider an equivalent layer compose by a set of $N$ point masses 
-(equivalent sources) over a layer located at depth $z_o$ ($z_o >z_i$) and whose 
-x- and y- coordinates of each point mass coincide with the corresponding coordinates 
+(equivalent sources) over a layer located at depth $z_0$ ($z_0 >z_i$) and whose 
+$x$- and $y$- coordinates of each point mass coincide with the corresponding coordinates 
 of the observation directly above.
 
 There is a linear relationship that maps the unknown mass distribution onto the gravity 
@@ -103,9 +103,9 @@ data given by
 
 where $\mathbf{d}$ is an $N \times 1$ vector whose ith element is the predicted gravity 
 data at the ith point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
-parameter vector whose jth element $p_j$  is the mass of the jth equivalent source 
-(point mass) at the jth Cartesian coordinates ($x_j$,$y_j$,$z_o$) and $\mathbf{A}$ 
-is an $N \times N$  sensitivity matrix whose ijth element is given by 
+parameter vector whose jth element $p_j$  is the mass of the $j$th equivalent source 
+(point mass) at the jth Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
+is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
 
 %\begin{equation}
 %\delta g(x_{i}, y_{i}, z_{i}) = \sum_{j=1}^{N} p_j a_{ij} \: ,
@@ -113,18 +113,18 @@ is an $N \times N$  sensitivity matrix whose ijth element is given by
 %\end{equation}
 
 \begin{equation}
-a_{ij}= \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
+a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
 (y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
 \label{eq:aij}
 \end{equation}
 
-where G is the Newton's gravitational constant.
+where $G$ is the Newton's gravitational constant and $c_{g} = 10^5$ is a constant transforming from $\mathrm{m/s^2}$ to mGal.
 
 Notice that the sensitivity matrix depends on the ith coordinates of the observations 
-and the jth coordinates of the equivalent sources. For convenience, we designate 
-these coordinates as matrix coordinates and the indices i and j as matrix indices.
+and the $j$th coordinates of the equivalent sources. For convenience, we designate 
+these coordinates as matrix coordinates and the indices $i$ and $j$ as matrix indices.
 
-In the classical equivalent-layer technique, we estimate the regularized parameter vector from the observed gravity data $d^O$ by
+In the classical equivalent-layer technique, we estimate the regularized parameter vector from the observed gravity data $d^o$ by
 
 
 %The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
