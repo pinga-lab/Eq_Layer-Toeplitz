@@ -101,10 +101,10 @@ data given by
 \label{eq:predicted-data-vector}
 \end{equation}
 
-where $\mathbf{d}$ is an $N \times 1$ vector whose ith element is the predicted gravity 
-data at the ith point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
-parameter vector whose jth element $p_j$  is the mass of the $j$th equivalent source 
-(point mass) at the jth Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
+where $\mathbf{d}$ is an $N \times 1$ vector whose $i$th element is the predicted gravity 
+data at the $i$th point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
+parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent source 
+(point mass) at the $j$th Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
 is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
 
 %\begin{equation}
@@ -120,7 +120,7 @@ a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
 
 where $G$ is the Newton's gravitational constant and $c_{g} = 10^5$ is a constant transforming from $\mathrm{m/s^2}$ to mGal.
 
-Notice that the sensitivity matrix depends on the ith coordinates of the observations 
+Notice that the sensitivity matrix depends on the $i$th coordinates of the observations 
 and the $j$th coordinates of the equivalent sources. For convenience, we designate 
 these coordinates as matrix coordinates and the indices $i$ and $j$ as matrix indices.
 
@@ -147,33 +147,42 @@ In the classical equivalent-layer technique, we estimate the regularized paramet
 \label{eq:estimated-p-parameter-space}
 \end{equation}
 
-\subsection{Fast equivalent layer technique}
-In \citet{siqueira-etal2017}, the authors developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on equivalent sources. This scheme is proven to have a better computational efficiency than the classical equivalent layer approach with data sets of at least 200 observation points, even using a large number of iterations.
-This work also proves that the excess of mass of a body is proportional to the surface integration of the gravity data on the horizontal plane $z_0$ where the equivalent sources are distributed. Considering each equivalent source directly beneath the observation points, a initial approximation of mass distibution is given by:
+\subsection{Fast equivalent-layer technique}
+\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on the equivalent layer. These authors proved that the fast equivalent-layer technique has a better computational efficiency than the classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the dataset totalize at least 200 observation points, even using a large number of iterations.
+
+Considering each equivalent source (point mass) directly beneath the observation point, the iteration of the Siqueira et al.'s (2017) method starts by an initial approximation of mass distibution given by
 
 \begin{equation}
 \mathbf{p}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
 \label{eq:initial_m}
 \end{equation}
-where $\mathbf{d}^o$ is the gravity data and $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix whose elements are:
+where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix whose
 
 \begin{equation}
-\tilde{\mathbf{A}}^{-1} = \frac{\Delta s}{(2 \pi \, G \, c_g)} \: .
+\tilde{\mathbf{A}}^{-1} = [\tilde{a}]_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: .
 \label{eq:a_approx}
 \end{equation}
 
-At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ for every source is calculated by minimizing the function:
+where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal coordinates $x_i$ and $y_i$ of the $i$th observation.
+At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ is estimated by minimizing the goal function:
 
 \begin{equation}
 \phi(\mathbf{\Delta p^k}) = ||\mathbf{d}^{o} - \mathbf{A}\hat{\mathbf{p}}^k - \tilde{\mathbf{A}} \mathbf{\Delta} \hat{\mathbf{p}^k}||_2^2
 \label{eq:goal-function_fast}
 \end{equation}
 
-\noindent and the mass distribution of the equivalent sources is updated as:
+\noindent and the masses of the equivalent sources is updated by
 
 \begin{equation}
-\mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: .
+\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: .
 \label{eq:update_m}
+\end{equation}
+
+\noindent with
+
+\begin{equation}
+\mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \tilde{\mathbf{A}}^{-1} (\mathbf{d}^{o} - \mathbf{A} \hat{\mathbf{p}}^{k}) \: .
+\label{eq:update_delta_m}
 \end{equation}
 
 %\lstset{language=Python}
@@ -189,7 +198,7 @@ At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ for ever
 %	p += delta_p
 %\end{lstlisting}
 
-At the $k$th iteration of Siqueira et al.'s (2017) method, the matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. While it is true that for a small number of observation points this represents no computational effort, for very large data sets it is costful and can be overwhelming in terms of RAM memory to maintain such operation.
+At the $k$th iteration of Siqueira et al.'s (2017) method, the matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. This matrix-vector product represents  the bottleneck of the Siqueira et al.'s (2017) method. Considering the limitation of 16 Gb of RAM memory in our system, we could run  Siqueira et al.'s (2017) method only up to 22 500 observation points. Hence, for very large data sets it is costful and can be overwhelming in terms of RAM memory to maintain such operation.
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
