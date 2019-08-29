@@ -43,7 +43,7 @@
 
 %\lipsum[1]
 
-We have developed an efficient and very fast equivalent layer technique for gravity data processing by modifying an iterative method grounded on excess mass constraint that does not require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) matrix structure, that raises when regular grids of observation points and equivalent sources (point masses) are used to set up a fictitious equivalent layer, we have developed an algorithm which greatly reduces the number of flops and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer. The algorithm is based on the structure of symmetric BTTB matrix, where all its elements consist of the elements of the first column, which in turn can be embedded into a symmetric Block-Circulant Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is needed to reconstruct the full matrix completely. From the first column of BCCB matrix, its eigenvalues can be calculated using the fast Fourier transform, which can be used to readily compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the gravity data. For example, while our method requires 26:8 seconds to run one million of observations, the fast equivalent layer technique required 48:3 seconds to run 22,500 observations. Test with real data from Caraj\'as, Brazil, shows its applicability to process very large dataset at low computational cost.
+We have developed an efficient and very fast equivalent-layer technique for gravity data processing by modifying an iterative method grounded on excess mass constraint that does not require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix, that raises when regular grids of observation points and equivalent sources (point masses) are used to set up a fictitious equivalent layer, we have developed an algorithm which greatly reduces the number of flops and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer. The structure of symmetric BTTB matrix consists of the elements of the first column of the sensitivity matrix, which in turn can be embedded into a symmetric Block-Circulant Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is needed to reconstruct the full sensitivity matrix completely. From the first column of BCCB matrix, its eigenvalues can be calculated using the fast Fourier transform, which can be used to readily compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the gravity data. For example, while our method requires 26:8 seconds to run one million of observations, the fast equivalent-layer technique required 48:3 seconds to run 22,500 observations. Test with real data from Caraj\'as, Brazil, shows its applicability to process very large dataset at low computational cost.
 
 \end{abstract}
 
@@ -52,7 +52,7 @@ We have developed an efficient and very fast equivalent layer technique for grav
 %\lipsum[1-5]
 
 The equivalent layer is a well-known technique for processing potential-field data in applied geophysics since 1960. It comes from potential theory as a mathematical solution of the Laplace's equation, in the region above the sources, by using the Dirichlet boundary condition \citep{kellogg1929}.
-This theory states that any potential-field data produced by an arbitrary 3D physical property distribution can be exactly reproduced by a fictitious layer located at any depth and having a continuous 2D physical property  distribution. In practical situations, the layer is approximated by a finite set of sources (e.g., point masses or dipoles) and their physical properties are estimated by solving a linear system of equations that yield an acceptable potential-field data fit. These fictitious sources are called equivalent sources.
+This theory states that any potential-field data produced by an arbitrary 3D physical-property distribution can be exactly reproduced by a fictitious layer located at any depth and having a continuous 2D physical-property  distribution. In practical situations, the layer is approximated by a finite set of sources (e.g., point masses or dipoles) and their physical properties are estimated by solving a linear system of equations that yield an acceptable potential-field data fit. These fictitious sources are called equivalent sources.
 
 Many previous works have used the equivalent layer as a processing technique of potential-field data. \citet{dampney1969} used the equivalent-layer technique for gridding and for computing the upward continuation of the potential-field data. \citet{cordell1992} and \citet{mendonca-silva1994} used it for interpolating and gridding potential-field data. \citet{emilia1973}, \citet{hansen-miyazaki1984} and \citet{li-oldenburg2010} used it for upward continuation of the potential-field data. \citet{silva1986}, \citet{leao-silva1989}, \citet{guspi-novara2009}, and \citet{oliveirajr-etal2013} used it for reducing the magnetic data to the pole. \citet{boggs-dransfield2004} used it for combining multiple data sets and \citet{barnes-lumley2011} for gradient-data processing.
 
@@ -70,11 +70,11 @@ We propose the use of BTTB and BCCB matrices properties to efficiently  solve th
 
 \section*{Methodology}
 
-\subsection{Equivalent layer technique for gravity data processing}
+\subsection{Equivalent-layer technique for gravity data processing}
 
 Let $d^{o}_{i}$ be the observed gravity data at
 the point $(x_{i}, y_{i}, z_{i})$, $i = 1, ..., N$, of a local Cartesian
-system with $x$ axis pointing to North, the $y$ axis pointing to East and 
+system with $x$ axis pointing to north, the $y$ axis pointing to east and 
 the $z$ axis pointing downward.
 %We consider that the gravity data are properly processed so that they
 %represent the difference between the observed gravity
@@ -88,39 +88,57 @@ the $z$ axis pointing downward.
 %refer the reader to \citet{li-gotze2001, fairhead-etal2003, 
 %hackney-featherstone2003, hinze-etal2005} and 
 %\citet{vajda-etal2006, vajda-etal2007, vajda-etal2008}, for example.
-In a local coordinate system, the gravity data can be considered 
-as the $z$~-~component (or vertical component) of the gravitational 
-attraction exerted by gravity sources. As a consequence, it can be
-approximated by a linear combination of ...
+Let us consider an equivalent layer compose by a set of $N$ point masses 
+(equivalent sources) over a layer located at depth $z_0$ ($z_0 >z_i$) and whose 
+$x$- and $y$- coordinates of each point mass coincide with the corresponding coordinates 
+of the observation directly above.
 
-\begin{equation}
-\delta g(x_{i}, y_{i}, z_{i}) = \sum_{j=1}^{N} p_j a_{ij} \: ,
-\label{eq:predicted-data-i}
-\end{equation}
-
-\begin{equation}
-a_{ij}= \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
-(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
-\label{eq:aij}
-\end{equation}
+There is a linear relationship that maps the unknown mass distribution onto the gravity 
+data given by
 
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \mathbf{A} \mathbf{p} \: ,
 \label{eq:predicted-data-vector}
 \end{equation}
 
-The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
-$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
-coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
-observed data and the equivalent sources.
-For convenience, we designate these coordinates as \textit{matrix coordinates} and the 
-indices $i$ and $j$ as \textit{matrix indices}.
+where $\mathbf{d}$ is an $N \times 1$ vector whose $i$th element is the predicted gravity 
+data at the $i$th point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
+parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent source 
+(point mass) at the $j$th Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
+is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
+
+%\begin{equation}
+%\delta g(x_{i}, y_{i}, z_{i}) = \sum_{j=1}^{N} p_j a_{ij} \: ,
+%\label{eq:predicted-data-i}
+%\end{equation}
 
 \begin{equation}
-\Psi(\mathbf{p}) = \| \mathbf{d}^{o} - \mathbf{d(p)} \|_{2}^{2} + 
-\mu \, \| \mathbf{p} \|_{2}^{2} \: ,
-\label{eq:goal-function}
+a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
+(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
+\label{eq:aij}
 \end{equation}
+
+where $G$ is the Newton's gravitational constant and $c_{g} = 10^5$ is a constant transforming from $\mathrm{m/s^2}$ to mGal.
+
+Notice that the sensitivity matrix depends on the $i$th coordinates of the observations 
+and the $j$th coordinates of the equivalent sources. For convenience, we designate 
+these coordinates as matrix coordinates and the indices $i$ and $j$ as matrix indices.
+
+In the classical equivalent-layer technique, we estimate the regularized parameter vector from the observed gravity data $d^o$ by
+
+
+%The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
+%$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
+%coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
+%observed data and the equivalent sources.
+%For convenience, we designate these coordinates as \textit{matrix coordinates} and the 
+%indices $i$ and $j$ as \textit{matrix indices}.
+
+%\begin{equation}
+%\Psi(\mathbf{p}) = \| \mathbf{d}^{o} - \mathbf{d(p)} \|_{2}^{2} + 
+%\mu \, \| \mathbf{p} \|_{2}^{2} \: ,
+%\label{eq:goal-function}
+%\end{equation}
 
 \begin{equation}
 \hat{\mathbf{p}} = \left( \mathbf{A}^{\top}\mathbf{A} + 
@@ -129,33 +147,42 @@ indices $i$ and $j$ as \textit{matrix indices}.
 \label{eq:estimated-p-parameter-space}
 \end{equation}
 
-\subsection{Fast equivalent layer technique}
-In \citet{siqueira-etal2017}, the authors developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on equivalent sources. This scheme is proven to have a better computational efficiency than the classical equivalent layer approach with data sets of at least 200 observation points, even using a large number of iterations.
-This work also proves that the excess of mass of a body is proportional to the surface integration of the gravity data on the horizontal plane $z_0$ where the equivalent sources are distributed. Considering each equivalent source directly beneath the observation points, a initial approximation of mass distibution is given by:
+\subsection{Fast equivalent-layer technique}
+\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on the equivalent layer. These authors proved that the fast equivalent-layer technique has a better computational efficiency than the classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the dataset totalize at least 200 observation points, even using a large number of iterations.
+
+Considering each equivalent source (point mass) directly beneath the observation point, the iteration of the Siqueira et al.'s (2017) method starts by an initial approximation of mass distibution given by
 
 \begin{equation}
 \mathbf{p}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
 \label{eq:initial_m}
 \end{equation}
-where $\mathbf{d}^o$ is the gravity data and $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix whose elements are:
+where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix whose
 
 \begin{equation}
-\tilde{\mathbf{A}}^{-1} = \frac{\Delta s}{(2 \pi \, G \, c_g)} \: .
+\tilde{\mathbf{A}}^{-1} = [\tilde{a}]_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: .
 \label{eq:a_approx}
 \end{equation}
 
-At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ for every source is calculated by minimizing the function:
+where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal coordinates $x_i$ and $y_i$ of the $i$th observation.
+At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ is estimated by minimizing the goal function:
 
 \begin{equation}
 \phi(\mathbf{\Delta p^k}) = ||\mathbf{d}^{o} - \mathbf{A}\hat{\mathbf{p}}^k - \tilde{\mathbf{A}} \mathbf{\Delta} \hat{\mathbf{p}^k}||_2^2
 \label{eq:goal-function_fast}
 \end{equation}
 
-\noindent and the mass distribution of the equivalent sources is updated as:
+\noindent and the masses of the equivalent sources is updated by
 
 \begin{equation}
-\mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: .
+\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: .
 \label{eq:update_m}
+\end{equation}
+
+\noindent with
+
+\begin{equation}
+\mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \tilde{\mathbf{A}}^{-1} (\mathbf{d}^{o} - \mathbf{A} \hat{\mathbf{p}}^{k}) \: .
+\label{eq:update_delta_m}
 \end{equation}
 
 %\lstset{language=Python}
@@ -171,7 +198,7 @@ At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ for ever
 %	p += delta_p
 %\end{lstlisting}
 
-At the $k$th iteration of Siqueira et al.'s (2017) method, the matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. While it is true that for a small number of observation points this represents no computational effort, for very large data sets it is costful and can be overwhelming in terms of RAM memory to maintain such operation.
+At the $k$th iteration of Siqueira et al.'s (2017) method, the matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. This matrix-vector product represents  the bottleneck of the Siqueira et al.'s (2017) method. Considering the limitation of 16 Gb of RAM memory in our system, we could run  Siqueira et al.'s (2017) method only up to 22 500 observation points. Hence, for very large data sets it is costful and can be overwhelming in terms of RAM memory to maintain such operation.
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
