@@ -76,70 +76,33 @@ Let $d^{o}_{i}$ be the observed gravity data at
 the point $(x_{i}, y_{i}, z_{i})$, $i = 1, ..., N$, of a local Cartesian
 system with $x$ axis pointing to north, the $y$ axis pointing to east and 
 the $z$ axis pointing downward.
-%We consider that the gravity data are properly processed so that they
-%represent the difference between the observed gravity
-%(corrected from non-gravitational effects due to the vehicle motion) 
-%and the normal gravity, at the same point. This quantity is called
-%\textit{gravity disturbance} \citep{hofmann-wellenhof-moritz2005}. 
-%Several authors have discussed the differences between the gravity 
-%anomaly and the gravity disturbance, as well as proposed that the second 
-%is more appropriated for geophysical applications. A detailed discussion
-%about this theoretical topic is beyond the scope of our work and we
-%refer the reader to \citet{li-gotze2001, fairhead-etal2003, 
-%hackney-featherstone2003, hinze-etal2005} and 
-%\citet{vajda-etal2006, vajda-etal2007, vajda-etal2008}, for example.
 Let us consider an equivalent layer compose by a set of $N$ point masses 
 (equivalent sources) over a layer located at depth $z_0$ ($z_0 >z_i$) and whose 
 $x$- and $y$- coordinates of each point mass coincide with the corresponding coordinates 
 of the observation directly above.
-
 There is a linear relationship that maps the unknown mass distribution onto the gravity 
 data given by
-
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \mathbf{A} \mathbf{p} \: ,
 \label{eq:predicted-data-vector}
 \end{equation}
-
 where $\mathbf{d}$ is an $N \times 1$ vector whose $i$th element is the predicted gravity 
 data at the $i$th point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
 parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent source 
 (point mass) at the $j$th Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
 is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
-
-%\begin{equation}
-%\delta g(x_{i}, y_{i}, z_{i}) = \sum_{j=1}^{N} p_j a_{ij} \: ,
-%\label{eq:predicted-data-i}
-%\end{equation}
-
 \begin{equation}
-a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
+a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
 (y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
 \label{eq:aij}
 \end{equation}
-
-where $G$ is the Newton's gravitational constant and $c_{g} = 10^5$ is a constant transforming from $\mathrm{m/s^2}$ to mGal.
-
+where $G$ is the Newton's gravitational constant and $c_{g} = 10^{5}$ 
+transforms from $\mathrm{m/s^2}$ to mGal.
 Notice that the sensitivity matrix depends on the $i$th coordinates of the observations 
 and the $j$th coordinates of the equivalent sources. For convenience, we designate 
 these coordinates as matrix coordinates and the indices $i$ and $j$ as matrix indices.
-
-In the classical equivalent-layer technique, we estimate the regularized parameter vector from the observed gravity data $d^o$ by
-
-
-%The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
-%$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
-%coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
-%observed data and the equivalent sources.
-%For convenience, we designate these coordinates as \textit{matrix coordinates} and the 
-%indices $i$ and $j$ as \textit{matrix indices}.
-
-%\begin{equation}
-%\Psi(\mathbf{p}) = \| \mathbf{d}^{o} - \mathbf{d(p)} \|_{2}^{2} + 
-%\mu \, \| \mathbf{p} \|_{2}^{2} \: ,
-%\label{eq:goal-function}
-%\end{equation}
-
+In the classical equivalent-layer technique, we estimate the regularized parameter vector 
+from the observed gravity data $\mathbf{d}^{o}$ by
 \begin{equation}
 \hat{\mathbf{p}} = \left( \mathbf{A}^{\top}\mathbf{A} + 
 \mu \, \mathbf{I} \right)^{-1}
@@ -148,9 +111,9 @@ In the classical equivalent-layer technique, we estimate the regularized paramet
 \end{equation}
 
 \subsection{Fast equivalent-layer technique}
-\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on the equivalent layer. These authors proved that the fast equivalent-layer technique has a better computational efficiency than the classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the dataset totalize at least 200 observation points, even using a large number of iterations.
+\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on the equivalent layer. Those authors showed that the fast equivalent-layer technique has a better computational efficiency than the classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the dataset totalize at least 200 observation points, even using a large number of iterations.
 
-Considering each equivalent source (point mass) directly beneath the observation point, the iteration of the Siqueira et al.'s (2017) method starts by an initial approximation of mass distibution given by
+Considering each equivalent source (point mass) directly beneath the observation point, the iteration of the Siqueira et al.'s (2017) method starts by an initial approximation of mass disttibution given by
 
 \begin{equation}
 \mathbf{p}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
