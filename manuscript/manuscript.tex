@@ -92,7 +92,7 @@ parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent 
 (point mass) at the $j$th Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
 is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
 \begin{equation}
-a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
+a_{ij}= \frac{c_{g} \, G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
 (y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
 \label{eq:aij}
 \end{equation}
@@ -111,57 +111,48 @@ from the observed gravity data $\mathbf{d}^{o}$ by
 \end{equation}
 
 \subsection{Fast equivalent-layer technique}
-\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on the equivalent layer. Those authors showed that the fast equivalent-layer technique has a better computational efficiency than the classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the dataset totalize at least 200 observation points, even using a large number of iterations.
+\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass 
+distribution over the equivalent layer based on the excess of mass and the positive correlation 
+between the observed gravity data and the masses on the equivalent layer. Those authors showed 
+that the fast equivalent-layer technique has a better computational efficiency than the 
+classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the 
+dataset totalize at least 200 observation points, even using a large number of iterations.
 
-Considering each equivalent source (point mass) directly beneath the observation point, the iteration of the Siqueira et al.'s (2017) method starts by an initial approximation of mass disttibution given by
-
+Considering one equivalent source (point mass) directly beneath each observation point, 
+the iteration of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
+starts by an initial approximation of mass distribution given by
 \begin{equation}
 \mathbf{p}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
-\label{eq:initial_m}
+\label{eq:p0_fast_eqlayer}
 \end{equation}
-where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix whose
-
+where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix with elements
 \begin{equation}
-\tilde{\mathbf{A}}^{-1} = [\tilde{a}]_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: .
-\label{eq:a_approx}
+\tilde{a}_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: ,
+\label{eq:aii_tilde_inv_fast_eqlayer}
 \end{equation}
-
-where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal coordinates $x_i$ and $y_i$ of the $i$th observation.
-At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ is estimated by minimizing the goal function:
-
+where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal 
+coordinates $x_i$ and $y_i$ of the $i$th observation.
+At the $k$th iteration, the masses of the equivalent sources are updated by
 \begin{equation}
-\phi(\mathbf{\Delta p^k}) = ||\mathbf{d}^{o} - \mathbf{A}\hat{\mathbf{p}}^k - \tilde{\mathbf{A}} \mathbf{\Delta} \hat{\mathbf{p}^k}||_2^2
-\label{eq:goal-function_fast}
+\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: ,
+\label{eq:p_k+1_fast_eqlayer}
 \end{equation}
-
-\noindent and the masses of the equivalent sources is updated by
-
-\begin{equation}
-\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: .
-\label{eq:update_m}
-\end{equation}
-
-\noindent with
-
+where the mass correction is given by
 \begin{equation}
 \mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \tilde{\mathbf{A}}^{-1} (\mathbf{d}^{o} - \mathbf{A} \hat{\mathbf{p}}^{k}) \: .
-\label{eq:update_delta_m}
+\label{eq:delta_p_k_fast_eqlayer}
 \end{equation}
 
-%\lstset{language=Python}
-%\lstset{frame=lines}
-%\lstset{caption={A \textit{Python} algorithm for Siqueira et al.'s (2017) fast equivalent layer.}}
-%\lstset{label={lst:code_direct}}
-%\lstset{basicstyle=\footnotesize}
-%\begin{lstlisting}
-%diagonal_A = G*(10**5)*2*pi/(dx*dy)
-%for i in range (itmax):
-%	res = (data - A.dot(p))
-%	delta_p = res/diagonal_A
-%	p += delta_p
-%\end{lstlisting}
-
-At the $k$th iteration of Siqueira et al.'s (2017) method, the matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. This matrix-vector product represents  the bottleneck of the Siqueira et al.'s (2017) method. Considering the limitation of 16 Gb of RAM memory in our system, we could run  Siqueira et al.'s (2017) method only up to 22 500 observation points. Hence, for very large data sets it is costful and can be overwhelming in terms of RAM memory to maintain such operation.
+At the $k$th iteration of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method, 
+the matrix-vector product 
+$\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual 
+$\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. This matrix-vector product represents the 
+bottleneck of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method. Considering 
+the limitation of 16 Gb of RAM 
+memory in our system, we could run  \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
+only up to 22 500 observation 
+points. Hence, for very large data sets it is costful and can be overwhelming in terms of RAM 
+memory to maintain such operation.
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
@@ -244,7 +235,7 @@ matrix index $i = 7$ (or $j = 7$).
 The element $a_{ij}$ (equation \ref{eq:aij}) can be rewritten 
 by using equations \ref{eq:xi} and \ref{eq:yi}, giving rise to:
 \begin{equation}
-a_{ij} = \frac{G \, \Delta z \, 10^{-5}}{ \left[ 
+a_{ij} = \frac{c_{g} \, G \, \Delta z}{ \left[ 
 	\left( \Delta k_{ij} \, \Delta x \right)^{2} + 
 	\left( \Delta l_{ij} \, \Delta y \right)^{2} + 
 	\left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} \: ,
@@ -407,14 +398,9 @@ with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{y}$.
 
 \subsection{BTTB matrix-vector product}
 
-\citet{siqueira-etal2017} developed a computationally efficient scheme for processing gravity data. 
-This scheme does not solve a linear system for estimating the parameter vector $\mathbf{p}$
-(equation \ref{eq:predicted-data-vector}).
-Instead, it uses an iterative process that corrects $\mathbf{p}$ based on the residuals. 
-Although computationally efficient, the method presented by \citet{siqueira-etal2017} requires, 
-at each iteration, the matrix-vector product $\mathbf{A}\mathbf{p}$ for computing the 
-predicted data vector $\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}).
-This step accounts for most of the total computation time of their algorithm and can suffer
+The matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation \ref{eq:delta_p_k_fast_eqlayer}) 
+required by \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method
+accounts for most of the total computation time of their algorithm and can suffer
 from RAM memory shortage when large data sets are used.
 This computational load can be drastically lessen by exploring the well-defined structure of 
 matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for the particular case in which 
