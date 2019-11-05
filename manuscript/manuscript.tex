@@ -410,7 +410,8 @@ In this case, $\mathbf{A}$ is a symmetric BTTB matrix (as illustrated by equatio
 \ref{eq:Aq-y-oriented}) and the predicted data vector 
 $\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}) can be efficiently
 computed by using the two-dimensional Discrete Fourier Transform (DFT).
-
+To do this, let us rewrite $\mathbf{d}(\mathbf{p})$ and
+$\mathbf{p}$ (equation \ref{eq:predicted-data-vector}) as the following partitioned vectors:
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \begin{bmatrix}
 \mathbf{d}_{0}(\mathbf{p}) \\
@@ -435,7 +436,7 @@ are $P \times 1$ vectors. Notice that $q$ is the block index defined by equation
 \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}, $Q$ defines the number of blocks
 $\mathbf{A}_{q}$ forming $\mathbf{A}$ and $P$ defines the number of elements forming 
 each block $\mathbf{A}_{q}$.
-
+By using these partitioned vectors, we define 
 \begin{equation}
 \mathbf{w} = \mathbf{C} \mathbf{v} \: ,
 \label{eq:embedding-BCCB-matrix-vector-product}
@@ -479,6 +480,16 @@ and
 with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
 equations \ref{eq:predicted-data-vector-partitioned} and 
 \ref{eq:parameter-vector-partitioned}, respectively.
+In equation \ref{eq:embedding-BCCB-matrix-vector-product}, $\mathbf{C}$ is a 
+symmetric Block-Circulant Circulant-Block (BCCB) matrix \citep[][ p. 184]{davis1979}.
+This matrix is circulant blockwise, formed by $Q \times Q$ blocks, where
+each block is a $P \times P$ circulant matrix. Additionally, the blocks lying 
+above the main diagonal are equal to those located below.
+
+PAREI AQUI
+
+In equation \ref{eq:embedding-BCCB-matrix-vector-product}, matrix $\mathbf{C}$
+is given by
 
 \begin{equation}
 \tensor{C} =
