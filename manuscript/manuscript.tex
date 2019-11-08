@@ -100,7 +100,8 @@ where $G$ is the Newton's gravitational constant and $c_{g} = 10^{5}$
 transforms from $\mathrm{m/s^2}$ to mGal.
 Notice that the sensitivity matrix depends on the $i$th coordinates of the observations 
 and the $j$th coordinates of the equivalent sources. For convenience, we designate 
-these coordinates as matrix coordinates and the indices $i$ and $j$ as matrix indices.
+these coordinates as \textit{matrix coordinates} and the indices $i$ and $j$ as 
+\textit{matrix indices}.
 In the classical equivalent-layer technique, we estimate the regularized parameter vector 
 from the observed gravity data $\mathbf{d}^{o}$ by
 \begin{equation}
@@ -146,12 +147,10 @@ where the mass correction is given by
 At the $k$th iteration of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method, 
 the matrix-vector product 
 $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual 
-$\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. This matrix-vector product represents the 
-bottleneck of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method. Considering 
-the limitation of 16 Gb of RAM 
-memory in our system, we could run  \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
-only up to 22 500 observation 
-points. Hence, for very large data sets it is costful and can be overwhelming in terms of RAM 
+$\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
+Considering the limitation of 16 Gb of RAM 
+memory in our system, we could run their method only up to 22 500 observation points. 
+Hence, for very large data sets it is costful and can be overwhelming in terms of RAM 
 memory to maintain such operation.
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
@@ -250,60 +249,60 @@ defined by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
 
 For $x$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}, respectively.
-In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-particular type of matrix called symmetric doubly block Toeplitz \citep[][ p. 28]{jain1989}
-or symmetric Block-Toeplitz Toeplitz-Block (BTTB) matrix \citep[][ p. 67]{chan-jin2007}.
-We opted for using the second term. This matrix is 
-composed of $N_{y} \times N_{y}$ blocks, where each block is a symmetric Toeplitz matrix
-formed by $N_{x} \times N_{x}$ elements.
+In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is 
+composed of $N_{y} \times N_{y}$ blocks, where each block is formed by $N_{x} \times N_{x}$ elements.
 For $y$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, respectively.
 In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-symmetric BTTB matrix composed of $N_{x} \times N_{x}$ blocks, where each block is a
-symmetric Toeplitz matrix formed by $N_{y} \times N_{y}$ elements.
-In both cases, the blocks lying at the same diagonal are equal to each other
-and those located above the main diagonal are equal to those located below.
+composed of $N_{x} \times N_{x}$ blocks, where each block is formed by $N_{y} \times N_{y}$ elements.
+In both cases, $\mathbf{A}$ is Toeplitz blockwise, i.e., the blocks lying at the same diagonal 
+are equal to each other.
+Besides, the blocks located above the main diagonal are equal to those 
+located below and each block is itself a Toeplitz matrix.
 These symmetries come from the fact that the coefficients
 $\Delta k_{ij}$ and $\Delta l_{ij}$ are squared at the denominator of 
 $a_{ij}$ (equation \ref{eq:aij-regular-grids}).
+Matrices with this well-defined pattern are called symmetric doubly block 
+Toeplitz \citep[][ p. 28]{jain1989} or symmetric Block-Toeplitz Toeplitz-Block (BTTB) 
+matrix \citep[][ p. 67]{chan-jin2007}. We opted for using the second term.
 
-We represent $\mathbf{A}$ as a grid of $Q \times Q$ blocks $\mathbf{A}_{q}$, 
-$q = 0, \dots, Q - 1$, where each block has $P \times P$ elements.
-For $x$-oriented grids, the index $q$ varies from $0$, at the main diagonal,
-to $Q - 1$, at the corners of $\mathbf{A}$, where $Q = N_{y}$.
-In this case, the index $q$ is defined as an integer function
-of the matrix indices $i$ and $j$ as follows:
+This well-defined pattern is better represented by using the \textit{block indices} $q$ and $p$. 
+We represent $\mathbf{A}$ as a grid of $Q \times Q$ blocks 
+$\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, where each block has $P \times P$ elements 
+conveniently represented by $a^{q}_{p}$, $p = 0, \dots, P - 1$, with $N = QP$. 
+The index $q$ defines the block diagonal where $\mathbf{A}_{q}$ lies 
+within $\mathbf{A}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
+the corners of $\mathbf{A}$. Similarly, the index $p$ defines the diagonal where $a^{q}_{p}$ 
+lies within $\mathbf{A}_{q}$. This index varies from $0$, at the main diagonal, to $P - 1$, at
+the corners of $\mathbf{A}_{q}$.
+For $x$-oriented grids, $Q = N_{y}$, $P = N_{x}$ and the block indices
+$q$ and $p$ are defined, respectively, by the following integer functions 
+of the matrix indices $i$ and $j$:
 \begin{equation}
-q(i, j) = \; \mid l(i) - l(j) \mid \quad ,
+q(i, j) = \; \mid l(i) - l(j) \mid
 \label{eq:q-x-oriented}
 \end{equation}
-where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-x-oriented}.
-The elements forming the first column of $\mathbf{A}_{q}$ are conveniently 
-represented as $a^{q}_{p}$, $p = 0, \dots, P - 1$, where $q \equiv q(i, j)$ 
-(equation \ref{eq:q-x-oriented}), $P = N_{x}$ and the subscript index $p$ is defined by 
-the following integer function:
+and
 \begin{equation}
 p(i, j) = \; \mid k(i) - k(j) \mid \quad ,
 \label{eq:p-x-oriented}
 \end{equation}
-where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-x-oriented}.
-For $y$-oriented grids, the index $q$ varies from $0$, at the main diagonal,
-to $Q - 1$, at the corners of $\mathbf{A}$, where $Q = N_{x}$.
-In such grids, $q$ is given by:
+where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-x-oriented} 
+and $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-x-oriented}.
+For $y$-oriented grids, $Q = N_{x}$, $P = N_{y}$ and the block indices
+$q$ and $p$ are defined, respectively, by the following integer functions 
+of the matrix indices $i$ and $j$:
 \begin{equation}
-q(i, j) = \; \mid k(i) - k(j) \mid \quad ,
+q(i, j) = \; \mid k(i) - k(j) \mid 
 \label{eq:q-y-oriented}
 \end{equation}
-where the integer functions $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}.
-In this case, the elements forming the first column of $\mathbf{A}_{q}$ are 
-represented as $a^{q}_{p}$, $p = 0, \dots, P - 1$, where $q \equiv q(i, j)$ 
-(equation \ref{eq:q-y-oriented}), $P = N_{y}$ and the subscript index $p$ is defined by:
+and
 \begin{equation}
 p(i, j) = \; \mid l(i) - l(j) \mid \quad ,
 \label{eq:p-y-oriented}
 \end{equation}
-where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
-For convenience, we designate the indices $q$ and $p$ as \textit{block indices}.
+where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}
+and $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
 
 It is important noting that different matrix indices $i$ or $j$ produce the same 
 absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} and
@@ -311,7 +310,10 @@ absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} and
 \ref{eq:l-y-oriented}). As a consequence, different pairs of matrix indices $i$
 and $j$ generate the same absolute values for the coefficients $\Delta k_{ij}$ and
 $\Delta l_{ij}$ that compose the denominator of $a_{ij}$ 
-(equation \ref{eq:aij-regular-grids}). It means that elements $a_{ij}$ defined
+(equation \ref{eq:aij-regular-grids}) and also the same values for the block indices
+$q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and 
+$p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}). 
+It means that elements $a_{ij}$ defined
 by different matrix indices $i$ and $j$ have the same value. The key point for
 understanding the structure of matrix $\mathbf{A}$ is then, given a single element $a_{ij}$
 defined by matrix indices $i$ and $j$, compute the grid indices 
@@ -323,12 +325,36 @@ $\Delta l_{ij}$ and determine the value of $a_{ij}$ with equation
 \ref{eq:aij-regular-grids} and 
 (2) compute the block indices $q$ (equations \ref{eq:q-x-oriented}, 
 and \ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and
-and \ref{eq:p-y-oriented}) and determine the positions where $a_{ij}$ appears
-in matrix $\mathbf{A}$.
+and \ref{eq:p-y-oriented}) and determine where $a_{ij}$ appears
+within matrix $\mathbf{A}$. This procedure can be used to illustrate the 
+well-defined pattern of the BTTB matrix $\mathbf{A}$.
 
 Consider the $x$-oriented grid of $N_{x} \times N_{y}$ points shown in Figure 1a, 
 with $N_{x} = 4$, $N_{y} = 3$ and $N = N_{x} \, N_{y} = 12$.
-This grid results in a matrix $\mathbf{A}$ given by:
+To illustrate the relationship between the matrix indices ($i$ and $j$) and 
+the block indices ($q$ and $p$), consider the element $a_{ij}$ defined by 
+$i = 2$ and $j = 10$, which is
+located at the upper right corner of $\mathbf{A}$, in the 2nd line and 10th column.
+By using equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}, we obtain the 
+grid indices $l(i) = 1$, $l(j) = 3$, $k(i) = 2$ and $k(j) = 2$.
+These grid indices result in the coefficients $\Delta k_{ij} = 0$ and $\Delta l_{ij} = -2$,
+which are used to compute the element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+as well as in the block indices $q = 2$ (equation \ref{eq:q-x-oriented}) and 
+$p = 0$ (equation \ref{eq:p-x-oriented}).
+These block indices indicate that this element $a_{ij}$ appears in the main diagonal
+of the blocks $\mathbf{A}_{2}$, which are located at the corners of $\mathbf{A}$.
+To verify this, let us take the matrix indices associated with these elements.
+They are $(i, j)$ = $(1, 9)$, $(2, 10)$, $(3, 11)$, $(4, 12)$, $(9, 1)$, $(10, 2)$, 
+$(11, 3)$ and $(12, 4)$. By using these matrix indices, it is easy to verify that all
+of them produce the same grid indices $l(i)$, $l(j)$, $k(i)$ and $k(j)$ 
+(equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}) as those associated with
+the element defined by $i = 2$ and $j = 10$. Consequently, all of them produce
+elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) having the same value.
+Besides, it is also easy to verify that all these matrix indices produce the same block
+indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented}).
+By repeating this procedure for all elements $a_{ij}$, $i = 1, \dots, 12$, $j = 1, \dots, 12$, 
+forming the matrix $\mathbf{A}$ obtained from our $x$-oriented grid (Figure 1a),
+we can verify that
 \begin{equation}
 \mathbf{A} = \begin{bmatrix}
 \mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
@@ -349,30 +375,7 @@ a^{q}_{3} & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
 \label{eq:Aq-x-oriented}
 \end{equation}
 with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{x}$.
-To illustrate the relationship between the block indices ($q$ and $p$) and the matrix indices 
-($i$ and $j$), consider the element $a_{ij}$ defined by $i = 2$ and $j = 10$, which is
-located at the upper right corner of $\mathbf{A}$, in the 2nd line and 10th column.
-By using equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}, we obtain the 
-grid indices $l(i) = 1$, $l(j) = 3$, $k(i) = 2$ and $k(j) = 2$.
-These grid indices result in the coefficients $\Delta k_{ij} = 0$ and $\Delta l_{ij} = -2$,
-which are used to compute the element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
-as well as in the block indices $q = 2$ (equation \ref{eq:q-x-oriented}) and 
-$p = 0$ (equation \ref{eq:p-x-oriented}).
-These block indices indicate that this element $a_{ij}$ appears in the main diagonal
-of the blocks $\mathbf{A}_{2}$, which are located at the corners of $\mathbf{A}$.
-To verify this, let us take the matrix indices associated with these elements.
-They are $(i, j)$ = $(1, 9)$, $(2, 10)$, $(3, 11)$, $(4, 12)$, $(9, 1)$, $(10, 2)$, 
-$(11, 3)$ and $(12, 4)$. By using these matrix indices, it is easy to verify that all
-of them produce the same grid indices $l(i)$, $l(j)$, $k(i)$ and $k(j)$ 
-(equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}) as those associated with
-the element defined by $i = 2$ and $j = 10$. Consequently, all of them produce
-elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) having the same value.
-Besides, it is also easy to verify that all these matrix indices produce the same block
-indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented}).
-By repeating this procedure for all elements $a_{ij}$, $i = 0, 1, 2, 3$, $j = 0, 1, 2$, 
-forming the matrix $\mathbf{A}$ obtained from our $x$-oriented grid (Figure 1a),
-we can verify the well-defined pattern represented by equations 
-\ref{eq:A-x-oriented-example} and \ref{eq:Aq-x-oriented}.
+
 This procedure can also be used to verify that the matrix $\mathbf{A}$ obtained
 from the $y$-oriented grid illustrated in Figure 1b is given by
 \begin{equation}
@@ -395,6 +398,12 @@ a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
 \label{eq:Aq-y-oriented}
 \end{equation}
 with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{y}$.
+
+These examples (equations \ref{eq:A-x-oriented-example}, \ref{eq:Aq-x-oriented}, 
+\ref{eq:A-y-oriented-example} and \ref{eq:Aq-y-oriented}) show that the entire 
+BTTB matrix $\mathbf{A}$ can be defined by using only the elements forming its first 
+column. Notice that this column contains the gravitational effect produced by the a single 
+equivalent source at all observation points.
 
 \subsection{BTTB matrix-vector product}
 
@@ -436,7 +445,7 @@ are $P \times 1$ vectors. Notice that $q$ is the block index defined by equation
 \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}, $Q$ defines the number of blocks
 $\mathbf{A}_{q}$ forming $\mathbf{A}$ and $P$ defines the number of elements forming 
 each block $\mathbf{A}_{q}$.
-By using these partitioned vectors, we define 
+By using these partitioned vectors and remembering that $N = QP$, we define 
 \begin{equation}
 \mathbf{w} = \mathbf{C} \mathbf{v} \: ,
 \label{eq:embedding-BCCB-matrix-vector-product}
@@ -448,15 +457,15 @@ where
 \mathbf{w}_{1} \\
 \vdots \\
 \mathbf{w}_{Q - 1} \\
-\mathbf{0}_{(2QP) \times 1}
-\end{bmatrix}_{(4QP) \times 1} \quad ,
+\mathbf{0}_{2N \times 1}
+\end{bmatrix}_{4N \times 1} \quad ,
 \label{eq:w-vector}
 \end{equation}
 \begin{equation}
 \mathbf{w}_{q} = \begin{bmatrix}
 \mathbf{d}_{q}(\mathbf{p}) \\
 \mathbf{0}_{P \times 1}
-\end{bmatrix}_{(2P) \times 1}
+\end{bmatrix}_{2P \times 1}
 \label{eq:wq-vector} \quad ,
 \end{equation}
 \begin{equation}
@@ -465,8 +474,8 @@ where
 \mathbf{v}_{1} \\
 \vdots \\
 \mathbf{v}_{Q - 1} \\
-\mathbf{0}_{(2QP) \times 1}
-\end{bmatrix}_{(4QP) \times 1} \quad ,
+\mathbf{0}_{2N \times 1}
+\end{bmatrix}_{4N \times 1} \quad ,
 \label{eq:v-vector}
 \end{equation}
 and
@@ -474,7 +483,7 @@ and
 \mathbf{v}_{q} = \begin{bmatrix}
 \mathbf{p}_{q} \\
 \mathbf{0}_{P \times 1}
-\end{bmatrix}_{(2P) \times 1}
+\end{bmatrix}_{2P \times 1}
 \label{eq:vq-vector} \quad ,
 \end{equation}
 with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
@@ -485,6 +494,40 @@ symmetric Block-Circulant Circulant-Block (BCCB) matrix \citep[][ p. 184]{davis1
 This matrix is circulant blockwise, formed by $Q \times Q$ blocks, where
 each block is a $P \times P$ circulant matrix. Additionally, the blocks lying 
 above the main diagonal are equal to those located below.
+
+The first column of blocks forming $\mathbf{C}$ 
+(equation \ref{eq:embedding-BCCB-matrix-vector-product}) is given by:
+\begin{equation}
+\left[\mathbf{C} \right]_{(0)} = 
+	\begin{bmatrix}
+	\mathbf{C}_{0} \\
+	\vdots \\
+	\mathbf{C}_{Q-1} \\
+	\mathbf{0} \\
+	\mathbf{C}_{Q-1} \\
+	\vdots \\
+	\mathbf{C}_{1}
+	\end{bmatrix}_{4N \times 2P} \: ,
+	\label{eq:C-first-column-blocks}
+\end{equation}
+where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros, 
+and the first column of each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is given by:
+\begin{equation}
+\left[\mathbf{C}_{q} \right]_{(0)} = 
+	\begin{bmatrix}
+		a^{q}_{0} \\
+		\vdots \\
+		a^{q}_{P-1} \\
+		0 \\
+		a^{q}_{P-1} \\
+		\vdots \\
+		a^{q}_{1}
+	\end{bmatrix}_{2P \times 1} \: ,
+	\label{eq:Cq-first-column}
+\end{equation}
+where $a^{q}_{p}$, $p = 0, \dots, P-1$, are the elements forming the sub-matrix 
+$\mathbf{A}_{q}$, as illustrated by equations \ref{eq:A-x-oriented-example}, \ref{eq:Aq-x-oriented}, 
+\ref{eq:A-y-oriented-example} and \ref{eq:Aq-y-oriented}.
 
 PAREI AQUI
 
@@ -528,55 +571,6 @@ The matrix $\mathbf{C}$ is a $4N_x N_y \times 4N_x N_y$ Block-Circulant matrix f
 
 %Instead of calculating the product $\mathbf{d} = \mathbf{A} \mathbf{p}$ (equation \ref{eq:predicted-data-vector}), we now carry the following multiplication:
 
-%\begin{equation}
-%\mathbf{C} \mathbf{v} = \mathbf{q} \: ,
-%\label{eq:BCCB_vector_product}
-%\end{equation}
-%where $\mathbf{v}$ and $\mathbf{q}$ are $4N_x N_y \times 1$ vectors given, respectively, by:
-
-%\begin{equation}
-%\mathbf{v} =
-%\begin{bmatrix}
-%	\mathbf{v}_{0} \cr
-%	\mathbf{v}_{1} \cr
-%	\vdots \cr
-%	\mathbf{v}_{N_x- 1} \cr
-%	\mathbf{0}_{(2 N_x N_y)}
-%\end{bmatrix}
-%\end{equation}
-
-%\noindent and
-%
-%\begin{equation}
-%\mathbf{q} =
-%\begin{bmatrix}
-%	\mathbf{q}_{0} \cr
-%	\mathbf{q}_{1} \cr
-%	\vdots \cr
-%	\mathbf{q}_{N_x - 1} \cr
-%	\mathbf{\dagger}_{(2 N_x N_y)}
-%\end{bmatrix} \: ,
-%\end{equation}
-%where $\mathbf{0}_{(2 N_x N_y)}$ is a $2 N_x N_y \times 1$ vector of zeros, $\mathbf{\dagger}_{(2 N_x N_y)}$ is $2 N_x N_y \times 1$ vector to be drop out and $\mathbf{v}_{\ell}$ and $\mathbf{q}_{\ell}$, $\ell = 0, \dots, N_x-1$ are:
-%
-%\begin{equation}
-%\mathbf{v}_{\ell} =
-%\begin{bmatrix}
-%	\mathbf{p}_{\ell} \cr
-%	\mathbf{0}_{(N_y)}
-%\end{bmatrix}
-%\end{equation}
-%
-%\noindent and
-%
-%\begin{equation}
-%\mathbf{q}_{\ell} =
-%\begin{bmatrix}
-%	\mathbf{d}_{\ell} \cr
-%	\mathbf{\dagger}_{(N_y)}
-%\end{bmatrix} \: ,
-%\end{equation}
-%where $\mathbf{0}_{(N_y)}$ is a $N_y \times 1$ vector of zeros, $\mathbf{\dagger}_{(N_y)}$ is a $N_y \times 1$ vector to be drop out and $\mathbf{d}_{\ell}$ and $\mathbf{p}_{\ell}$ are $N_y \times 1$ vectors partitioned from the original $\mathbf{d}$ and $\mathbf{p}$ vectors (equation \ref{eq:predicted-data-vector}).
 
 As demonstrated by \cite{grenander-szego1984}, circulant matrices can be diagonalized by taking the discrete Fourier transform (DFT), i.e., its eigenvalues can be easily calculated by a fast algorithm of DFT. For BCCB matrices \cite{chan-jin2007} demonstrate that they satisfy:
 
@@ -614,40 +608,7 @@ By substituting equation \ref{eq:fft_BCCB} in equation \ref{eq:embedding-BCCB-ma
 
 \noindent where ``$\circ$'' denotes the Hadamard product, $\mathbf{L}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the eigenvalues of $\mathbf{C}$, and $\mathbf{V}$ and $\mathbf{Q}$ are $2N_x \times 2N_y$ row-oriented matrices obtained from the vectors $\mathbf{v}$ and $\mathbf{q}$.
 
-Note that in general, the first column of blocks forming a BCCB matrix $\mathbf{C}_{\ell}$ (equation \ref{eq:circulant_elements}) is given by:
 
-\begin{equation}
-\left[\mathbf{C} \right]_{(0)} = 
-\begin{bmatrix}
-\mathbf{C}_{0} \cr
-\mathbf{C}_{1} \cr
-\vdots \cr
-\mathbf{C}_{N_x-2} \cr
-\mathbf{C}_{N_x-1} \cr
-\mathbf{0} \cr
-\mathbf{C}_{N_x-1} \cr
-\mathbf{C}_{N_x-2} \cr
-\vdots \cr
-\mathbf{C}_{1}
-\end{bmatrix} \; ,
-\end{equation}
-where each block $\mathbf{C}_{\ell}$, $\ell = 0, \dots, N_x-1$, is a $2N_y \times 2N_y$ circulant matrix and $\mathbf{0}$ is a $2N_y \times 2N_y$ matrix with all elements equal to zero. Thus, the first column $\mathbf{c}_{0}$ of a circulant matrix $\mathbf{C}$ is given by:
-
-\begin{equation}
-\mathbf{c}_{0} =
-\begin{bmatrix}
-	a_{00} \cr
-	a_{10} \cr
-	\vdots \cr
-	a_{(N_y-2)0} \cr
-	a_{N_y-1) 0} \cr
-	0 \cr
-	a_{N_y-1) 0} \cr
-	a_{(N_y-2)0} \cr
-	\vdots \cr
-	a_{10}
-\end{bmatrix} \:.
-\end{equation}
 
 To complete the process, after calculating the inverse to obtain $\mathbf{W}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{w}$ and also rearrange the elements of $\mathbf{w}$ to obtain the wanted vector $\mathbf{d(p)}$.
 
