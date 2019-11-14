@@ -255,8 +255,8 @@ For $y$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are
 computed by using equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, respectively.
 In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
 composed of $N_{x} \times N_{x}$ blocks, where each block is formed by $N_{y} \times N_{y}$ elements.
-In both cases, $\mathbf{A}$ is Toeplitz blockwise, i.e., the blocks lying at the same diagonal 
-are equal to each other.
+In both cases, $\mathbf{A}$ is Toeplitz blockwise, i.e., the blocks lying at the same block 
+diagonal are equal to each other.
 Besides, the blocks located above the main diagonal are equal to those 
 located below and each block is itself a Toeplitz matrix.
 These symmetries come from the fact that the coefficients
@@ -267,14 +267,34 @@ Toeplitz \citep[][ p. 28]{jain1989} or symmetric Block-Toeplitz Toeplitz-Block (
 matrix \citep[][ p. 67]{chan-jin2007}. We opted for using the second term.
 
 This well-defined pattern is better represented by using the \textit{block indices} $q$ and $p$. 
-We represent $\mathbf{A}$ as a grid of $Q \times Q$ blocks 
-$\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, where each block has $P \times P$ elements 
-conveniently represented by $a^{q}_{p}$, $p = 0, \dots, P - 1$, with $N = QP$. 
-The index $q$ defines the block diagonal where $\mathbf{A}_{q}$ lies 
-within $\mathbf{A}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
+We represent $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) as a grid of $Q \times Q$ blocks 
+$\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, given by
+\begin{equation}
+	\mathbf{A} = \begin{bmatrix}
+	\mathbf{A}_{0}   & \mathbf{A}_{1} & \cdots         & \mathbf{A}_{Q-1} \\
+	\mathbf{A}_{1}   & \mathbf{A}_{0} & \ddots         & \vdots           \\ 
+	\vdots           & \ddots         & \ddots         & \mathbf{A}_{1}   \\
+	\mathbf{A}_{Q-1} & \cdots         & \mathbf{A}_{1} & \mathbf{A}_{0}                 
+	\end{bmatrix}_{N \times N} \: ,
+	\label{eq:BTTB_A}
+\end{equation}
+where each block has $P \times P$ elements conveniently represented by $a^{q}_{p}$, 
+$p = 0, \dots, P - 1$, as follows:
+\begin{equation}
+	\mathbf{A}_{q} = \begin{bmatrix}
+	a^{q}_{0}   & a^{q}_{1} & \cdots    & a^{q}_{P-1} \\
+	a^{q}_{1}   & a^{q}_{0} & \ddots    & \vdots           \\ 
+	\vdots      & \ddots    & \ddots    & a^{q}_{1}   \\
+	a^{q}_{P-1} & \cdots    & a^{q}_{1} & a^{q}_{0}                 
+	\end{bmatrix}_{P \times P} \: ,
+	\label{eq:Aq_block}
+\end{equation}
+with $N = QP$. The index $q$ defines the block diagonal where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) 
+lies within the BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A}). 
+This index varies from $0$, at the main diagonal, to $Q - 1$, at
 the corners of $\mathbf{A}$. Similarly, the index $p$ defines the diagonal where $a^{q}_{p}$ 
-lies within $\mathbf{A}_{q}$. This index varies from $0$, at the main diagonal, to $P - 1$, at
-the corners of $\mathbf{A}_{q}$.
+lies within $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}). This index varies from $0$, 
+at the main diagonal, to $P - 1$, at the corners of $\mathbf{A}_{q}$.
 For $x$-oriented grids, $Q = N_{y}$, $P = N_{x}$ and the block indices
 $q$ and $p$ are defined, respectively, by the following integer functions 
 of the matrix indices $i$ and $j$:
@@ -303,6 +323,22 @@ p(i, j) = \; \mid l(i) - l(j) \mid \quad ,
 \end{equation}
 where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}
 and $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
+Notice that, for each element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+defined by matrix indices $i$ and $j$, there is a corresponding block element
+$a^{q}_{p}$, defined by block indices $q$ (equations \ref{eq:q-x-oriented} and 
+\ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}),
+so that
+\begin{equation}
+	a^{q}_{p} \equiv a_{ij} \quad .
+	\label{eq:aqp_equiv_aij}
+\end{equation}
+We also stress that matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) defined 
+by elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) in terms of matrix indices 
+$i$ and $j$ is strictly the same BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A}) defined 
+by the blocks $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) and block elements 
+$a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) in terms of the block indices 
+$q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and $p$ 
+(equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}).
 
 It is important noting that different matrix indices $i$ or $j$ produce the same 
 absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} and
@@ -312,10 +348,12 @@ and $j$ generate the same absolute values for the coefficients $\Delta k_{ij}$ a
 $\Delta l_{ij}$ that compose the denominator of $a_{ij}$ 
 (equation \ref{eq:aij-regular-grids}) and also the same values for the block indices
 $q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and 
-$p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}). 
+$p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}), as well as the same
+block element $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}). 
 It means that elements $a_{ij}$ defined
 by different matrix indices $i$ and $j$ have the same value. The key point for
-understanding the structure of matrix $\mathbf{A}$ is then, given a single element $a_{ij}$
+understanding the structure of BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A})
+is then, given a single element $a_{ij}$
 defined by matrix indices $i$ and $j$, compute the grid indices 
 $k$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
 $l$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}).
@@ -325,16 +363,16 @@ $\Delta l_{ij}$ and determine the value of $a_{ij}$ with equation
 \ref{eq:aij-regular-grids} and 
 (2) compute the block indices $q$ (equations \ref{eq:q-x-oriented}, 
 and \ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and
-and \ref{eq:p-y-oriented}) and determine where $a_{ij}$ appears
-within matrix $\mathbf{A}$. This procedure can be used to illustrate the 
-well-defined pattern of the BTTB matrix $\mathbf{A}$.
+and \ref{eq:p-y-oriented}) and determine the corresponding block element $a^{q}_{p}$ 
+(equation \ref{eq:aqp_equiv_aij}) forming $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}). 
 
 Consider the $x$-oriented grid of $N_{x} \times N_{y}$ points shown in Figure 1a, 
 with $N_{x} = 4$, $N_{y} = 3$ and $N = N_{x} \, N_{y} = 12$.
 To illustrate the relationship between the matrix indices ($i$ and $j$) and 
 the block indices ($q$ and $p$), consider the element $a_{ij}$ defined by 
 $i = 2$ and $j = 10$, which is
-located at the upper right corner of $\mathbf{A}$, in the 2nd line and 10th column.
+located at the upper right corner of $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), 
+in the 2nd line and 10th column.
 By using equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}, we obtain the 
 grid indices $l(i) = 1$, $l(j) = 3$, $k(i) = 2$ and $k(j) = 2$.
 These grid indices result in the coefficients $\Delta k_{ij} = 0$ and $\Delta l_{ij} = -2$,
@@ -342,7 +380,8 @@ which are used to compute the element $a_{ij}$ (equation \ref{eq:aij-regular-gri
 as well as in the block indices $q = 2$ (equation \ref{eq:q-x-oriented}) and 
 $p = 0$ (equation \ref{eq:p-x-oriented}).
 These block indices indicate that this element $a_{ij}$ appears in the main diagonal
-of the blocks $\mathbf{A}_{2}$, which are located at the corners of $\mathbf{A}$.
+of the blocks $\mathbf{A}_{2}$ (equation \ref{eq:Aq_block}), which are located at the corners 
+of $\mathbf{A}$ (equation \ref{eq:BTTB_A}).
 To verify this, let us take the matrix indices associated with these elements.
 They are $(i, j)$ = $(1, 9)$, $(2, 10)$, $(3, 11)$, $(4, 12)$, $(9, 1)$, $(10, 2)$, 
 $(11, 3)$ and $(12, 4)$. By using these matrix indices, it is easy to verify that all
@@ -351,10 +390,11 @@ of them produce the same grid indices $l(i)$, $l(j)$, $k(i)$ and $k(j)$
 the element defined by $i = 2$ and $j = 10$. Consequently, all of them produce
 elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) having the same value.
 Besides, it is also easy to verify that all these matrix indices produce the same block
-indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented}).
+indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented})
+and the same block element $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
 By repeating this procedure for all elements $a_{ij}$, $i = 1, \dots, 12$, $j = 1, \dots, 12$, 
-forming the matrix $\mathbf{A}$ obtained from our $x$-oriented grid (Figure 1a),
-we can verify that
+forming the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) obtained from our 
+$x$-oriented grid (Figure 1a), we can verify that
 \begin{equation}
 \mathbf{A} = \begin{bmatrix}
 \mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
@@ -363,7 +403,7 @@ we can verify that
 \end{bmatrix} \quad ,
 \label{eq:A-x-oriented-example}
 \end{equation}
-where $\mathbf{A}_{q}$, $q = 0, \dots, Q -1$, $Q = N_{y}$, 
+where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q -1$, $Q = N_{y}$, 
 are symmetric Toeplitz matrices given by:
 \begin{equation}
 \mathbf{A}_{q} = \begin{bmatrix}
@@ -374,9 +414,11 @@ a^{q}_{3} & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
 \end{bmatrix} \quad ,
 \label{eq:Aq-x-oriented}
 \end{equation}
-with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{x}$.
+with elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) defined by 
+$p = 0, \dots, P - 1$, $P = N_{x}$.
 
-This procedure can also be used to verify that the matrix $\mathbf{A}$ obtained
+This procedure can also be used to verify that the matrix $\mathbf{A}$ 
+(equation \ref{eq:predicted-data-vector}) obtained
 from the $y$-oriented grid illustrated in Figure 1b is given by
 \begin{equation}
 \mathbf{A} = \begin{bmatrix}
@@ -387,7 +429,7 @@ from the $y$-oriented grid illustrated in Figure 1b is given by
 \end{bmatrix} \quad ,
 \label{eq:A-y-oriented-example}
 \end{equation}
-where $\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, $Q = N_{x}$, 
+where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q - 1$, $Q = N_{x}$, 
 are symmetric Toeplitz matrices given by:
 \begin{equation}
 \mathbf{A}_{q} = \begin{bmatrix}
@@ -397,13 +439,15 @@ a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
 \end{bmatrix} \quad ,
 \label{eq:Aq-y-oriented}
 \end{equation}
-with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{y}$.
+with elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) defined by 
+$p = 0, \dots, P - 1$, $P = N_{y}$.
 
-These examples (equations \ref{eq:A-x-oriented-example}, \ref{eq:Aq-x-oriented}, 
-\ref{eq:A-y-oriented-example} and \ref{eq:Aq-y-oriented}) show that the entire 
-BTTB matrix $\mathbf{A}$ can be defined by using only the elements forming its first 
-column. Notice that this column contains the gravitational effect produced by the a single 
-equivalent source at all observation points.
+These examples (equations \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) show 
+that the entire $N \times N$ BTTB matrix $\mathbf{A}$ 
+(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}) 
+can be defined by using only the elements 
+forming its first column (or row). Notice that this column contains the gravitational effect 
+produced by a single equivalent source at all $N$ observation points.
 
 \subsection{BTTB matrix-vector product}
 
@@ -414,9 +458,8 @@ from RAM memory shortage when large data sets are used.
 This computational load can be drastically lessen by exploring the well-defined structure of 
 matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for the particular case in which 
 its elements $a_{ij}$ are defined by equation \ref{eq:aij-regular-grids}. 
-In this case, $\mathbf{A}$ is a symmetric BTTB matrix (as illustrated by equations
-\ref{eq:A-x-oriented-example}, \ref{eq:Aq-x-oriented}, \ref{eq:A-y-oriented-example} and
-\ref{eq:Aq-y-oriented}) and the predicted data vector 
+In this case, $\mathbf{A}$ is a symmetric BTTB matrix (equations \ref{eq:BTTB_A} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) and the predicted data vector 
 $\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}) can be efficiently
 computed by using the two-dimensional Discrete Fourier Transform (DFT).
 To do this, let us rewrite $\mathbf{d}(\mathbf{p})$ and
@@ -424,7 +467,6 @@ $\mathbf{p}$ (equation \ref{eq:predicted-data-vector}) as the following partitio
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \begin{bmatrix}
 \mathbf{d}_{0}(\mathbf{p}) \\
-\mathbf{d}_{1}(\mathbf{p}) \\
 \vdots \\
 \mathbf{d}_{Q - 1}(\mathbf{p})
 \end{bmatrix}_{N \times 1}
@@ -434,7 +476,6 @@ and
 \begin{equation}
 \mathbf{p} = \begin{bmatrix}
 \mathbf{p}_{0} \\
-\mathbf{p}_{1} \\
 \vdots \\
 \mathbf{p}_{Q - 1}
 \end{bmatrix}_{N \times 1} \quad ,
@@ -443,8 +484,8 @@ and
 where $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$, $q = 0, \dots, Q - 1$,
 are $P \times 1$ vectors. Notice that $q$ is the block index defined by equations 
 \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}, $Q$ defines the number of blocks
-$\mathbf{A}_{q}$ forming $\mathbf{A}$ and $P$ defines the number of elements forming 
-each block $\mathbf{A}_{q}$.
+$\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) forming $\mathbf{A}$ (equation \ref{eq:BTTB_A}) 
+and $P$ defines the number of elements forming each block $\mathbf{A}_{q}$.
 By using these partitioned vectors and remembering that $N = QP$, we define 
 \begin{equation}
 \mathbf{w} = \mathbf{C} \mathbf{v} \: ,
@@ -454,7 +495,6 @@ where
 \begin{equation}
 \mathbf{w} = \begin{bmatrix}
 \mathbf{w}_{0} \\
-\mathbf{w}_{1} \\
 \vdots \\
 \mathbf{w}_{Q - 1} \\
 \mathbf{0}_{2N \times 1}
@@ -471,7 +511,6 @@ where
 \begin{equation}
 \mathbf{v} = \begin{bmatrix}
 \mathbf{v}_{0} \\
-\mathbf{v}_{1} \\
 \vdots \\
 \mathbf{v}_{Q - 1} \\
 \mathbf{0}_{2N \times 1}
@@ -489,13 +528,21 @@ and
 with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
 equations \ref{eq:predicted-data-vector-partitioned} and 
 \ref{eq:parameter-vector-partitioned}, respectively.
+
 In equation \ref{eq:embedding-BCCB-matrix-vector-product}, $\mathbf{C}$ is a 
-symmetric Block-Circulant Circulant-Block (BCCB) matrix \citep[][ p. 184]{davis1979}.
+$4N \times 4N$ symmetric Block-Circulant Circulant-Block (BCCB) matrix \citep[][ p. 184]{davis1979}.
 This matrix is circulant blockwise, formed by $Q \times Q$ blocks, where
-each block is a $P \times P$ circulant matrix. Additionally, the blocks lying 
+each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is a $2P \times 2P$ circulant matrix. 
+Similarly to the BTTB matrix $\mathbf{A}$ (equations \ref{eq:BTTB_A} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}), 
+the index $q$ defines the block diagonal where $\mathbf{C}_{q}$ lies 
+within $\mathbf{C}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
+the corners of $\mathbf{C}$. Additionally, the blocks lying 
 above the main diagonal are equal to those located below.
 
-The first column of blocks forming $\mathbf{C}$ 
+It is known that a circulant matrix can be defined by properly downshifting 
+its first column \citep[][ p. 221]{golub-vanloan2013}. So, 
+the first column of blocks forming $\mathbf{C}$ 
 (equation \ref{eq:embedding-BCCB-matrix-vector-product}) is given by:
 \begin{equation}
 \left[\mathbf{C} \right]_{(0)} = 
@@ -525,51 +572,43 @@ and the first column of each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is giv
 	\end{bmatrix}_{2P \times 1} \: ,
 	\label{eq:Cq-first-column}
 \end{equation}
-where $a^{q}_{p}$, $p = 0, \dots, P-1$, are the elements forming the sub-matrix 
-$\mathbf{A}_{q}$, as illustrated by equations \ref{eq:A-x-oriented-example}, \ref{eq:Aq-x-oriented}, 
-\ref{eq:A-y-oriented-example} and \ref{eq:Aq-y-oriented}.
+where $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}), $p = 0, \dots, P-1$, are the elements 
+forming the block $\mathbf{A}_{q}$ (equations \ref{eq:Aq_block} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}).
+To illustrate equations \ref{eq:C-first-column-blocks} and \ref{eq:Cq-first-column}, 
+consider our $y$-oriented grid illustrated in Figure 1b. In this case, the resulting 
+BCCB matrix $\mathbf{C}$ (equation \ref{eq:embedding-BCCB-matrix-vector-product}) is given by 
+\begin{equation}
+\mathbf{C} =
+\begin{bmatrix}
+	\mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} \\
+	\mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} \\
+	\mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} \\
+	\mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     \\
+	\mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} \\
+	\mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} \\
+	\mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} \\
+	\mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}}
+\end{bmatrix},
+\label{eq:C-y-oriented}
+\end{equation}
+where each block $\mathbf{C}_{q}$, $q = 0, 1, 2$, is represented as follows 
+\begin{equation}
+\tensor{C}_{q} =
+\begin{bmatrix}
+	a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} \\
+	a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} \\
+	a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         \\
+	0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} \\
+	a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{0} & a^{q}_{0} & a^{q}_{1} \\
+	a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
+\end{bmatrix}
+\label{eq:Cq-y-oriented}
+\end{equation}
+in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
+Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a.
 
 PAREI AQUI
-
-In equation \ref{eq:embedding-BCCB-matrix-vector-product}, matrix $\mathbf{C}$
-is given by
-
-\begin{equation}
-\tensor{C} =
-\begin{bmatrix}
-	\tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} \cr
-	\tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} \cr
-	\tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} \cr
-	\tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} \cr
-	\tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} \cr
-	\tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} \cr
-	\tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} \cr
-	\tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}}
-\end{bmatrix},
-\label{eq:circulant_elements}
-\end{equation}
-where each block $\mathbf{C}_{l}$ is:
-
-\begin{equation}
-\tensor{C}_{l} =
-\begin{bmatrix}
-	\tensor{A}_{l} & \times \cr
-	\times & \tensor{A}_{l}
-\end{bmatrix} =
-\begin{bmatrix}
-	a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} & a_{1}^{\ell} \cr
-	a_{1}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} \cr
-	a_{2}^{\ell} & a_{1}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} \cr
-	0^{\ell} & a_{2}^{\ell} & a_{1}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} \cr
-	a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} & a_{0}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} \cr
-	a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} & a_{1}^{\ell} & a_{0}^{\ell}
-\end{bmatrix}.
-\label{eq:toeplitz_circulant_element}
-\end{equation}
-
-The matrix $\mathbf{C}$ is a $4N_x N_y \times 4N_x N_y$ Block-Circulant matrix formed by Circulant-Blocks matrices. This matrix is formed by a grid of $2N_x \times 2N_x$ blocks, where each block is a $2N_y \times 2N_y$ matrix.
-
-%Instead of calculating the product $\mathbf{d} = \mathbf{A} \mathbf{p}$ (equation \ref{eq:predicted-data-vector}), we now carry the following multiplication:
 
 
 As demonstrated by \cite{grenander-szego1984}, circulant matrices can be diagonalized by taking the discrete Fourier transform (DFT), i.e., its eigenvalues can be easily calculated by a fast algorithm of DFT. For BCCB matrices \cite{chan-jin2007} demonstrate that they satisfy:
