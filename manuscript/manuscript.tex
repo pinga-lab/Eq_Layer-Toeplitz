@@ -93,7 +93,7 @@ parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent 
 is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
 \begin{equation}
 a_{ij}= \frac{c_{g} \, G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
-(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
+(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; ,
 \label{eq:aij}
 \end{equation}
 where $G$ is the Newton's gravitational constant and $c_{g} = 10^{5}$ 
@@ -541,9 +541,9 @@ the corners of $\mathbf{C}$. Additionally, the blocks lying
 above the main diagonal are equal to those located below.
 
 It is known that a circulant matrix can be defined by properly downshifting 
-its first column \citep[][ p. 221]{golub-vanloan2013}. So, 
-the first column of blocks forming $\mathbf{C}$ 
-(equation \ref{eq:embedding-BCCB-matrix-vector-product}) is given by:
+its first column \citep[][ p. 221]{golub-vanloan2013}. Hence, the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:embedding-BCCB-matrix-vector-product}) can be obtained from its 
+first column of blocks, which is given by
 \begin{equation}
 \left[\mathbf{C} \right]_{(0)} = 
 	\begin{bmatrix}
@@ -557,8 +557,9 @@ the first column of blocks forming $\mathbf{C}$
 	\end{bmatrix}_{4N \times 2P} \: ,
 	\label{eq:C-first-column-blocks}
 \end{equation}
-where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros, 
-and the first column of each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is given by:
+where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros. Similarly, each block 
+$\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, can be obtained by downshifting its first 
+column
 \begin{equation}
 \left[\mathbf{C}_{q} \right]_{(0)} = 
 	\begin{bmatrix}
@@ -575,8 +576,9 @@ and the first column of each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is giv
 where $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}), $p = 0, \dots, P-1$, are the elements 
 forming the block $\mathbf{A}_{q}$ (equations \ref{eq:Aq_block} and 
 \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}).
-To illustrate equations \ref{eq:C-first-column-blocks} and \ref{eq:Cq-first-column}, 
-consider our $y$-oriented grid illustrated in Figure 1b. In this case, the resulting 
+The downshift can be thought off as permutation that pushes the components of a column vector 
+down one notch with wraparound \citep[][ p. 20]{golub-vanloan2013}.
+To illustrate this operation, consider our $y$-oriented grid illustrated in Figure 1b. In this case, the resulting 
 BCCB matrix $\mathbf{C}$ (equation \ref{eq:embedding-BCCB-matrix-vector-product}) is given by 
 \begin{equation}
 \mathbf{C} =
@@ -610,15 +612,29 @@ Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a
 
 PAREI AQUI
 
+It is known that BCCB matrices are diagonalized by the two-dimensional unitary DFT
+\citep[][p. 147]{jain1989}. 
 
-As demonstrated by \cite{grenander-szego1984}, circulant matrices can be diagonalized by taking the discrete Fourier transform (DFT), i.e., its eigenvalues can be easily calculated by a fast algorithm of DFT. For BCCB matrices \cite{chan-jin2007} demonstrate that they satisfy:
-
+It means that $\mathbf{C}$ (equation \ref{eq:embedding-BCCB-matrix-vector-product}) 
+satisfies 
 \begin{equation}
-\mathbf{C} = \left(\mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right)^{\ast} \mathbf{\Lambda}\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \: ,
-\label{eq:fft_BCCB}
+\mathbf{C} = 
+\left(\mathbf{F}_{(2Q)} \otimes \mathbf{F}_{(2P)} \right)^{\ast} 
+\mathbf{\Lambda}\left( \mathbf{F}_{(2Q)} \otimes \mathbf{F}_{(2P)} \right) \: ,
+\label{eq:dft_BCCB}
 \end{equation}
+where $\mathbf{F}_{(2Q)}$ and $\mathbf{F}_{(2P)}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices, ... pegar o texto do notebook 
 
-\noindent where $\mathbf{F}_{(2N_y)}$ and $\mathbf{F}_{(2N_x)}$ are the matrices of the discrete Fourier transform, ``$\otimes$'' represents the Kronecker product, ``$\ast$'' the conjugate matrix and $\mathbf{\Lambda}$ is the diagonal matrix $4N_xN_y \times 4N_xN_y$ containing the eigenvalues of $\mathbf{C}$. By proper manipulating equation \ref{eq:fft_BCCB} it is possible to calculate the eigenvalues of the BCCB matrix using only its first column:
+the matrices of the discrete Fourier transform, ``$\otimes$'' represents the Kronecker product, ``$\ast$'' the conjugate matrix and $\mathbf{\Lambda}$ is the diagonal matrix $4N_xN_y \times 4N_xN_y$ containing the eigenvalues of $\mathbf{C}$.
+
+As demonstrated by \citet{grenander-szego1984}, circulant matrices are diagonalized by taking the discrete 
+Fourier transform (DFT), i.e., its eigenvalues can be easily calculated by a fast algorithm of DFT. 
+
+
+
+
+ By proper manipulating equation \ref{eq:fft_BCCB} it is possible to calculate the eigenvalues of the BCCB matrix using only its first column:
 
 \begin{eqnarray}
 \left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \mathbf{C} = \mathbf{\Lambda} \, \left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \\
