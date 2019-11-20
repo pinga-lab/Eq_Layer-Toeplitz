@@ -462,7 +462,7 @@ In this case, $\mathbf{A}$ is a symmetric BTTB matrix (equations \ref{eq:BTTB_A}
 \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) and the predicted data vector 
 $\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}) can be efficiently
 computed by using the two-dimensional Discrete Fourier Transform (DFT).
-To do this, let us rewrite $\mathbf{d}(\mathbf{p})$ and
+To do this, let us first rewrite $\mathbf{d}(\mathbf{p})$ and
 $\mathbf{p}$ (equation \ref{eq:predicted-data-vector}) as the following partitioned vectors:
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \begin{bmatrix}
@@ -486,10 +486,12 @@ are $P \times 1$ vectors. Notice that $q$ is the block index defined by equation
 \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}, $Q$ defines the number of blocks
 $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) forming $\mathbf{A}$ (equation \ref{eq:BTTB_A}) 
 and $P$ defines the number of elements forming each block $\mathbf{A}_{q}$.
-By using these partitioned vectors and remembering that $N = QP$, we define 
+Then, by using the partitioned vectors 
+(equations \ref{eq:parameter-vector-partitioned} and \ref{eq:predicted-data-vector-partitioned}) 
+and remembering that $N = QP$, we define the auxiliary linear system
 \begin{equation}
 \mathbf{w} = \mathbf{C} \mathbf{v} \: ,
-\label{eq:embedding-BCCB-matrix-vector-product}
+\label{eq:auxiliary-system}
 \end{equation}
 where
 \begin{equation}
@@ -528,10 +530,17 @@ and
 with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
 equations \ref{eq:predicted-data-vector-partitioned} and 
 \ref{eq:parameter-vector-partitioned}, respectively.
+Finally $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) is a 
+$4N \times 4N$ symmetric Block-Circulant Circulant-Block (BCCB) matrix 
+\citep[][ p. 184]{davis1979}.
+What follows aims at showing how we use the auxiliary system 
+(equation \ref{eq:auxiliary-system}) to compute the 
+matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ 
+(equation \ref{eq:delta_p_k_fast_eqlayer}) in a computationally 
+efficient way by exploring the structure of matrix $\mathbf{C}$.
 
-In equation \ref{eq:embedding-BCCB-matrix-vector-product}, $\mathbf{C}$ is a 
-$4N \times 4N$ symmetric Block-Circulant Circulant-Block (BCCB) matrix \citep[][ p. 184]{davis1979}.
-This matrix is circulant blockwise, formed by $Q \times Q$ blocks, where
+Matrix $\mathbf{C}$ (equation \ref{eq:auxiliary-system})
+is circulant blockwise, formed by $Q \times Q$ blocks, where
 each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is a $2P \times 2P$ circulant matrix. 
 Similarly to the BTTB matrix $\mathbf{A}$ (equations \ref{eq:BTTB_A} and 
 \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}), 
@@ -539,10 +548,9 @@ the index $q$ defines the block diagonal where $\mathbf{C}_{q}$ lies
 within $\mathbf{C}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
 the corners of $\mathbf{C}$. Additionally, the blocks lying 
 above the main diagonal are equal to those located below.
-
 It is known that a circulant matrix can be defined by properly downshifting 
 its first column \citep[][ p. 221]{golub-vanloan2013}. Hence, the BCCB matrix $\mathbf{C}$ 
-(equation \ref{eq:embedding-BCCB-matrix-vector-product}) can be obtained from its 
+(equation \ref{eq:auxiliary-system}) can be obtained from its 
 first column of blocks, which is given by
 \begin{equation}
 \left[\mathbf{C} \right]_{(0)} = 
@@ -561,7 +569,7 @@ where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros. Similarly, each block
 $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, can be obtained by downshifting its first 
 column
 \begin{equation}
-\left[\mathbf{C}_{q} \right]_{(0)} = 
+\mathbf{c}^{q}_{0} = 
 	\begin{bmatrix}
 		a^{q}_{0} \\
 		\vdots \\
@@ -578,8 +586,9 @@ forming the block $\mathbf{A}_{q}$ (equations \ref{eq:Aq_block} and
 \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}).
 The downshift can be thought off as permutation that pushes the components of a column vector 
 down one notch with wraparound \citep[][ p. 20]{golub-vanloan2013}.
-To illustrate this operation, consider our $y$-oriented grid illustrated in Figure 1b. In this case, the resulting 
-BCCB matrix $\mathbf{C}$ (equation \ref{eq:embedding-BCCB-matrix-vector-product}) is given by 
+To illustrate this operation, consider our $y$-oriented grid illustrated in Figure 1b. 
+In this case, the resulting 
+BCCB matrix $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) is given by 
 \begin{equation}
 \mathbf{C} =
 \begin{bmatrix}
@@ -610,60 +619,72 @@ where each block $\mathbf{C}_{q}$, $q = 0, 1, 2$, is represented as follows
 in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
 Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a.
 
-PAREI AQUI
-
-It is known that BCCB matrices are diagonalized by the two-dimensional unitary DFT
-\citep[][p. 147]{jain1989}. 
-
-It means that $\mathbf{C}$ (equation \ref{eq:embedding-BCCB-matrix-vector-product}) 
+BCCB matrices are diagonalized by the two-dimensional unitary DFT \citep[][ p. 150]{jain1989}. 
+It means that $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) 
 satisfies 
 \begin{equation}
 \mathbf{C} = 
-\left(\mathbf{F}_{(2Q)} \otimes \mathbf{F}_{(2P)} \right)^{\ast} 
-\mathbf{\Lambda}\left( \mathbf{F}_{(2Q)} \otimes \mathbf{F}_{(2P)} \right) \: ,
-\label{eq:dft_BCCB}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)^{\ast} 
+\boldsymbol{\Lambda}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: ,
+\label{eq:C-diagonalized}
 \end{equation}
-where $\mathbf{F}_{(2Q)}$ and $\mathbf{F}_{(2P)}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
-unitary DFT matrices, ... pegar o texto do notebook 
-
-the matrices of the discrete Fourier transform, ``$\otimes$'' represents the Kronecker product, ``$\ast$'' the conjugate matrix and $\mathbf{\Lambda}$ is the diagonal matrix $4N_xN_y \times 4N_xN_y$ containing the eigenvalues of $\mathbf{C}$.
-
-As demonstrated by \citet{grenander-szego1984}, circulant matrices are diagonalized by taking the discrete 
-Fourier transform (DFT), i.e., its eigenvalues can be easily calculated by a fast algorithm of DFT. 
-
-
-
-
- By proper manipulating equation \ref{eq:fft_BCCB} it is possible to calculate the eigenvalues of the BCCB matrix using only its first column:
-
-\begin{eqnarray}
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \mathbf{C} = \mathbf{\Lambda} \, \left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \\
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{C} \, \mathbf{t}_{1} = \mathbf{\Lambda} \, \left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{t}_{1} \\
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{c}_{0} = \mathbf{\Lambda} \, \frac{1}{\sqrt{4N_xN_y}}\mathbf{1}_{(4N_xN_y)} \\
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{c}_{0} = \frac{1}{\sqrt{4N_xN_y}} \mathbf{\lambda} \quad ,
-\label{eq:fft_BCCB_column}
-\end{eqnarray}
-
-\noindent where $\mathbf{t}_{1}$ is a $4N_xN_y \times 1$ vector with first element equal to 1 and all the remaining elements equal to 0, the vector $\mathbf{c}_{0}$ $4N_xN_y \times 1$ is the first column of $\mathbf{C}$, $\mathbf{1}_{(4N_xN_y)}$ is a $4N_xN_y \times 1$ with all elements equal to 1 and $\mathbf{\lambda}$ is a vector representing the diagonal of $\mathbf{\Lambda}$ (the eigenvalues of $\mathbf{C}$). Note that using one of the Kronecker product properties equation \ref{eq:fft_BCCB_column} can be calculated using the 2D-DFT \citep{jain1989}:
-
-\begin{eqnarray}
-\mathbf{F}_{(2N_x)} \mathbf{G} \, \mathbf{F}_{(2N_y)} &= \frac{1}{\sqrt{4N_xN_y}} \mathbf{L}
-\quad ,
-\label{eq:fft_BCCB_column_2D}
-\end{eqnarray}
-
-\noindent where $\mathbf{G}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the elements of the first column $\mathbf{c}_{0}$ of $\mathbf{C}$ and $\mathbf{L}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the eigenvalues $\mathbf{\lambda}$.
-
-By substituting equation \ref{eq:fft_BCCB} in equation \ref{eq:embedding-BCCB-matrix-vector-product}, using the fast calculation of the eigenvalues of BCCB matrices (equation \ref{eq:fft_BCCB_column_2D}) and using the same previous Kronecker product property, the auxiliary matrix-vetor product $\mathbf{w} = \mathbf{C} \mathbf{v}$ can be rewritten as follows:
-
+where $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices, respectively, the superscritpt ``$\ast$" denotes the complex conjugate, 
+the symbol ``$\otimes$" denotes the Kronecker product
+and $\boldsymbol{\Lambda}$ is a $4QP \times 4QP$ diagonal matrix containing the eigenvalues 
+of $\mathbf{C}$.
+By substituting equation \ref{eq:C-diagonalized} in the auxiliary system 
+(equation \ref{eq:auxiliary-system}) and premultiplying both
+sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$, 
+we obtain
 \begin{equation}
-\mathbf{F}_{(2 N_x)}^{\ast} \left[ \mathbf{L} \circ \left( \mathbf{F}_{(2N_x)} \mathbf{V} \, \mathbf{F}_{(2N_y)} \right) \right] \mathbf{F}_{(2N_y)}^{\ast} = \mathbf{W} \: ,
-\label{eq:fft_q}
+\boldsymbol{\Lambda} \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+\mathbf{v} = \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+\mathbf{w} \: .
+\label{eq:auxiliary-system-manipulated}
 \end{equation}
+Now, using the property of Kronecker products for separable transformations 
+\citep[][ p. 31]{jain1989} and the symmetry of unitary DFT matrices,
+we rewrite equation \ref{eq:auxiliary-system-manipulated} as follows:
+\begin{equation}
+\mathbf{F}_{2Q}^{\ast} \left[ 
+\mathbf{L} \circ \left(\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
+\right] \mathbf{F}_{2P}^{\ast} = \mathbf{W} \: ,
+\label{eq:DFT-system}
+\end{equation}
+where ``$\circ$'' denotes the Hadamard product and 
+$\mathbf{L}$, $\mathbf{V}$ and $\mathbf{W}$ are $2Q \times 2P$ matrices obtained 
+by rearranging, along their rows, the elements forming the diagonal of matrix $\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectively.
 
-\noindent where ``$\circ$'' denotes the Hadamard product, $\mathbf{L}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the eigenvalues of $\mathbf{C}$, and $\mathbf{V}$ and $\mathbf{Q}$ are $2N_x \times 2N_y$ row-oriented matrices obtained from the vectors $\mathbf{v}$ and $\mathbf{q}$.
+explicar onde esta a DFT 2D
 
+%% Eigenvalues of 
 
+By properly manipulating equation \ref{eq:DFT_C}, it is possible to show that
+\begin{equation}
+	\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \, 
+	\mathbf{c}_{0} = \frac{1}{\sqrt{4QP}} \, \boldsymbol{\lambda} \: ,
+	\label{eq:DFT_C_column}
+\end{equation}
+where $\mathbf{c}_{0}$ is a $4QP \times 1$ vector representing the first column of 
+$\mathbf{C}$ (equation \ref{eq:auxiliary-system}) and 
+$\boldsymbol{\lambda}$ is a $4QP \times 1$ vector containing the diagonal of 
+matrix $\boldsymbol{\Lambda}$ (equation \ref{eq:DFT_C}).
+Using the property of Kronecker products for separable transformations \citep[][ p. 31]{jain1989}
+and the symmetry of unitary DFT matrices, equation \ref{eq:DFT_C_column} can be rewritten 
+as follows
+\begin{eqnarray}
+	\mathbf{F}_{2Q} \, \mathbf{G} \, \mathbf{F}_{2P} = 
+	\frac{1}{\sqrt{4QP}} \, \mathbf{L} \: ,
+	\label{eq:DFT_C_column_2}
+\end{eqnarray}
+where $\mathbf{G}$ and $\mathbf{L}$ are $2Q \times 2P$ matrices obtained, respectively, 
+by rearranging the elements of $\mathbf{c}_{0}$ and $\boldsymbol{\lambda}$ along their rows.
+This equation shows that the eigenvalues of the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:auxiliary-system}), forming the rows of $\mathbf{L}$,
+are obtained by computing the two-dimensional DFT of matrix $\mathbf{G}$,
+whose rows are formed by the elements of the first column of $\mathbf{C}$.
 
 To complete the process, after calculating the inverse to obtain $\mathbf{W}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{w}$ and also rearrange the elements of $\mathbf{w}$ to obtain the wanted vector $\mathbf{d(p)}$.
 
@@ -724,9 +745,9 @@ Using a PC with a Intel Core i7 4790@3.6GHz processor and 16 Gb of RAM memory, F
 
 
 \section{Synthetic tests}
-In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
+In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
  
-The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:embedding-BCCB-matrix-vector-product}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:embedding-BCCB-matrix-vector-product}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
+The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:auxiliary-system}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:auxiliary-system}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
 
 We perform two forms of processing the gravity data (Figure \ref{fig:synthetic_data}) through the equivalent layer technique: the upward (Figure \ref{fig:upward_comparison}) and the downward (Figure \ref{fig:downward_comparison}) continuations. The upward height is 300 m and the downward  is at 50 m.   Either in the upward continuation (Figure \ref{fig:upward_comparison}) or in the downward continuation (Figure \ref{fig:downward_comparison}), the continued gravity data using the fast equivalent layer proposed by \citet{siqueira-etal2017} (Figures \ref{fig:upward_comparison}a and \ref{fig:downward_comparison}a) are in close agreement with those produced by our modification of \citet{siqueira-etal2017} method (Figures \ref{fig:upward_comparison}b and \ref{fig:downward_comparison}b). The residuals (Figures \ref{fig:upward_comparison}c and \ref{fig:downward_comparison}c) quantify this agreement since their means and standard deviations are close to zero in both continued gravity data using both methods.  All the continued gravity data shown here (Figures \ref{fig:upward_comparison} and \ref{fig:downward_comparison}) agree with the true ones (not shown). The most striking feature of these upward or the downward continuations concerns the total computation time. The computation time spent by our method is approximately $1\,500$ times faster than \citet{siqueira-etal2017} method. 
 
@@ -736,7 +757,7 @@ Test with real data are conducted with the gravity data from Caraj\'as, north of
 
 This airborne gravity survey was divided in two different areas, collected in different times, having samples spacing of 7.65 m and 15.21 m, totalizing  4,353,428 observation points. The height of the flight was fixed at 900 m. The gravity data (Figure \ref{fig:carajas_real_data}) were gridded into a regularly spaced dataset of $250\,000$ observation points ($500 \times 500$) with a grid spacing of $716.9311$ km north-south and $781.7387$ km east-west.
 
-To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}), we set an equivalent layer at 300 m deep. Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed (Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data,  show an acceptable data fitting because they have a mean close to zero (0.0003 mGal) and a small standard deviation of 0.105 mGal which corresponds to approximately 0.1 \% of the amplitude of the gravity data.
+To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}), we set an equivalent layer at 300 m deep. Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed (Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data,  show an acceptable data fitting because they have a mean close to zero (0.0003 mGal) and a small standard deviation of 0.105 mGal which corresponds to approximately 0.1 \% of the amplitude of the gravity data.
 
 These small residuals indicate that our method yielded an estimated mass distribution (not shown) that can be used in the data processing. We perform upward-continuation of the real gravity data (Figure \ref{fig:carajas_real_data}) at a constant height of $5\,000$ m over the real data. The upward-continued gravity data (Figure \ref{fig:up2000_carajas_500x500}) seem a reasonable processing because of the attenuation of the short wavelenghts. By using our approach, the processing of the $250\,000$ observations was extremely fast and took 0.216 seconds.
 
@@ -795,25 +816,25 @@ Figure~\ref{fig:bccb_fast_val}
 Figure~\ref{fig:delta_comparison}
 
 \plot{delta_comparison}{width=13.5cm}
-{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}).}
+{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}).}
 \newpage
 
 Figure~\ref{fig:delta_rho}
 
 \plot{delta_rho}{width=13.5cm}
-{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}).}
+{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}).}
 \newpage
 
 Figure~\ref{fig:upward_comparison}
 
 \plot{upward_comparison}{width=5cm}
-{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
+{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
 \newpage
 
 Figure~\ref{fig:downward_comparison}
 
 \plot{downward_comparison}{width=5cm}
-{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
+{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
 \newpage
 
 Figure~\ref{fig:carajas_real_data}
@@ -825,13 +846,13 @@ Figure~\ref{fig:carajas_real_data}
 Figure~\ref{fig:carajas_gz_predito_val}
 
 \plot{carajas_gz_predito_val}{width=8cm}
-{Caraj\'as Province, Brazil. (a) Predicted gravity data produced by our modification of the fast equivalent-layer method \citep{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}). (b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:carajas_real_data} and the predicted data in panel a, with their mean of 0.000292 mGal and standard deviation of $0.105$ mGal.}
+{Caraj\'as Province, Brazil. (a) Predicted gravity data produced by our modification of the fast equivalent-layer method \citep{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}). (b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:carajas_real_data} and the predicted data in panel a, with their mean of 0.000292 mGal and standard deviation of $0.105$ mGal.}
 \newpage
 
 Figure~\ref{fig:up2000_carajas_500x500}
 
 \plot{up2000_carajas_500x500}{width=13.5cm}
-{Caraj\'as Province, Brazil. The upward-continued gravity data using our modification of the fast equivalent layer method \citep{siqueira-etal2017} that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}). The total computation time is 0.216 seconds for processing of the $250,000$ observations.}
+{Caraj\'as Province, Brazil. The upward-continued gravity data using our modification of the fast equivalent layer method \citep{siqueira-etal2017} that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}). The total computation time is 0.216 seconds for processing of the $250,000$ observations.}
 \newpage
 
 %\subsubsection{Multiplot} 
