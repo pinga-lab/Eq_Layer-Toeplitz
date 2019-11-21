@@ -262,9 +262,9 @@ located below and each block is itself a Toeplitz matrix.
 These symmetries come from the fact that the coefficients
 $\Delta k_{ij}$ and $\Delta l_{ij}$ are squared at the denominator of 
 $a_{ij}$ (equation \ref{eq:aij-regular-grids}).
-Matrices with this well-defined pattern are called symmetric doubly block 
-Toeplitz \citep[][ p. 28]{jain1989} or symmetric Block-Toeplitz Toeplitz-Block (BTTB) 
-matrix \citep[][ p. 67]{chan-jin2007}. We opted for using the second term.
+Matrices with this well-defined pattern are called 
+Doubly Block Toeplitz \citep[][ p. 28]{jain1989} or symmetric Block-Toeplitz Toeplitz-Block (BTTB),
+for example. We opted for using the second term.
 
 This well-defined pattern is better represented by using the \textit{block indices} $q$ and $p$. 
 We represent $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) as a grid of $Q \times Q$ blocks 
@@ -531,7 +531,7 @@ with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
 equations \ref{eq:predicted-data-vector-partitioned} and 
 \ref{eq:parameter-vector-partitioned}, respectively.
 Finally $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) is a 
-$4N \times 4N$ symmetric Block-Circulant Circulant-Block (BCCB) matrix 
+$4N \times 4N$ symmetric Block Circulant matrix with Circulant Blocks (BCCB) 
 \citep[][ p. 184]{davis1979}.
 What follows aims at showing how we use the auxiliary system 
 (equation \ref{eq:auxiliary-system}) to compute the 
@@ -619,8 +619,8 @@ where each block $\mathbf{C}_{q}$, $q = 0, 1, 2$, is represented as follows
 in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
 Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a.
 
-BCCB matrices are diagonalized by the two-dimensional unitary DFT \citep[][ p. 150]{jain1989}. 
-It means that $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) 
+BCCB matrices are diagonalized by the two-dimensional unitary DFT 
+\citep[][ p. 185]{davis1979}. It means that $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) 
 satisfies 
 \begin{equation}
 \mathbf{C} = 
@@ -629,11 +629,11 @@ satisfies
 \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: ,
 \label{eq:C-diagonalized}
 \end{equation}
-where $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
-unitary DFT matrices, respectively, the superscritpt ``$\ast$" denotes the complex conjugate, 
-the symbol ``$\otimes$" denotes the Kronecker product
-and $\boldsymbol{\Lambda}$ is a $4QP \times 4QP$ diagonal matrix containing the eigenvalues 
-of $\mathbf{C}$.
+where the symbol ``$\otimes$" denotes the Kronecker product \citep[][ p. 22]{davis1979},
+$\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices \citep[][ p. 31]{davis1979}, respectively, the superscritpt 
+``$\ast$" denotes the complex conjugate and $\boldsymbol{\Lambda}$ is a 
+$4QP \times 4QP$ diagonal matrix containing the eigenvalues of $\mathbf{C}$.
 By substituting equation \ref{eq:C-diagonalized} in the auxiliary system 
 (equation \ref{eq:auxiliary-system}) and premultiplying both
 sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$, 
@@ -645,7 +645,7 @@ we obtain
 \label{eq:auxiliary-system-manipulated}
 \end{equation}
 Now, using the property of Kronecker products for separable transformations 
-\citep[][ p. 31]{jain1989} and the symmetry of unitary DFT matrices,
+\citep[][ p. 31]{jain1989} and the symmetry of unitary DFT matrices (see Appendix A),
 we rewrite equation \ref{eq:auxiliary-system-manipulated} as follows:
 \begin{equation}
 \mathbf{F}_{2Q}^{\ast} \left[ 
@@ -657,7 +657,6 @@ where ``$\circ$'' denotes the Hadamard product and
 $\mathbf{L}$, $\mathbf{V}$ and $\mathbf{W}$ are $2Q \times 2P$ matrices obtained 
 by rearranging, along their rows, the elements forming the diagonal of matrix $\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectively.
 
-explicar onde esta a DFT 2D
 
 %% Eigenvalues of 
 
@@ -933,7 +932,111 @@ Figure~\ref{fig:up2000_carajas_500x500}
 
 %This study was financed by the brazilian agencies CAPES (in the form of a scholarship), FAPERJ (grant n.$^{\circ}$ E-26 202.729/2018) and CNPq (grant n.$^{\circ}$ 308945/2017-4).
 
-%\append{Appendix example}
+\append{Kronecker product for separable transformations}
+
+In the present Appendix, we deduce equation \ref{eq:DFT-system} by applying the 
+row-ordered $vec$-operator, here designated simply as $vec$-operator.
+This operator was implicitly used by \citet[][ p. 31]{jain1989} to 
+show the relationship between Kronecker products and separable 
+transformations. The $vec$-operator used here 
+transforms a matrix into a column vector by stacking its rows. It is important 
+to stress that this operator is different from that defined by \citet{neudecker1969}, which 
+is most commonly found in the literature and 
+transforms a matrix into a column vector by stacking its columns.
+What follows is based on \citet{jain1989}.
+
+Let $\mathbf{M}$ be an arbitrary $2Q \times 2P$ matrix given by:
+\begin{equation}
+\mathbf{M} = \begin{bmatrix}
+\mathbf{m}^{\top}_{1} \\ 
+\vdots \\
+\mathbf{m}^{\top}_{2Q}
+\end{bmatrix} \: ,
+\label{eq:matrix-M}
+\end{equation}
+where $\mathbf{m}_{i}$, $i = 1, \dots, 2Q$, are $2P \times 1$ vectors containing 
+the rows of $\mathbf{M}$.
+The elements of this matrix can be rearranged into a column vector by using the
+$vec$-operator \citep[][ p. 31]{jain1989} as follows:
+\begin{equation}
+vec \left( \mathbf{M} \right) = \begin{bmatrix}
+\mathbf{m}_{1} \\
+\vdots \\
+\mathbf{m}_{2P}
+\end{bmatrix}_{4QP \times 1} \: .
+\label{eq:vec-operator}
+\end{equation}
+This rearrangement is known as lexicographic ordering \citep[][ p. 150]{jain1989}.
+
+Now, the two-dimensional DFT of $\mathbf{M}$ (equation \ref{eq:matrix-M}) be
+defined in matrix notation as follows:
+\begin{equation}
+\tilde{\mathbf{M}} = \mathbf{F}_{2Q} \, \mathbf{M} \, \mathbf{F}_{2P} \: ,
+\label{eq:2D-DFT-M}
+\end{equation}
+where $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices. This equation shows that the two-dimensional DFT is a 
+separable transformation \citep[][ p. 17]{jain1989}.
+By implicitly using the $vec$-operator (equation \ref{eq:vec-operator}), 
+\citet[][ p. 31]{jain1989} showed that:
+\begin{equation}
+vec \left( \tilde{\mathbf{M}} \right) = 
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P}^{\top} \right) 
+vec \left( \mathbf{M} \right) \: .
+\label{eq:kronecker-separable}
+\end{equation}
+This equation is valid not only for the two-dimensional DFT, but for any separable 
+transformation defined with arbitrary matrices other than the unitary DFT matrices
+$\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ (equation \ref{eq:2D-DFT-M}).
+We stress that equation \ref{eq:kronecker-separable} is different from that 
+presented by \citet{neudecker1969}. While equation \ref{eq:kronecker-separable} is 
+defined by using the $vec$-operator shown in equation \ref{eq:vec-operator}, that presented 
+by \citet{neudecker1969} is defined by using a $vec$-operator that 
+transforms a matrix into a column vector by stacking its columns.
+
+Consider that vector $\mathbf{w}$ (equation \ref{eq:auxiliary-system-manipulated}) 
+is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
+$\mathbf{W}$, whose two-dimensional DFT is represented by $\tilde{\mathbf{W}}$, 
+and remember that unitary DFT matrices are symmetric. In this case, 
+according to equations \ref{eq:2D-DFT-M} and \ref{eq:kronecker-separable}, we can rewrite 
+the right side of equation \ref{eq:auxiliary-system-manipulated} as follows:
+\begin{equation}
+vec \left( \tilde{\mathbf{W}} \right) = 
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+vec \left( \mathbf{W} \right) \: .
+\label{eq:right_side_DFT_system_1}
+\end{equation}
+Similarly, consider that $\mathbf{v}$ (equation \ref{eq:auxiliary-system-manipulated}) 
+is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
+$\mathbf{V}$, whose two-dimensional DFT is represented by $\tilde{\mathbf{V}}$, and 
+use equations \ref{eq:2D-DFT-M} and \ref{eq:kronecker-separable} to rewrite the 
+left side of equation \ref{eq:auxiliary-system-manipulated} as follows:
+\begin{equation}
+\boldsymbol{\Lambda} \, vec \left( \tilde{\mathbf{V}} \right) = 
+\boldsymbol{\Lambda}
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+vec \left( \mathbf{V} \right) \: .
+\label{eq:left_side_DFT_system_1}
+\end{equation}
+Because $\boldsymbol{\Lambda}$ is a diagonal matrix, 
+equation \ref{eq:left_side_DFT_system_1} 
+
+PAREI AQUI
+
+Using the fact that $\boldsymbol{\Lambda}$ is a diagonal matrix, we can 
+rewrite equation \ref{eq:left_side_DFT_system_1} 
+
+
+Additionally, premultiply the result by the diagonal matrix $\boldsymbol{\Lambda}$ 
+
+
+Notice that the left side of equation \ref{eq:auxiliary-system-manipulated} is 
+premultiplied by the diagonal matrix $\boldsymbol{\Lambda}$. 
+
+
+
+
+
 
 %\append[equations]{Another appendix}
 
