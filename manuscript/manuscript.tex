@@ -491,7 +491,7 @@ Then, by using the partitioned vectors
 and remembering that $N = QP$, we define the auxiliary linear system
 \begin{equation}
 \mathbf{w} = \mathbf{C} \mathbf{v} \: ,
-\label{eq:auxiliary-system}
+\label{eq:w_Cv}
 \end{equation}
 where
 \begin{equation}
@@ -530,16 +530,16 @@ and
 with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
 equations \ref{eq:predicted-data-vector-partitioned} and 
 \ref{eq:parameter-vector-partitioned}, respectively.
-Finally $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) is a 
+Finally $\mathbf{C}$ (equation \ref{eq:w_Cv}) is a 
 $4N \times 4N$ symmetric Block Circulant matrix with Circulant Blocks (BCCB) 
 \citep[][ p. 184]{davis1979}.
 What follows aims at showing how we use the auxiliary system 
-(equation \ref{eq:auxiliary-system}) to compute the 
+(equation \ref{eq:w_Cv}) to compute the 
 matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ 
 (equation \ref{eq:delta_p_k_fast_eqlayer}) in a computationally 
 efficient way by exploring the structure of matrix $\mathbf{C}$.
 
-Matrix $\mathbf{C}$ (equation \ref{eq:auxiliary-system})
+Matrix $\mathbf{C}$ (equation \ref{eq:w_Cv})
 is circulant blockwise, formed by $Q \times Q$ blocks, where
 each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is a $2P \times 2P$ circulant matrix. 
 Similarly to the BTTB matrix $\mathbf{A}$ (equations \ref{eq:BTTB_A} and 
@@ -550,7 +550,7 @@ the corners of $\mathbf{C}$. Additionally, the blocks lying
 above the main diagonal are equal to those located below.
 It is known that a circulant matrix can be defined by properly downshifting 
 its first column \citep[][ p. 221]{golub-vanloan2013}. Hence, the BCCB matrix $\mathbf{C}$ 
-(equation \ref{eq:auxiliary-system}) can be obtained from its 
+(equation \ref{eq:w_Cv}) can be obtained from its 
 first column of blocks, which is given by
 \begin{equation}
 \left[\mathbf{C} \right]_{(0)} = 
@@ -588,7 +588,7 @@ The downshift can be thought off as permutation that pushes the components of a 
 down one notch with wraparound \citep[][ p. 20]{golub-vanloan2013}.
 To illustrate this operation, consider our $y$-oriented grid illustrated in Figure 1b. 
 In this case, the resulting 
-BCCB matrix $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) is given by 
+BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv}) is given by 
 \begin{equation}
 \mathbf{C} =
 \begin{bmatrix}
@@ -620,7 +620,7 @@ in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
 Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a.
 
 BCCB matrices are diagonalized by the two-dimensional unitary DFT 
-\citep[][ p. 185]{davis1979}. It means that $\mathbf{C}$ (equation \ref{eq:auxiliary-system}) 
+\citep[][ p. 185]{davis1979}. It means that $\mathbf{C}$ (equation \ref{eq:w_Cv}) 
 satisfies 
 \begin{equation}
 \mathbf{C} = 
@@ -629,63 +629,45 @@ satisfies
 \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: ,
 \label{eq:C-diagonalized}
 \end{equation}
-where the symbol ``$\otimes$" denotes the Kronecker product \citep[][ p. 22]{davis1979},
+where the symbol ``$\otimes$" denotes the Kronecker product \citep{neudecker1969},
 $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
 unitary DFT matrices \citep[][ p. 31]{davis1979}, respectively, the superscritpt 
 ``$\ast$" denotes the complex conjugate and $\boldsymbol{\Lambda}$ is a 
 $4QP \times 4QP$ diagonal matrix containing the eigenvalues of $\mathbf{C}$.
 By substituting equation \ref{eq:C-diagonalized} in the auxiliary system 
-(equation \ref{eq:auxiliary-system}) and premultiplying both
+(equation \ref{eq:w_Cv}) and premultiplying both
 sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$, 
 we obtain
 \begin{equation}
 \boldsymbol{\Lambda} \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
 \mathbf{v} = \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
 \mathbf{w} \: .
-\label{eq:auxiliary-system-manipulated}
+\label{eq:vec-DFT-system}
 \end{equation}
-Now, using the property of Kronecker products for separable transformations 
-\citep[][ p. 31]{jain1989} and the symmetry of unitary DFT matrices (see Appendix A),
-we rewrite equation \ref{eq:auxiliary-system-manipulated} as follows:
+Now, by applying the $vec$-operator to both sides of equation \ref{eq:vec-DFT-system} 
+(see the details in Appendix A), we obtain:
 \begin{equation}
 \mathbf{F}_{2Q}^{\ast} \left[ 
 \mathbf{L} \circ \left(\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
 \right] \mathbf{F}_{2P}^{\ast} = \mathbf{W} \: ,
 \label{eq:DFT-system}
 \end{equation}
-where ``$\circ$'' denotes the Hadamard product and 
+where ``$\circ$'' denotes the Hadamard product \citep[][ p. 298]{horn_johnson1991} and 
 $\mathbf{L}$, $\mathbf{V}$ and $\mathbf{W}$ are $2Q \times 2P$ matrices obtained 
-by rearranging, along their rows, the elements forming the diagonal of matrix $\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectively.
+by rearranging, along their rows, the elements forming the diagonal of matrix 
+$\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectively.
+The left side of equation \ref{eq:DFT-system} contains the two-dimensional 
+Inverse Discrete Fourier Transform (IDFT) of the term in brackets, which in turn
+represents the Hadamard product of matrix $\mathbf{L}$ (equation \ref{eq:left_side_DFT_system_3})
+and the DFT of matrix $\mathbf{V}$ (equation \ref{eq:left_side_DFT_system_1}).
+Matrix $\mathbf{L}$ contains the eigenvalues 
+of $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) and can be 
+efficiently computed by using only the first column of the BCCB matrix 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
+Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
+by using the two-dimensional Fast Fourier Transform.
 
-
-%% Eigenvalues of 
-
-By properly manipulating equation \ref{eq:DFT_C}, it is possible to show that
-\begin{equation}
-	\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \, 
-	\mathbf{c}_{0} = \frac{1}{\sqrt{4QP}} \, \boldsymbol{\lambda} \: ,
-	\label{eq:DFT_C_column}
-\end{equation}
-where $\mathbf{c}_{0}$ is a $4QP \times 1$ vector representing the first column of 
-$\mathbf{C}$ (equation \ref{eq:auxiliary-system}) and 
-$\boldsymbol{\lambda}$ is a $4QP \times 1$ vector containing the diagonal of 
-matrix $\boldsymbol{\Lambda}$ (equation \ref{eq:DFT_C}).
-Using the property of Kronecker products for separable transformations \citep[][ p. 31]{jain1989}
-and the symmetry of unitary DFT matrices, equation \ref{eq:DFT_C_column} can be rewritten 
-as follows
-\begin{eqnarray}
-	\mathbf{F}_{2Q} \, \mathbf{G} \, \mathbf{F}_{2P} = 
-	\frac{1}{\sqrt{4QP}} \, \mathbf{L} \: ,
-	\label{eq:DFT_C_column_2}
-\end{eqnarray}
-where $\mathbf{G}$ and $\mathbf{L}$ are $2Q \times 2P$ matrices obtained, respectively, 
-by rearranging the elements of $\mathbf{c}_{0}$ and $\boldsymbol{\lambda}$ along their rows.
-This equation shows that the eigenvalues of the BCCB matrix $\mathbf{C}$ 
-(equation \ref{eq:auxiliary-system}), forming the rows of $\mathbf{L}$,
-are obtained by computing the two-dimensional DFT of matrix $\mathbf{G}$,
-whose rows are formed by the elements of the first column of $\mathbf{C}$.
-
-To complete the process, after calculating the inverse to obtain $\mathbf{W}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{w}$ and also rearrange the elements of $\mathbf{w}$ to obtain the wanted vector $\mathbf{d(p)}$.
+%To complete the process, after calculating the inverse to obtain $\mathbf{W}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{w}$ and also rearrange the elements of $\mathbf{w}$ to obtain the wanted vector $\mathbf{d(p)}$.
 
 %The algorithm for computing the matrix-vector product $\mathbf{A}\mathbf{p}$ and obtaining the resulting vector $\mathbf{d(p)}$ can be summarized in the following steps:
 
@@ -744,9 +726,9 @@ Using a PC with a Intel Core i7 4790@3.6GHz processor and 16 Gb of RAM memory, F
 
 
 \section{Synthetic tests}
-In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
+In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
  
-The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:auxiliary-system}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:auxiliary-system}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
+The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:w_Cv}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:w_Cv}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
 
 We perform two forms of processing the gravity data (Figure \ref{fig:synthetic_data}) through the equivalent layer technique: the upward (Figure \ref{fig:upward_comparison}) and the downward (Figure \ref{fig:downward_comparison}) continuations. The upward height is 300 m and the downward  is at 50 m.   Either in the upward continuation (Figure \ref{fig:upward_comparison}) or in the downward continuation (Figure \ref{fig:downward_comparison}), the continued gravity data using the fast equivalent layer proposed by \citet{siqueira-etal2017} (Figures \ref{fig:upward_comparison}a and \ref{fig:downward_comparison}a) are in close agreement with those produced by our modification of \citet{siqueira-etal2017} method (Figures \ref{fig:upward_comparison}b and \ref{fig:downward_comparison}b). The residuals (Figures \ref{fig:upward_comparison}c and \ref{fig:downward_comparison}c) quantify this agreement since their means and standard deviations are close to zero in both continued gravity data using both methods.  All the continued gravity data shown here (Figures \ref{fig:upward_comparison} and \ref{fig:downward_comparison}) agree with the true ones (not shown). The most striking feature of these upward or the downward continuations concerns the total computation time. The computation time spent by our method is approximately $1\,500$ times faster than \citet{siqueira-etal2017} method. 
 
@@ -756,7 +738,7 @@ Test with real data are conducted with the gravity data from Caraj\'as, north of
 
 This airborne gravity survey was divided in two different areas, collected in different times, having samples spacing of 7.65 m and 15.21 m, totalizing  4,353,428 observation points. The height of the flight was fixed at 900 m. The gravity data (Figure \ref{fig:carajas_real_data}) were gridded into a regularly spaced dataset of $250\,000$ observation points ($500 \times 500$) with a grid spacing of $716.9311$ km north-south and $781.7387$ km east-west.
 
-To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}), we set an equivalent layer at 300 m deep. Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed (Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data,  show an acceptable data fitting because they have a mean close to zero (0.0003 mGal) and a small standard deviation of 0.105 mGal which corresponds to approximately 0.1 \% of the amplitude of the gravity data.
+To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}), we set an equivalent layer at 300 m deep. Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed (Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data,  show an acceptable data fitting because they have a mean close to zero (0.0003 mGal) and a small standard deviation of 0.105 mGal which corresponds to approximately 0.1 \% of the amplitude of the gravity data.
 
 These small residuals indicate that our method yielded an estimated mass distribution (not shown) that can be used in the data processing. We perform upward-continuation of the real gravity data (Figure \ref{fig:carajas_real_data}) at a constant height of $5\,000$ m over the real data. The upward-continued gravity data (Figure \ref{fig:up2000_carajas_500x500}) seem a reasonable processing because of the attenuation of the short wavelenghts. By using our approach, the processing of the $250\,000$ observations was extremely fast and took 0.216 seconds.
 
@@ -815,25 +797,25 @@ Figure~\ref{fig:bccb_fast_val}
 Figure~\ref{fig:delta_comparison}
 
 \plot{delta_comparison}{width=13.5cm}
-{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}).}
+{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}).}
 \newpage
 
 Figure~\ref{fig:delta_rho}
 
 \plot{delta_rho}{width=13.5cm}
-{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}).}
+{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}).}
 \newpage
 
 Figure~\ref{fig:upward_comparison}
 
 \plot{upward_comparison}{width=5cm}
-{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
+{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
 \newpage
 
 Figure~\ref{fig:downward_comparison}
 
 \plot{downward_comparison}{width=5cm}
-{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
+{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
 \newpage
 
 Figure~\ref{fig:carajas_real_data}
@@ -845,13 +827,13 @@ Figure~\ref{fig:carajas_real_data}
 Figure~\ref{fig:carajas_gz_predito_val}
 
 \plot{carajas_gz_predito_val}{width=8cm}
-{Caraj\'as Province, Brazil. (a) Predicted gravity data produced by our modification of the fast equivalent-layer method \citep{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}). (b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:carajas_real_data} and the predicted data in panel a, with their mean of 0.000292 mGal and standard deviation of $0.105$ mGal.}
+{Caraj\'as Province, Brazil. (a) Predicted gravity data produced by our modification of the fast equivalent-layer method \citep{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}). (b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:carajas_real_data} and the predicted data in panel a, with their mean of 0.000292 mGal and standard deviation of $0.105$ mGal.}
 \newpage
 
 Figure~\ref{fig:up2000_carajas_500x500}
 
 \plot{up2000_carajas_500x500}{width=13.5cm}
-{Caraj\'as Province, Brazil. The upward-continued gravity data using our modification of the fast equivalent layer method \citep{siqueira-etal2017} that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:auxiliary-system}). The total computation time is 0.216 seconds for processing of the $250,000$ observations.}
+{Caraj\'as Province, Brazil. The upward-continued gravity data using our modification of the fast equivalent layer method \citep{siqueira-etal2017} that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}). The total computation time is 0.216 seconds for processing of the $250,000$ observations.}
 \newpage
 
 %\subsubsection{Multiplot} 
@@ -932,29 +914,30 @@ Figure~\ref{fig:up2000_carajas_500x500}
 
 %This study was financed by the brazilian agencies CAPES (in the form of a scholarship), FAPERJ (grant n.$^{\circ}$ E-26 202.729/2018) and CNPq (grant n.$^{\circ}$ 308945/2017-4).
 
-\append{Kronecker product for separable transformations}
+\append{Efficient computations by using the 2D DFT}
 
-In the present Appendix, we deduce equation \ref{eq:DFT-system} by applying the 
-row-ordered $vec$-operator, here designated simply as $vec$-operator.
+In the present Appendix, we deduce equation \ref{eq:DFT-system}
+by using the row-ordered $vec$-operator (here designated simply as $vec$-operator).
+This equation can be efficiently computed by using the two-dimensional 
+fast Fourier Transform. 
 This operator was implicitly used by \citet[][ p. 31]{jain1989} to 
 show the relationship between Kronecker products and separable 
-transformations. The $vec$-operator used here 
+transformations. The $vec$-operator defined here 
 transforms a matrix into a column vector by stacking its rows. It is important 
 to stress that this operator is different from that defined by \citet{neudecker1969}, which 
 is most commonly found in the literature and 
 transforms a matrix into a column vector by stacking its columns.
-What follows is based on \citet{jain1989}.
 
-Let $\mathbf{M}$ be an arbitrary $2Q \times 2P$ matrix given by:
+Let $\mathbf{M}$ be an arbitrary $N \times M$ matrix given by:
 \begin{equation}
 \mathbf{M} = \begin{bmatrix}
 \mathbf{m}^{\top}_{1} \\ 
 \vdots \\
-\mathbf{m}^{\top}_{2Q}
+\mathbf{m}^{\top}_{N}
 \end{bmatrix} \: ,
 \label{eq:matrix-M}
 \end{equation}
-where $\mathbf{m}_{i}$, $i = 1, \dots, 2Q$, are $2P \times 1$ vectors containing 
+where $\mathbf{m}_{i}$, $i = 1, \dots, N$, are $M \times 1$ vectors containing 
 the rows of $\mathbf{M}$.
 The elements of this matrix can be rearranged into a column vector by using the
 $vec$-operator \citep[][ p. 31]{jain1989} as follows:
@@ -962,55 +945,85 @@ $vec$-operator \citep[][ p. 31]{jain1989} as follows:
 vec \left( \mathbf{M} \right) = \begin{bmatrix}
 \mathbf{m}_{1} \\
 \vdots \\
-\mathbf{m}_{2P}
-\end{bmatrix}_{4QP \times 1} \: .
+\mathbf{m}_{N}
+\end{bmatrix}_{NM \times 1} \: .
 \label{eq:vec-operator}
 \end{equation}
 This rearrangement is known as lexicographic ordering \citep[][ p. 150]{jain1989}.
 
-Now, the two-dimensional DFT of $\mathbf{M}$ (equation \ref{eq:matrix-M}) be
-defined in matrix notation as follows:
+Two important properties of the $vec$-operator (equation \ref{eq:vec-operator}) 
+are necessary to us. 
+To define the first one, consider an 
+$N \times M$ matrix $\mathbf{H}$ given by
 \begin{equation}
-\tilde{\mathbf{M}} = \mathbf{F}_{2Q} \, \mathbf{M} \, \mathbf{F}_{2P} \: ,
-\label{eq:2D-DFT-M}
+\mathbf{H} = \mathbf{P} \circ \mathbf{Q} \: ,
+\label{eq:matrix-H}
 \end{equation}
-where $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
-unitary DFT matrices. This equation shows that the two-dimensional DFT is a 
-separable transformation \citep[][ p. 17]{jain1989}.
-By implicitly using the $vec$-operator (equation \ref{eq:vec-operator}), 
+where $\mathbf{P}$ and $\mathbf{Q}$ are arbitrary $N \times M$ matrices and 
+``$\circ$" represents the Hadamard product \citep[][ p. 298]{horn_johnson1991}.
+By applying the $vec$-operator to $\mathbf{H}$ (equation \ref{eq:matrix-H}), 
+it can be shown that
+\begin{equation}
+vec \left( \mathbf{H} \right) = 
+vec \left( \mathbf{P} \right) \circ vec \left( \mathbf{Q} \right) \: .
+\label{eq:vec-matrix-H}
+\end{equation}
+To define the second important property of $vec$-operator, 
+consider an $N \times M$ matrix $\mathbf{S}$ defined by 
+the separable transformation \citet[][ p. 31]{jain1989}:
+\begin{equation}
+\mathbf{S} = \mathbf{P \, M \, Q} \: ,
+\label{eq:matrix-S}
+\end{equation}
+where $\mathbf{P}$ and $\mathbf{Q}$ are arbitrary $N \times N$ and $M \times M$ 
+matrices, respectively.
+By implicitly applying the $vec$-operator to 
+the $\mathbf{S}$ (equation \ref{eq:matrix-S}), 
 \citet[][ p. 31]{jain1989} showed that:
 \begin{equation}
-vec \left( \tilde{\mathbf{M}} \right) = 
-\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P}^{\top} \right) 
-vec \left( \mathbf{M} \right) \: .
-\label{eq:kronecker-separable}
+vec \left( \mathbf{S} \right) = 
+\left( \mathbf{P} \otimes \mathbf{Q}^{\top} \right) 
+vec \left( \mathbf{M} \right) \: ,
+\label{eq:vec-matrix-S}
 \end{equation}
-This equation is valid not only for the two-dimensional DFT, but for any separable 
-transformation defined with arbitrary matrices other than the unitary DFT matrices
-$\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ (equation \ref{eq:2D-DFT-M}).
-We stress that equation \ref{eq:kronecker-separable} is different from that 
-presented by \citet{neudecker1969}. While equation \ref{eq:kronecker-separable} is 
-defined by using the $vec$-operator shown in equation \ref{eq:vec-operator}, that presented 
-by \citet{neudecker1969} is defined by using a $vec$-operator that 
-transforms a matrix into a column vector by stacking its columns.
+where ``$\otimes$" denotes the Kronecker product \citep{neudecker1969}.
+It is important to stress the difference between equation \ref{eq:vec-matrix-S}
+and that presented by \citet{neudecker1969}, which is more commonly found in 
+the literature.
+While that equation uses a $vec$-operator that transforms a matrix into a column 
+vector by stacking its columns, equation \ref{eq:vec-matrix-S} 
+uses the $vec$-operator defined by equation \ref{eq:vec-operator}, which 
+transforms a matrix into a column vector by stacking its rows.
 
-Consider that vector $\mathbf{w}$ (equation \ref{eq:auxiliary-system-manipulated}) 
+Now, let us deduce equation \ref{eq:DFT-system} by 
+using the above-defined properties (equation \ref{eq:vec-matrix-H}
+and \ref{eq:vec-matrix-S}).
+We start calling attention to the right side of equation \ref{eq:vec-DFT-system}.
+Consider that vector $\mathbf{w}$ (equation \ref{eq:vec-DFT-system}) 
 is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
-$\mathbf{W}$, whose two-dimensional DFT is represented by $\tilde{\mathbf{W}}$, 
-and remember that unitary DFT matrices are symmetric. In this case, 
-according to equations \ref{eq:2D-DFT-M} and \ref{eq:kronecker-separable}, we can rewrite 
-the right side of equation \ref{eq:auxiliary-system-manipulated} as follows:
+$\mathbf{W}$, whose two-dimensional DFT $\tilde{\mathbf{W}}$ is represented by the 
+following separable transformation \citep[][ p. 146]{jain1989}:
+\begin{equation}
+\tilde{\mathbf{W}} = \mathbf{F}_{2Q} \, \mathbf{W} \, \mathbf{F}_{2P} \: ,
+\label{eq:2D-DFT-W}
+\end{equation}
+where $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices. 
+Using equation \ref{eq:vec-matrix-S} and the symmetry of unitary DFT 
+matrices, we rewrite the right side of equation \ref{eq:vec-DFT-system} 
+as follows:
 \begin{equation}
 vec \left( \tilde{\mathbf{W}} \right) = 
 \left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
 vec \left( \mathbf{W} \right) \: .
 \label{eq:right_side_DFT_system_1}
 \end{equation}
-Similarly, consider that $\mathbf{v}$ (equation \ref{eq:auxiliary-system-manipulated}) 
+Similarly, consider that $\mathbf{v}$ (equation \ref{eq:vec-DFT-system}) 
 is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
-$\mathbf{V}$, whose two-dimensional DFT is represented by $\tilde{\mathbf{V}}$, and 
-use equations \ref{eq:2D-DFT-M} and \ref{eq:kronecker-separable} to rewrite the 
-left side of equation \ref{eq:auxiliary-system-manipulated} as follows:
+$\mathbf{V}$, whose two-dimensional DFT (equation \ref{eq:2D-DFT-W}) is 
+represented by $\tilde{\mathbf{V}}$, and use
+equation \ref{eq:vec-matrix-S} to rewrite the 
+left side of equation \ref{eq:vec-DFT-system} as follows:
 \begin{equation}
 \boldsymbol{\Lambda} \, vec \left( \tilde{\mathbf{V}} \right) = 
 \boldsymbol{\Lambda}
@@ -1018,24 +1031,84 @@ left side of equation \ref{eq:auxiliary-system-manipulated} as follows:
 vec \left( \mathbf{V} \right) \: .
 \label{eq:left_side_DFT_system_1}
 \end{equation}
-Because $\boldsymbol{\Lambda}$ is a diagonal matrix, 
-equation \ref{eq:left_side_DFT_system_1} 
+Note that both sides of equation \ref{eq:left_side_DFT_system_1}
+are defined as the product of the diagonal matrix $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) 
+and a vector. In this case, the matrix-vector product can be conveniently replaced by
+\begin{equation}
+\boldsymbol{\lambda} \circ vec \left( \tilde{\mathbf{V}} \right) = 
+\boldsymbol{\lambda} \circ
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+vec \left( \mathbf{V} \right) \: ,
+\label{eq:left_side_DFT_system_2}
+\end{equation}
+where $\boldsymbol{\lambda}$ is a $4QP \times 1$ vector containing the diagonal of 
+$\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}).
+Then, consider that $\boldsymbol{\lambda}$ is obtained by applying the $vec$-operator 
+(equation \ref{eq:vec-operator}) to a $2Q \times 2P$ matrix $\mathbf{L}$ and use 
+equations \ref{eq:vec-matrix-H} and \ref{eq:vec-matrix-S} to rewrite equation 
+\ref{eq:left_side_DFT_system_2} as follows:
+\begin{equation}
+vec \left( \mathbf{L} \circ \tilde{\mathbf{V}} \right) = 
+vec \left[ \mathbf{L} \circ 
+\left( \mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
+\right] \: .
+\label{eq:left_side_DFT_system_3}
+\end{equation}
+Equations \ref{eq:2D-DFT-W}, \ref{eq:right_side_DFT_system_1} and 
+\ref{eq:left_side_DFT_system_3} show that equation \ref{eq:vec-DFT-system}
+is obtained by applying the $vec$-operator to 
+\begin{equation}
+\mathbf{L} \circ \left( \mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) = 
+\mathbf{F}_{2Q} \, \mathbf{W} \, \mathbf{F}_{2P} \: .
+\label{eq:DFT-system-preliminary}
+\end{equation}
+Finally, we premultiply both sides of equation \ref{eq:DFT-system-preliminary} by 
+$\mathbf{F}_{2Q}^{\ast}$ and then postmultiply both sides of the result by 
+$\mathbf{F}_{2P}^{\ast}$ to deduce equation \ref{eq:DFT-system}.
 
-PAREI AQUI
 
-Using the fact that $\boldsymbol{\Lambda}$ is a diagonal matrix, we can 
-rewrite equation \ref{eq:left_side_DFT_system_1} 
+\append{Efficient computation of the eigenvalues of $\mathbf{C}$}
 
+In the present Appendix, we show how to efficiently compute matrix $\mathbf{L}$
+(equations \ref{eq:left_side_DFT_system_3}, \ref{eq:DFT-system-preliminary} 
+and \ref{eq:DFT-system}) by using only the first column of the BCCB matrix
+$\mathbf{C}$ (equation \ref{eq:w_Cv}).
 
-Additionally, premultiply the result by the diagonal matrix $\boldsymbol{\Lambda}$ 
-
-
-Notice that the left side of equation \ref{eq:auxiliary-system-manipulated} is 
-premultiplied by the diagonal matrix $\boldsymbol{\Lambda}$. 
-
-
-
-
+We need first premultiply both sides of equation \ref{eq:C-diagonalized}
+by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$ to obtain
+\begin{equation}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \mathbf{C} = 
+\boldsymbol{\Lambda}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: .
+\label{eq:C-diagonalized2}
+\end{equation}
+From equation \ref{eq:C-diagonalized2}, we can easily show that 
+\citep[][ p. 77]{chan-jin2007}:
+\begin{equation}
+	\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \, 
+	\mathbf{c}_{0} = \frac{1}{\sqrt{4QP}} \, \boldsymbol{\lambda} \: ,
+	\label{eq:DFT_C_column}
+\end{equation}
+where $\mathbf{c}_{0}$ is a $4QP \times 1$ vector representing the first column of 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}) and 
+$\boldsymbol{\lambda}$ (equation \ref{eq:left_side_DFT_system_2}) is the $4QP \times 1$ 
+vector that contains the diagonal of matrix $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) 
+and is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to matrix $\mathbf{L}$.
+Now, let us conveniently consider that $\mathbf{c}_{0}$ is obtained by applying the $vec$-operator 
+to a $2Q \times 2P$ matrix $\mathbf{G}$.
+Using this matrix, the property of the $vec$-operator for separable transformations 
+(equation \ref{eq:matrix-S}) and the symmetry of unitary DFT matrices, equation \ref{eq:DFT_C_column} 
+can be rewritten as follows
+\begin{eqnarray}
+	\mathbf{F}_{2Q} \, \mathbf{G} \, \mathbf{F}_{2P} = 
+	\frac{1}{\sqrt{4QP}} \, \mathbf{L} \: .
+	\label{eq:DFT_C_column_2}
+\end{eqnarray}
+This equation shows that the eigenvalues of the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:w_Cv}), forming the rows of $\mathbf{L}$,
+are obtained by computing the two-dimensional DFT of matrix $\mathbf{G}$,
+which contains the elements forming the first column of the BCCB matrix 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}).
 
 
 %\append[equations]{Another appendix}
