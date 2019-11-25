@@ -43,7 +43,7 @@
 
 %\lipsum[1]
 
-We have developed an efficient and very fast equivalent-layer technique for gravity data processing by modifying an iterative method grounded on excess mass constraint that does not require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix, that raises when regular grids of observation points and equivalent sources (point masses) are used to set up a fictitious equivalent layer, we have developed an algorithm which greatly reduces the number of flops and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer. The structure of symmetric BTTB matrix consists of the elements of the first column of the sensitivity matrix, which in turn can be embedded into a symmetric Block-Circulant Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is needed to reconstruct the full sensitivity matrix completely. From the first column of BCCB matrix, its eigenvalues can be calculated using the fast Fourier transform, which can be used to readily compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the gravity data. For example, while our method requires 26:8 seconds to run one million of observations, the fast equivalent-layer technique required 48:3 seconds to run 22,500 observations. Test with real data from Caraj\'as, Brazil, shows its applicability to process very large dataset at low computational cost.
+We have developed an efficient and very fast equivalent-layer technique for gravity data processing by modifying an iterative method grounded on excess mass constraint that does not require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix, that raises when regular grids of observation points and equivalent sources (point masses) are used to set up a fictitious equivalent layer, we have developed an algorithm which greatly reduces the number of flops and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer. The structure of symmetric BTTB matrix consists of the elements of the first column of the sensitivity matrix, which in turn can be embedded into a symmetric Block-Circulant Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is needed to reconstruct the full sensitivity matrix completely. From the first column of BCCB matrix, its eigenvalues can be calculated using the two-dimensional Fast Fourier Transform (2D FFT), which can be used to readily compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the gravity data. For example, while our method requires 26:8 seconds to run one million of observations, the fast equivalent-layer technique required 48:3 seconds to run 22,500 observations. Test with real data from Caraj\'as, Brazil, shows its applicability to process very large dataset at low computational cost.
 
 \end{abstract}
 
@@ -61,7 +61,7 @@ The classic equivalent-layer formulation consists in estimating the physical-pro
 In potential-field methods, the properties of Toeplitz system were used for downward continuation \citep{zhang-etal2016} and for 3D gravity-data inversion using a 2D multilayer model \citep{zhang-wong2015}. In the particular case of gravity data, the kernel generates a linear system with a matrix known as symmetric Block-Toeplitz Toeplitz-Block (BTTB).
 
 A wide variety of applications in mathematics and engineers that fall into Toeplitz systems propelled the development of a large variety of  methods for solving them. %Direct methods were conceived by \citet{levinson1946} and by \citet{trench1964}. Currently the conjugate gradient is used in most cases.
-\citet{grenander-szego1984} noticed that a circulant matrix can be diagonalized by taking the fast Fourier trasform (FFT) of its first column, making it possible to calculate the matrix-vector product and solve the system with low computational cost \citep{strang-aarikka1986, olkin1986}. \citet{chan-jin2007} show some preconditioners to embedd the Toeplitz and BTTB matrices into, respectively, circulant matrices and Block-Circulant Circulant-Block (BCCB) by solving the system applying the conjugate gradient method.
+\citet{grenander-szego1984} noticed that a circulant matrix can be diagonalized by taking the Fast Fourier Trasform (FFT) of its first column, making it possible to calculate the matrix-vector product and solve the system with low computational cost \citep{strang-aarikka1986, olkin1986}. \citet{chan-jin2007} show some preconditioners to embedd the Toeplitz and BTTB matrices into, respectively, circulant matrices and Block-Circulant Circulant-Block (BCCB) by solving the system applying the conjugate gradient method.
 
 Although the use of the equivalent-layer technique increased over the last decades, one of the biggest problem is still its high computational cost for processing large-data sets. \citet{siqueira-etal2017} developed a computationally efficient scheme for processing gravity data. This scheme does not solve a linear system, instead uses an iterative process that corrects the physical-property distribution over the equivalent layer by adding mass corrections that are proportional to the gravity residual. Although efficient, the method presented by \citet{siqueira-etal2017} requires, at each iteration,  the full computation of the forward problem to guarantee the convergence of the algorithm. The time spent on forward modeling accounts for most of the total computation time of their method.
 
@@ -123,7 +123,7 @@ Considering one equivalent source (point mass) directly beneath each observation
 the iteration of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
 starts by an initial approximation of mass distribution given by
 \begin{equation}
-\mathbf{p}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
+\hat{\mathbf{p}}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
 \label{eq:p0_fast_eqlayer}
 \end{equation}
 where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix with elements
@@ -146,8 +146,8 @@ where the mass correction is given by
 
 At the $k$th iteration of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method, 
 the matrix-vector product 
-$\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual 
-$\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
+$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ must be calculated to get a 
+new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
 Considering the limitation of 16 Gb of RAM 
 memory in our system, we could run their method only up to 22 500 observation points. 
 Hence, for very large data sets it is costful and can be overwhelming in terms of RAM 
@@ -665,28 +665,43 @@ of $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) and can be
 efficiently computed by using only the first column of the BCCB matrix 
 $\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
 Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
-by using the two-dimensional Fast Fourier Transform.
+by using the two-dimensional Fast Fourier Transform (2D FFT).
 
-%To complete the process, after calculating the inverse to obtain $\mathbf{W}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{w}$ and also rearrange the elements of $\mathbf{w}$ to obtain the wanted vector $\mathbf{d(p)}$.
+Therefore, at each iteration $k$th of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) 
+method (equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
+$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ by following the steps below:
 
-%The algorithm for computing the matrix-vector product $\mathbf{A}\mathbf{p}$ and obtaining the resulting vector $\mathbf{d(p)}$ can be summarized in the following steps:
+\begin{itemize}
+\item[\textbf{(1)}] Use equation \ref{eq:aij-regular-grids} to compute the first column of the 
+BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A});
 
-%1. Compute the first column of the embedded $4N_x N_y \times 4N_x N_y$ BCCB matrix $\mathbf{C}$ by using the first column of the $N_x N_y \times N_x N_y$ BTTB matrix $\mathbf{A}$;
+\item[\textbf{(2)}] Compute the first column $\mathbf{c}^{q}_{0}$ (equation \ref{eq:Cq-first-column}) of each 
+block $\mathbf{C}_{q}$ to obtain the first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:w_Cv});
 
-%2. Compute the eigenvalues of $\mathbf{C}$ rearranging them in rows of the $2N_x \times 2N_y$ matrix $\mathbf{L}$;
+\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of the matrix $\mathbf{G}$ and
+use the 2D FFT to compute matrix $\mathbf{L}$ (equation \ref{eq:DTF_G});
 
-%3. Rearrange the vector $\mathbf{v}$ in the rows of the $2N_x \times 2N_y$ matrix $\mathbf{V}$;
+\item[\textbf{(4)}] Rearrange the parameter vector $\hat{\mathbf{p}}^{k}$ 
+(equation \ref{eq:predicted-data-vector}) in its partitioned form 
+(equation \ref{eq:parameter-vector-partitioned}) to define the auxiliary vector 
+$\mathbf{v}$ (equation \ref{eq:v-vector});
 
-%4. Compute the Hadammard product $\mathbf{L} \circ \tilde{\mathbf{P}}$, where $\tilde{\mathbf{P}} = \mathbf{F}_{(2N_x)} \mathbf{P} \, \mathbf{F}_{(2N_y)}$ is computed by using a fast algorithm for 2D DFT;
+\item[\textbf{(5)}] Rearrange $\mathbf{v}$ to obtain matrix $\mathbf{V}$, use the 2D FFT 
+to compute its DFT and evaluate the left side of equation \ref{eq:DFT-system-preliminary};
 
-%5. Compute the resulting $2N_x \times 2N_y$ matrix $\mathbf{Q} = \mathbf{F}_{(2N_x)}^{\ast} \left[ \mathbf{L} \circ \tilde{\mathbf{P}}\right] \mathbf{F}_{(2N_y)}^{\ast}$ by using a fast algorithm for inverse 2D DFT;
+\item[\textbf{(6)}] Use the 2D FFT to compute the IDFT of the result obtained at item (5) and 
+obtain the matrix $\mathbf{W}$ (equation \ref{eq:DFT-system});
 
-%6. Rearrange the rows of $\mathbf{Q}$ to obtain the vector $\mathbf{q}$;
+\item[\textbf{(7)}] Use the $vec$-operator (equation \ref{eq:vec-operator}) and equations 
+\ref{eq:w-vector} and \ref{eq:wq-vector} to rearrange $\mathbf{W}$ and obtain the predicted 
+data vector $\mathbf{d}(\hat{\mathbf{p}}^{k})$.
 
-%7. Rearrange the elements of $\mathbf{q}$ to obtain the vector $\mathbf{d(p)}$.
+\end{itemize}
 
 
 \subsection{Computational performance}
+
 In a normal procedure of the fast equivalent layer proposed by \citet{siqueira-etal2017}, at each iteration a full matrix $\tensor{A}$ (equation \ref{eq:predicted-data-vector}) is multiplied by the estimated mass distribution parameter vector $\hat{\mathbf{p}}^k$ producing the predicted gravity data $\mathbf{d(p)}$  iteratively. As pointed in \citet{siqueira-etal2017} the number of flops (floating-point operations) necessary to estimate the $N$-dimensional parameter vector inside the iteration loop is
 
 \begin{equation}
@@ -696,7 +711,9 @@ f_0 = N^{it} (3N + 2N^2) \; ,
 
 \noindent where $N^{it}$ is the number of iterations. From equation \ref{eq:float_classic} it is clear that the matrix-vector product ($2N^2$) accounts for most of the computational complexity in this method.
 
-It is well known that FFT takes $2 N \log_2(N)$ flops \citep{chu1999inside}. Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
+PAREI AQUI (O N DOS FLOPS EH 4N NO NOSSO CASO)
+
+It is well known that FFT takes $5 N \log_2(N)$ flops \citep[][ p. 15]{vanloan1973}. Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
 
 \begin{equation}
 f_1 = 8N\log_2(4N) + N^{it} (27N + 16N\log_2(4N)).
@@ -744,13 +761,13 @@ These small residuals indicate that our method yielded an estimated mass distrib
 
 
 \section{Conclusions}
-By exploring the Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix in the gravity data processing, we have proposed a new efficient approach for calculating the gravity-data forward modeling required in the iterative fast equivalent-layer technique grounded on excess mass constraint that does not demand  the solution of linear systems.  Its efficiency requires the use of regular grids of observations and equivalent sources (point masses). Our algorithm greatly reduces the number of  flops necessary to estimate a 2D mass distribution within the equivalent layer that fits the observed gravity data. For example, when processing one million observations the number of flops is reduced in 104 times. Traditionally, such amount of data impractically requires 7.6 Terabytes of RAM memory to handle the full sensitivity matrix. Rather, in our method, this matrix takes 61.035 Megabytes of RAM memory only.
+By exploring the BTTB structure of the sensitivity matrix in the gravity data processing, we have proposed a new efficient approach for calculating the gravity-data forward modeling required in the iterative fast equivalent-layer technique grounded on excess mass constraint that does not demand  the solution of linear systems.  Its efficiency requires the use of regular grids of observations and equivalent sources (point masses). Our algorithm greatly reduces the number of  flops necessary to estimate a 2D mass distribution within the equivalent layer that fits the observed gravity data. For example, when processing one million observations the number of flops is reduced in 104 times. Traditionally, such amount of data impractically requires 7.6 Terabytes of RAM memory to handle the full sensitivity matrix. Rather, in our method, this matrix takes 61.035 Megabytes of RAM memory only.
 
 Our method takes advantage of the symmetric BTTB system that arises when processing a harmonic function and considering that either the observations or the sources of the interpretative model (point of masses over the equivalent layer) are distributed on regular grids. Symmetric BTTB matrices can be stored by using only a single column and can be embedded into a symmetric BCCB matrix, which in turn also only needs a single column. 
 This means that only a single column  of the sensitivity matrix needs to be calculated.  Once the jth column of the sensitivity matrix represents the influence of the jth source (jth point mass) has on the predicted data, our method only requires a single point mass that set up the equivalent layer to compute the gravity-data forward modeling.
 
-Using the fast Fourier transform it is possible to calculate the eigenvalues of BCCB matrices which can
-be used to compute a matrix-vector product (gravity-data forward modeling) in a very low computational cost. We have successfully applied the proposed method to upward (or downward) synthetic gravity data. Testing on field data from the Caraj\'as Province, north of Brazil, confirms the potential of our approach in upward-continuing  gravity data with $250\,000$ observations in  about 0.2 seconds.  Our method allows, in future research, applying the equivalent layer-technique for processing and interpreting massive data set such as collected in continental and global scales studies.
+Using the 2D FFT, it is possible to calculate the eigenvalues of BCCB matrices which can
+be used to compute a matrix-vector product (gravity-data forward modeling) in a very low computational cost. We have successfully applied the proposed method to upward (or downward) synthetic gravity data. Testing on field data from the Caraj{\'a}s Province, north of Brazil, confirms the potential of our approach in upward-continuing  gravity data with $250\,000$ observations in  about 0.2 seconds.  Our method allows, in future research, applying the equivalent layer-technique for processing and interpreting massive data set such as collected in continental and global scales studies.
 
 \newpage
 
@@ -914,7 +931,7 @@ Figure~\ref{fig:up2000_carajas_500x500}
 
 %This study was financed by the brazilian agencies CAPES (in the form of a scholarship), FAPERJ (grant n.$^{\circ}$ E-26 202.729/2018) and CNPq (grant n.$^{\circ}$ 308945/2017-4).
 
-\append{Efficient computations by using the 2D DFT}
+\append{Computations with the 2D DFT}
 
 In the present Appendix, we deduce equation \ref{eq:DFT-system}
 by using the row-ordered $vec$-operator (here designated simply as $vec$-operator).
@@ -1067,7 +1084,7 @@ $\mathbf{F}_{2Q}^{\ast}$ and then postmultiply both sides of the result by
 $\mathbf{F}_{2P}^{\ast}$ to deduce equation \ref{eq:DFT-system}.
 
 
-\append{Efficient computation of the eigenvalues of $\mathbf{C}$}
+\append{The eigenvalues of $\mathbf{C}$}
 
 In the present Appendix, we show how to efficiently compute matrix $\mathbf{L}$
 (equations \ref{eq:left_side_DFT_system_3}, \ref{eq:DFT-system-preliminary} 
@@ -1102,7 +1119,7 @@ can be rewritten as follows
 \begin{eqnarray}
 	\mathbf{F}_{2Q} \, \mathbf{G} \, \mathbf{F}_{2P} = 
 	\frac{1}{\sqrt{4QP}} \, \mathbf{L} \: .
-	\label{eq:DFT_C_column_2}
+	\label{eq:DTF_G}
 \end{eqnarray}
 This equation shows that the eigenvalues of the BCCB matrix $\mathbf{C}$ 
 (equation \ref{eq:w_Cv}), forming the rows of $\mathbf{L}$,
