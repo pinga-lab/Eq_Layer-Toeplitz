@@ -60,6 +60,8 @@ The classic equivalent-layer formulation consists in estimating the physical-pro
 
 In potential-field methods, the properties of Toeplitz system were used for downward continuation \citep{zhang-etal2016} and for 3D gravity-data inversion using a 2D multilayer model \citep{zhang-wong2015}. In the particular case of gravity data, the kernel generates a linear system with a matrix known as symmetric Block-Toeplitz Toeplitz-Block (BTTB).
 
+INCLUIR \citet{qiang_etal2019}
+
 A wide variety of applications in mathematics and engineers that fall into Toeplitz systems propelled the development of a large variety of  methods for solving them. %Direct methods were conceived by \citet{levinson1946} and by \citet{trench1964}. Currently the conjugate gradient is used in most cases.
 \citet{grenander-szego1984} noticed that a circulant matrix can be diagonalized by taking the Fast Fourier Trasform (FFT) of its first column, making it possible to calculate the matrix-vector product and solve the system with low computational cost \citep{strang-aarikka1986, olkin1986}. \citet{chan-jin2007} show some preconditioners to embedd the Toeplitz and BTTB matrices into, respectively, circulant matrices and Block-Circulant Circulant-Block (BCCB) by solving the system applying the conjugate gradient method.
 
@@ -533,11 +535,13 @@ equations \ref{eq:predicted-data-vector-partitioned} and
 Finally $\mathbf{C}$ (equation \ref{eq:w_Cv}) is a 
 $4N \times 4N$ symmetric Block Circulant matrix with Circulant Blocks (BCCB) 
 \citep[][ p. 184]{davis1979}.
-What follows aims at showing how we use the auxiliary system 
-(equation \ref{eq:w_Cv}) to compute the 
-matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ 
-(equation \ref{eq:delta_p_k_fast_eqlayer}) in a computationally 
-efficient way by exploring the structure of matrix $\mathbf{C}$.
+What follows shows a step-by-step description of how we use the auxiliary 
+system (equation \ref{eq:w_Cv}) to compute the matrix-vector product 
+$\tensor{A} \hat{\mathbf{p}}^{k}$ (equation \ref{eq:delta_p_k_fast_eqlayer}) in 
+a computationally efficient way by exploring the structure of matrix $\mathbf{C}$.
+We show that this approach, that have been used in potential-field methods
+\citep[e.g.,][]{zhang-wong2015, zhang-etal2016, qiang_etal2019}, is actually a fast 
+convolution method \citep[e.g.,][ p. 213]{vanloan1992}.
 
 Matrix $\mathbf{C}$ (equation \ref{eq:w_Cv})
 is circulant blockwise, formed by $Q \times Q$ blocks, where
@@ -548,8 +552,8 @@ the index $q$ defines the block diagonal where $\mathbf{C}_{q}$ lies
 within $\mathbf{C}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
 the corners of $\mathbf{C}$. Additionally, the blocks lying 
 above the main diagonal are equal to those located below.
-It is known that a circulant matrix can be defined by properly downshifting 
-its first column \citep[][ p. 221]{golub-vanloan2013}. Hence, the BCCB matrix $\mathbf{C}$ 
+It is well-known that a circulant matrix can be defined by properly downshifting 
+its first column \citep[][ p. 206]{vanloan1992}. Hence, the BCCB matrix $\mathbf{C}$ 
 (equation \ref{eq:w_Cv}) can be obtained from its 
 first column of blocks, which is given by
 \begin{equation}
@@ -666,24 +670,23 @@ efficiently computed by using only the first column of the BCCB matrix
 $\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
 Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
 by using the two-dimensional Fast Fourier Transform (2D FFT).
+This approach is a two-dimensional discrete convolution \citep[e.g.,][ p. 213]{vanloan1992}.
 
-Therefore, at each iteration $k$th of the fast equivalent-layer technique, 
+At each iteration $k$th of the fast equivalent-layer technique, 
 (equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
 $\mathbf{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ by following 
 the steps below:
+
 \begin{itemize}
 \item[\textbf{(1)}] Use equation \ref{eq:aij-regular-grids} to compute the first column 
-of each block $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) forming the BTTB matrix 
-$\mathbf{A}$ (equation \ref{eq:BTTB_A});
+of each block $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q-1$, forming 
+the BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A});
 
-\item[\textbf{(2)}] Rearrange the first column of $\mathbf{A}$  equations
-
-
-$\mathbf{c}^{q}_{0}$ 
-(equation \ref{eq:Cq-first-column}) of each block $\mathbf{C}_{q}$ to obtain the 
+\item[\textbf{(2)}] Rearrange the first column of $\mathbf{A}$ according to equations 
+\ref{eq:C-first-column-blocks} and \ref{eq:Cq-first-column} to obtain the
 first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv});
 
-\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of the matrix $\mathbf{G}$ and
+\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of matrix $\mathbf{G}$ and
 use the 2D FFT to compute matrix $\mathbf{L}$ (equation \ref{eq:DTF_G});
 
 \item[\textbf{(4)}] Rearrange the parameter vector $\hat{\mathbf{p}}^{k}$ 
@@ -707,9 +710,31 @@ data vector $\mathbf{d}(\hat{\mathbf{p}}^{k})$.
 \subsection{Computational performance}
 
 
-The number of flops (floating-point operations) required to compute the 
+The number of flops (floating-point operations) necessary to estimate the 
+$N \times 1$ parameter vector $\mathbf{p}$ in the fast equivalent-layer technique 
+\citep{siqueira-etal2017} is
+\begin{equation}
+f_0 = N^{it} (3N + 2N^2) \; ,
+\label{eq:float_classic}
+\end{equation}
+where $N^{it}$ is the number of iterations. In this equation, the term $2N^2$ is associated 
+with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation 
+\ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
+of this method.
 
-It is well known that FFT takes $5 N \log_2(N)$ flops \citep[][ p. 15]{vanloan1973}. Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
+Our method computes this matrix-vector by using a fast convolution approach.
+
+PAREI AQUI
+
+1 DFT for precomputing matrix $\mathbf{L}$ (step 3)
+1 DFT + 1 Hadamard product + 1 IDFT at each iteration $k$ (steps 5 and 6)
+
+The number of flops (floating-point operations) required to compute the a DFT/IDFT 
+via FFT is $5 (4N)^{2} \log_{2}(4N)$ ?
+
+It is well known that FFT takes $5 N \log_2(N)$ flops \citep[][ p. 15]{vanloan1992}. 
+
+Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
 
 \begin{equation}
 f_1 = 8N\log_2(4N) + N^{it} (27N + 16N\log_2(4N)).
@@ -731,19 +756,9 @@ f_f = 12N + 8N \log_2(4N) + N^{it} (27N + 16N\log(4N)).
 \label{eq:float_new}
 \end{equation}
 
-PAREI AQUI
 
-The number of flops (floating-point operations) necessary to estimate the 
-$N \times 1$ parameter vector $\mathbf{p}$ in the fast equivalent-layer technique 
-\citep{siqueira-etal2017} is
-\begin{equation}
-f_0 = N^{it} (3N + 2N^2) \; ,
-\label{eq:float_classic}
-\end{equation}
-where $N^{it}$ is the number of iterations. In this equation, the term $2N^2$ is associated 
-with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation 
-\ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
-of this method.
+
+
 
 
 Figure \ref{fig:float} shows the floating points to estimate the parameter vector using the fast equivalent layer by using the method of \citet{siqueira-etal2017} (equation \ref{eq:float_classic}) and our approach (equation \ref{eq:float_bccb}) versus the number of observation points varyig from $N = 5000$ to $N = 1\,000\,000$ with $50$ iterations. The number of operations is drastically decreased.
