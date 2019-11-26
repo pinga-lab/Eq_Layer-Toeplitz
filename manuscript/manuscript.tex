@@ -451,10 +451,10 @@ produced by a single equivalent source at all $N$ observation points.
 
 \subsection{BTTB matrix-vector product}
 
-The matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation \ref{eq:delta_p_k_fast_eqlayer}) 
-required by \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method
-accounts for most of the total computation time of their algorithm and can suffer
-from RAM memory shortage when large data sets are used.
+The matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation 
+\ref{eq:delta_p_k_fast_eqlayer}) required by the fast equivalent-layer 
+technique \citep{siqueira-etal2017} accounts for most of its total computation time 
+and can cause RAM memory shortage when large data sets are used.
 This computational load can be drastically lessen by exploring the well-defined structure of 
 matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for the particular case in which 
 its elements $a_{ij}$ are defined by equation \ref{eq:aij-regular-grids}. 
@@ -667,17 +667,21 @@ $\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
 Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
 by using the two-dimensional Fast Fourier Transform (2D FFT).
 
-Therefore, at each iteration $k$th of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) 
-method (equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
-$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ by following the steps below:
-
+Therefore, at each iteration $k$th of the fast equivalent-layer technique, 
+(equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
+$\mathbf{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ by following 
+the steps below:
 \begin{itemize}
-\item[\textbf{(1)}] Use equation \ref{eq:aij-regular-grids} to compute the first column of the 
-BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A});
+\item[\textbf{(1)}] Use equation \ref{eq:aij-regular-grids} to compute the first column 
+of each block $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) forming the BTTB matrix 
+$\mathbf{A}$ (equation \ref{eq:BTTB_A});
 
-\item[\textbf{(2)}] Compute the first column $\mathbf{c}^{q}_{0}$ (equation \ref{eq:Cq-first-column}) of each 
-block $\mathbf{C}_{q}$ to obtain the first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ 
-(equation \ref{eq:w_Cv});
+\item[\textbf{(2)}] Rearrange the first column of $\mathbf{A}$  equations
+
+
+$\mathbf{c}^{q}_{0}$ 
+(equation \ref{eq:Cq-first-column}) of each block $\mathbf{C}_{q}$ to obtain the 
+first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv});
 
 \item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of the matrix $\mathbf{G}$ and
 use the 2D FFT to compute matrix $\mathbf{L}$ (equation \ref{eq:DTF_G});
@@ -702,16 +706,8 @@ data vector $\mathbf{d}(\hat{\mathbf{p}}^{k})$.
 
 \subsection{Computational performance}
 
-In a normal procedure of the fast equivalent layer proposed by \citet{siqueira-etal2017}, at each iteration a full matrix $\tensor{A}$ (equation \ref{eq:predicted-data-vector}) is multiplied by the estimated mass distribution parameter vector $\hat{\mathbf{p}}^k$ producing the predicted gravity data $\mathbf{d(p)}$  iteratively. As pointed in \citet{siqueira-etal2017} the number of flops (floating-point operations) necessary to estimate the $N$-dimensional parameter vector inside the iteration loop is
 
-\begin{equation}
-f_0 = N^{it} (3N + 2N^2) \; ,
-\label{eq:float_classic}
-\end{equation}
-
-\noindent where $N^{it}$ is the number of iterations. From equation \ref{eq:float_classic} it is clear that the matrix-vector product ($2N^2$) accounts for most of the computational complexity in this method.
-
-PAREI AQUI (O N DOS FLOPS EH 4N NO NOSSO CASO)
+The number of flops (floating-point operations) required to compute the 
 
 It is well known that FFT takes $5 N \log_2(N)$ flops \citep[][ p. 15]{vanloan1973}. Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
 
@@ -734,6 +730,21 @@ and it is decreased in our method to
 f_f = 12N + 8N \log_2(4N) + N^{it} (27N + 16N\log(4N)).
 \label{eq:float_new}
 \end{equation}
+
+PAREI AQUI
+
+The number of flops (floating-point operations) necessary to estimate the 
+$N \times 1$ parameter vector $\mathbf{p}$ in the fast equivalent-layer technique 
+\citep{siqueira-etal2017} is
+\begin{equation}
+f_0 = N^{it} (3N + 2N^2) \; ,
+\label{eq:float_classic}
+\end{equation}
+where $N^{it}$ is the number of iterations. In this equation, the term $2N^2$ is associated 
+with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation 
+\ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
+of this method.
+
 
 Figure \ref{fig:float} shows the floating points to estimate the parameter vector using the fast equivalent layer by using the method of \citet{siqueira-etal2017} (equation \ref{eq:float_classic}) and our approach (equation \ref{eq:float_bccb}) versus the number of observation points varyig from $N = 5000$ to $N = 1\,000\,000$ with $50$ iterations. The number of operations is drastically decreased.
 
