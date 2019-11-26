@@ -43,7 +43,7 @@
 
 %\lipsum[1]
 
-We have developed an efficient and very fast equivalent-layer technique for gravity data processing by modifying an iterative method grounded on excess mass constraint that does not require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix, that raises when regular grids of observation points and equivalent sources (point masses) are used to set up a fictitious equivalent layer, we have developed an algorithm which greatly reduces the number of flops and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer. The structure of symmetric BTTB matrix consists of the elements of the first column of the sensitivity matrix, which in turn can be embedded into a symmetric Block-Circulant Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is needed to reconstruct the full sensitivity matrix completely. From the first column of BCCB matrix, its eigenvalues can be calculated using the fast Fourier transform, which can be used to readily compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the gravity data. For example, while our method requires 26:8 seconds to run one million of observations, the fast equivalent-layer technique required 48:3 seconds to run 22,500 observations. Test with real data from Caraj\'as, Brazil, shows its applicability to process very large dataset at low computational cost.
+We have developed an efficient and very fast equivalent-layer technique for gravity data processing by modifying an iterative method grounded on excess mass constraint that does not require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix, that raises when regular grids of observation points and equivalent sources (point masses) are used to set up a fictitious equivalent layer, we have developed an algorithm which greatly reduces the number of flops and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer. The structure of symmetric BTTB matrix consists of the elements of the first column of the sensitivity matrix, which in turn can be embedded into a symmetric Block-Circulant Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is needed to reconstruct the full sensitivity matrix completely. From the first column of BCCB matrix, its eigenvalues can be calculated using the two-dimensional Fast Fourier Transform (2D FFT), which can be used to readily compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the gravity data. For example, while our method requires 26:8 seconds to run one million of observations, the fast equivalent-layer technique required 48:3 seconds to run 22,500 observations. Test with real data from Caraj\'as, Brazil, shows its applicability to process very large dataset at low computational cost.
 
 \end{abstract}
 
@@ -61,7 +61,7 @@ The classic equivalent-layer formulation consists in estimating the physical-pro
 In potential-field methods, the properties of Toeplitz system were used for downward continuation \citep{zhang-etal2016} and for 3D gravity-data inversion using a 2D multilayer model \citep{zhang-wong2015}. In the particular case of gravity data, the kernel generates a linear system with a matrix known as symmetric Block-Toeplitz Toeplitz-Block (BTTB).
 
 A wide variety of applications in mathematics and engineers that fall into Toeplitz systems propelled the development of a large variety of  methods for solving them. %Direct methods were conceived by \citet{levinson1946} and by \citet{trench1964}. Currently the conjugate gradient is used in most cases.
-\citet{grenander-szego1984} noticed that a circulant matrix can be diagonalized by taking the fast Fourier trasform (FFT) of its first column, making it possible to calculate the matrix-vector product and solve the system with low computational cost \citep{strang-aarikka1986, olkin1986}. \citet{chan-jin2007} show some preconditioners to embedd the Toeplitz and BTTB matrices into, respectively, circulant matrices and Block-Circulant Circulant-Block (BCCB) by solving the system applying the conjugate gradient method.
+\citet{grenander-szego1984} noticed that a circulant matrix can be diagonalized by taking the Fast Fourier Trasform (FFT) of its first column, making it possible to calculate the matrix-vector product and solve the system with low computational cost \citep{strang-aarikka1986, olkin1986}. \citet{chan-jin2007} show some preconditioners to embedd the Toeplitz and BTTB matrices into, respectively, circulant matrices and Block-Circulant Circulant-Block (BCCB) by solving the system applying the conjugate gradient method.
 
 Although the use of the equivalent-layer technique increased over the last decades, one of the biggest problem is still its high computational cost for processing large-data sets. \citet{siqueira-etal2017} developed a computationally efficient scheme for processing gravity data. This scheme does not solve a linear system, instead uses an iterative process that corrects the physical-property distribution over the equivalent layer by adding mass corrections that are proportional to the gravity residual. Although efficient, the method presented by \citet{siqueira-etal2017} requires, at each iteration,  the full computation of the forward problem to guarantee the convergence of the algorithm. The time spent on forward modeling accounts for most of the total computation time of their method.
 
@@ -76,70 +76,34 @@ Let $d^{o}_{i}$ be the observed gravity data at
 the point $(x_{i}, y_{i}, z_{i})$, $i = 1, ..., N$, of a local Cartesian
 system with $x$ axis pointing to north, the $y$ axis pointing to east and 
 the $z$ axis pointing downward.
-%We consider that the gravity data are properly processed so that they
-%represent the difference between the observed gravity
-%(corrected from non-gravitational effects due to the vehicle motion) 
-%and the normal gravity, at the same point. This quantity is called
-%\textit{gravity disturbance} \citep{hofmann-wellenhof-moritz2005}. 
-%Several authors have discussed the differences between the gravity 
-%anomaly and the gravity disturbance, as well as proposed that the second 
-%is more appropriated for geophysical applications. A detailed discussion
-%about this theoretical topic is beyond the scope of our work and we
-%refer the reader to \citet{li-gotze2001, fairhead-etal2003, 
-%hackney-featherstone2003, hinze-etal2005} and 
-%\citet{vajda-etal2006, vajda-etal2007, vajda-etal2008}, for example.
 Let us consider an equivalent layer compose by a set of $N$ point masses 
 (equivalent sources) over a layer located at depth $z_0$ ($z_0 >z_i$) and whose 
 $x$- and $y$- coordinates of each point mass coincide with the corresponding coordinates 
 of the observation directly above.
-
 There is a linear relationship that maps the unknown mass distribution onto the gravity 
 data given by
-
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \mathbf{A} \mathbf{p} \: ,
 \label{eq:predicted-data-vector}
 \end{equation}
-
 where $\mathbf{d}$ is an $N \times 1$ vector whose $i$th element is the predicted gravity 
 data at the $i$th point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
 parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent source 
 (point mass) at the $j$th Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
 is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
-
-%\begin{equation}
-%\delta g(x_{i}, y_{i}, z_{i}) = \sum_{j=1}^{N} p_j a_{ij} \: ,
-%\label{eq:predicted-data-i}
-%\end{equation}
-
 \begin{equation}
-a_{ij}= c_{g} \frac{G \, (z_{0} - z_{i}) \, 10^{-5}}{\left[(x_{i} - x_{j})^{2} +
-(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; .
+a_{ij}= \frac{c_{g} \, G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
+(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; ,
 \label{eq:aij}
 \end{equation}
-
-where $G$ is the Newton's gravitational constant and $c_{g} = 10^5$ is a constant transforming from $\mathrm{m/s^2}$ to mGal.
-
+where $G$ is the Newton's gravitational constant and $c_{g} = 10^{5}$ 
+transforms from $\mathrm{m/s^2}$ to mGal.
 Notice that the sensitivity matrix depends on the $i$th coordinates of the observations 
 and the $j$th coordinates of the equivalent sources. For convenience, we designate 
-these coordinates as matrix coordinates and the indices $i$ and $j$ as matrix indices.
-
-In the classical equivalent-layer technique, we estimate the regularized parameter vector from the observed gravity data $d^o$ by
-
-
-%The elements $a_{ij}$ (equation \ref{eq:aij}) forming the matrix 
-%$\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) are defined in terms of the 
-%coordinates $x_{i}$, $y_{i}$, $x_{j}$ and $y_{j}$, which are associated with the
-%observed data and the equivalent sources.
-%For convenience, we designate these coordinates as \textit{matrix coordinates} and the 
-%indices $i$ and $j$ as \textit{matrix indices}.
-
-%\begin{equation}
-%\Psi(\mathbf{p}) = \| \mathbf{d}^{o} - \mathbf{d(p)} \|_{2}^{2} + 
-%\mu \, \| \mathbf{p} \|_{2}^{2} \: ,
-%\label{eq:goal-function}
-%\end{equation}
-
+these coordinates as \textit{matrix coordinates} and the indices $i$ and $j$ as 
+\textit{matrix indices}.
+In the classical equivalent-layer technique, we estimate the regularized parameter vector 
+from the observed gravity data $\mathbf{d}^{o}$ by
 \begin{equation}
 \hat{\mathbf{p}} = \left( \mathbf{A}^{\top}\mathbf{A} + 
 \mu \, \mathbf{I} \right)^{-1}
@@ -148,57 +112,46 @@ In the classical equivalent-layer technique, we estimate the regularized paramet
 \end{equation}
 
 \subsection{Fast equivalent-layer technique}
-\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass distribution over the equivalent layer based on the excess of mass and the positive correlation between the observed gravity data and the masses on the equivalent layer. These authors proved that the fast equivalent-layer technique has a better computational efficiency than the classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the dataset totalize at least 200 observation points, even using a large number of iterations.
+\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass 
+distribution over the equivalent layer based on the excess of mass and the positive correlation 
+between the observed gravity data and the masses on the equivalent layer. Those authors showed 
+that the fast equivalent-layer technique has a better computational efficiency than the 
+classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the 
+dataset totalize at least 200 observation points, even using a large number of iterations.
 
-Considering each equivalent source (point mass) directly beneath the observation point, the iteration of the Siqueira et al.'s (2017) method starts by an initial approximation of mass distibution given by
-
+Considering one equivalent source (point mass) directly beneath each observation point, 
+the iteration of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
+starts by an initial approximation of mass distribution given by
 \begin{equation}
-\mathbf{p}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
-\label{eq:initial_m}
+\hat{\mathbf{p}}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
+\label{eq:p0_fast_eqlayer}
 \end{equation}
-where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix whose
-
+where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix with elements
 \begin{equation}
-\tilde{\mathbf{A}}^{-1} = [\tilde{a}]_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: .
-\label{eq:a_approx}
+\tilde{a}_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: ,
+\label{eq:aii_tilde_inv_fast_eqlayer}
 \end{equation}
-
-where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal coordinates $x_i$ and $y_i$ of the $i$th observation.
-At each $k$th iteration, a mass correction vector $\mathbf{\Delta p^k}$ is estimated by minimizing the goal function:
-
+where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal 
+coordinates $x_i$ and $y_i$ of the $i$th observation.
+At the $k$th iteration, the masses of the equivalent sources are updated by
 \begin{equation}
-\phi(\mathbf{\Delta p^k}) = ||\mathbf{d}^{o} - \mathbf{A}\hat{\mathbf{p}}^k - \tilde{\mathbf{A}} \mathbf{\Delta} \hat{\mathbf{p}^k}||_2^2
-\label{eq:goal-function_fast}
+\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: ,
+\label{eq:p_k+1_fast_eqlayer}
 \end{equation}
-
-\noindent and the masses of the equivalent sources is updated by
-
-\begin{equation}
-\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: .
-\label{eq:update_m}
-\end{equation}
-
-\noindent with
-
+where the mass correction is given by
 \begin{equation}
 \mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \tilde{\mathbf{A}}^{-1} (\mathbf{d}^{o} - \mathbf{A} \hat{\mathbf{p}}^{k}) \: .
-\label{eq:update_delta_m}
+\label{eq:delta_p_k_fast_eqlayer}
 \end{equation}
 
-%\lstset{language=Python}
-%\lstset{frame=lines}
-%\lstset{caption={A \textit{Python} algorithm for Siqueira et al.'s (2017) fast equivalent layer.}}
-%\lstset{label={lst:code_direct}}
-%\lstset{basicstyle=\footnotesize}
-%\begin{lstlisting}
-%diagonal_A = G*(10**5)*2*pi/(dx*dy)
-%for i in range (itmax):
-%	res = (data - A.dot(p))
-%	delta_p = res/diagonal_A
-%	p += delta_p
-%\end{lstlisting}
-
-At the $k$th iteration of Siqueira et al.'s (2017) method, the matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ must be calculated to get a new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$. This matrix-vector product represents  the bottleneck of the Siqueira et al.'s (2017) method. Considering the limitation of 16 Gb of RAM memory in our system, we could run  Siqueira et al.'s (2017) method only up to 22 500 observation points. Hence, for very large data sets it is costful and can be overwhelming in terms of RAM memory to maintain such operation.
+At the $k$th iteration of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method, 
+the matrix-vector product 
+$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ must be calculated to get a 
+new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
+Considering the limitation of 16 Gb of RAM 
+memory in our system, we could run their method only up to 22 500 observation points. 
+Hence, for very large data sets it is costful and can be overwhelming in terms of RAM 
+memory to maintain such operation.
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
@@ -281,7 +234,7 @@ matrix index $i = 7$ (or $j = 7$).
 The element $a_{ij}$ (equation \ref{eq:aij}) can be rewritten 
 by using equations \ref{eq:xi} and \ref{eq:yi}, giving rise to:
 \begin{equation}
-a_{ij} = \frac{G \, \Delta z \, 10^{-5}}{ \left[ 
+a_{ij} = \frac{c_{g} \, G \, \Delta z}{ \left[ 
 	\left( \Delta k_{ij} \, \Delta x \right)^{2} + 
 	\left( \Delta l_{ij} \, \Delta y \right)^{2} + 
 	\left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} \: ,
@@ -296,60 +249,96 @@ defined by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
 
 For $x$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}, respectively.
-In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-particular type of matrix called symmetric doubly block Toeplitz \citep[][ p. 28]{jain1989}
-or symmetric Block-Toeplitz Toeplitz-Block (BTTB) matrix \citep[][ p. 67]{chan-jin2007}.
-We opted for using the second term. This matrix is 
-composed of $N_{y} \times N_{y}$ blocks, where each block is a symmetric Toeplitz matrix
-formed by $N_{x} \times N_{x}$ elements.
+In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is 
+composed of $N_{y} \times N_{y}$ blocks, where each block is formed by $N_{x} \times N_{x}$ elements.
 For $y$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
 computed by using equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, respectively.
 In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
-symmetric BTTB matrix composed of $N_{x} \times N_{x}$ blocks, where each block is a
-symmetric Toeplitz matrix formed by $N_{y} \times N_{y}$ elements.
-In both cases, the blocks lying at the same diagonal are equal to each other
-and those located above the main diagonal are equal to those located below.
+composed of $N_{x} \times N_{x}$ blocks, where each block is formed by $N_{y} \times N_{y}$ elements.
+In both cases, $\mathbf{A}$ is Toeplitz blockwise, i.e., the blocks lying at the same block 
+diagonal are equal to each other.
+Besides, the blocks located above the main diagonal are equal to those 
+located below and each block is itself a Toeplitz matrix.
 These symmetries come from the fact that the coefficients
 $\Delta k_{ij}$ and $\Delta l_{ij}$ are squared at the denominator of 
 $a_{ij}$ (equation \ref{eq:aij-regular-grids}).
+Matrices with this well-defined pattern are called 
+Doubly Block Toeplitz \citep[][ p. 28]{jain1989} or symmetric Block-Toeplitz Toeplitz-Block (BTTB),
+for example. We opted for using the second term.
 
-We represent $\mathbf{A}$ as a grid of $Q \times Q$ blocks $\mathbf{A}_{q}$, 
-$q = 0, \dots, Q - 1$, where each block has $P \times P$ elements.
-For $x$-oriented grids, the index $q$ varies from $0$, at the main diagonal,
-to $Q - 1$, at the corners of $\mathbf{A}$, where $Q = N_{y}$.
-In this case, the index $q$ is defined as an integer function
-of the matrix indices $i$ and $j$ as follows:
+This well-defined pattern is better represented by using the \textit{block indices} $q$ and $p$. 
+We represent $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) as a grid of $Q \times Q$ blocks 
+$\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, given by
 \begin{equation}
-q(i, j) = \; \mid l(i) - l(j) \mid \quad ,
+	\mathbf{A} = \begin{bmatrix}
+	\mathbf{A}_{0}   & \mathbf{A}_{1} & \cdots         & \mathbf{A}_{Q-1} \\
+	\mathbf{A}_{1}   & \mathbf{A}_{0} & \ddots         & \vdots           \\ 
+	\vdots           & \ddots         & \ddots         & \mathbf{A}_{1}   \\
+	\mathbf{A}_{Q-1} & \cdots         & \mathbf{A}_{1} & \mathbf{A}_{0}                 
+	\end{bmatrix}_{N \times N} \: ,
+	\label{eq:BTTB_A}
+\end{equation}
+where each block has $P \times P$ elements conveniently represented by $a^{q}_{p}$, 
+$p = 0, \dots, P - 1$, as follows:
+\begin{equation}
+	\mathbf{A}_{q} = \begin{bmatrix}
+	a^{q}_{0}   & a^{q}_{1} & \cdots    & a^{q}_{P-1} \\
+	a^{q}_{1}   & a^{q}_{0} & \ddots    & \vdots           \\ 
+	\vdots      & \ddots    & \ddots    & a^{q}_{1}   \\
+	a^{q}_{P-1} & \cdots    & a^{q}_{1} & a^{q}_{0}                 
+	\end{bmatrix}_{P \times P} \: ,
+	\label{eq:Aq_block}
+\end{equation}
+with $N = QP$. The index $q$ defines the block diagonal where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) 
+lies within the BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A}). 
+This index varies from $0$, at the main diagonal, to $Q - 1$, at
+the corners of $\mathbf{A}$. Similarly, the index $p$ defines the diagonal where $a^{q}_{p}$ 
+lies within $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}). This index varies from $0$, 
+at the main diagonal, to $P - 1$, at the corners of $\mathbf{A}_{q}$.
+For $x$-oriented grids, $Q = N_{y}$, $P = N_{x}$ and the block indices
+$q$ and $p$ are defined, respectively, by the following integer functions 
+of the matrix indices $i$ and $j$:
+\begin{equation}
+q(i, j) = \; \mid l(i) - l(j) \mid
 \label{eq:q-x-oriented}
 \end{equation}
-where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-x-oriented}.
-The elements forming the first column of $\mathbf{A}_{q}$ are conveniently 
-represented as $a^{q}_{p}$, $p = 0, \dots, P - 1$, where $q \equiv q(i, j)$ 
-(equation \ref{eq:q-x-oriented}), $P = N_{x}$ and the subscript index $p$ is defined by 
-the following integer function:
+and
 \begin{equation}
 p(i, j) = \; \mid k(i) - k(j) \mid \quad ,
 \label{eq:p-x-oriented}
 \end{equation}
-where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-x-oriented}.
-For $y$-oriented grids, the index $q$ varies from $0$, at the main diagonal,
-to $Q - 1$, at the corners of $\mathbf{A}$, where $Q = N_{x}$.
-In such grids, $q$ is given by:
+where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-x-oriented} 
+and $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-x-oriented}.
+For $y$-oriented grids, $Q = N_{x}$, $P = N_{y}$ and the block indices
+$q$ and $p$ are defined, respectively, by the following integer functions 
+of the matrix indices $i$ and $j$:
 \begin{equation}
-q(i, j) = \; \mid k(i) - k(j) \mid \quad ,
+q(i, j) = \; \mid k(i) - k(j) \mid 
 \label{eq:q-y-oriented}
 \end{equation}
-where the integer functions $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}.
-In this case, the elements forming the first column of $\mathbf{A}_{q}$ are 
-represented as $a^{q}_{p}$, $p = 0, \dots, P - 1$, where $q \equiv q(i, j)$ 
-(equation \ref{eq:q-y-oriented}), $P = N_{y}$ and the subscript index $p$ is defined by:
+and
 \begin{equation}
 p(i, j) = \; \mid l(i) - l(j) \mid \quad ,
 \label{eq:p-y-oriented}
 \end{equation}
-where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
-For convenience, we designate the indices $q$ and $p$ as \textit{block indices}.
+where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}
+and $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
+Notice that, for each element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+defined by matrix indices $i$ and $j$, there is a corresponding block element
+$a^{q}_{p}$, defined by block indices $q$ (equations \ref{eq:q-x-oriented} and 
+\ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}),
+so that
+\begin{equation}
+	a^{q}_{p} \equiv a_{ij} \quad .
+	\label{eq:aqp_equiv_aij}
+\end{equation}
+We also stress that matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) defined 
+by elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) in terms of matrix indices 
+$i$ and $j$ is strictly the same BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A}) defined 
+by the blocks $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) and block elements 
+$a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) in terms of the block indices 
+$q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and $p$ 
+(equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}).
 
 It is important noting that different matrix indices $i$ or $j$ produce the same 
 absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} and
@@ -357,9 +346,14 @@ absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} and
 \ref{eq:l-y-oriented}). As a consequence, different pairs of matrix indices $i$
 and $j$ generate the same absolute values for the coefficients $\Delta k_{ij}$ and
 $\Delta l_{ij}$ that compose the denominator of $a_{ij}$ 
-(equation \ref{eq:aij-regular-grids}). It means that elements $a_{ij}$ defined
+(equation \ref{eq:aij-regular-grids}) and also the same values for the block indices
+$q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and 
+$p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}), as well as the same
+block element $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}). 
+It means that elements $a_{ij}$ defined
 by different matrix indices $i$ and $j$ have the same value. The key point for
-understanding the structure of matrix $\mathbf{A}$ is then, given a single element $a_{ij}$
+understanding the structure of BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A})
+is then, given a single element $a_{ij}$
 defined by matrix indices $i$ and $j$, compute the grid indices 
 $k$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
 $l$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}).
@@ -369,12 +363,38 @@ $\Delta l_{ij}$ and determine the value of $a_{ij}$ with equation
 \ref{eq:aij-regular-grids} and 
 (2) compute the block indices $q$ (equations \ref{eq:q-x-oriented}, 
 and \ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and
-and \ref{eq:p-y-oriented}) and determine the positions where $a_{ij}$ appears
-in matrix $\mathbf{A}$.
+and \ref{eq:p-y-oriented}) and determine the corresponding block element $a^{q}_{p}$ 
+(equation \ref{eq:aqp_equiv_aij}) forming $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}). 
 
 Consider the $x$-oriented grid of $N_{x} \times N_{y}$ points shown in Figure 1a, 
 with $N_{x} = 4$, $N_{y} = 3$ and $N = N_{x} \, N_{y} = 12$.
-This grid results in a matrix $\mathbf{A}$ given by:
+To illustrate the relationship between the matrix indices ($i$ and $j$) and 
+the block indices ($q$ and $p$), consider the element $a_{ij}$ defined by 
+$i = 2$ and $j = 10$, which is
+located at the upper right corner of $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), 
+in the 2nd line and 10th column.
+By using equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}, we obtain the 
+grid indices $l(i) = 1$, $l(j) = 3$, $k(i) = 2$ and $k(j) = 2$.
+These grid indices result in the coefficients $\Delta k_{ij} = 0$ and $\Delta l_{ij} = -2$,
+which are used to compute the element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+as well as in the block indices $q = 2$ (equation \ref{eq:q-x-oriented}) and 
+$p = 0$ (equation \ref{eq:p-x-oriented}).
+These block indices indicate that this element $a_{ij}$ appears in the main diagonal
+of the blocks $\mathbf{A}_{2}$ (equation \ref{eq:Aq_block}), which are located at the corners 
+of $\mathbf{A}$ (equation \ref{eq:BTTB_A}).
+To verify this, let us take the matrix indices associated with these elements.
+They are $(i, j)$ = $(1, 9)$, $(2, 10)$, $(3, 11)$, $(4, 12)$, $(9, 1)$, $(10, 2)$, 
+$(11, 3)$ and $(12, 4)$. By using these matrix indices, it is easy to verify that all
+of them produce the same grid indices $l(i)$, $l(j)$, $k(i)$ and $k(j)$ 
+(equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}) as those associated with
+the element defined by $i = 2$ and $j = 10$. Consequently, all of them produce
+elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) having the same value.
+Besides, it is also easy to verify that all these matrix indices produce the same block
+indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented})
+and the same block element $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
+By repeating this procedure for all elements $a_{ij}$, $i = 1, \dots, 12$, $j = 1, \dots, 12$, 
+forming the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) obtained from our 
+$x$-oriented grid (Figure 1a), we can verify that
 \begin{equation}
 \mathbf{A} = \begin{bmatrix}
 \mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
@@ -383,7 +403,7 @@ This grid results in a matrix $\mathbf{A}$ given by:
 \end{bmatrix} \quad ,
 \label{eq:A-x-oriented-example}
 \end{equation}
-where $\mathbf{A}_{q}$, $q = 0, \dots, Q -1$, $Q = N_{y}$, 
+where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q -1$, $Q = N_{y}$, 
 are symmetric Toeplitz matrices given by:
 \begin{equation}
 \mathbf{A}_{q} = \begin{bmatrix}
@@ -394,32 +414,11 @@ a^{q}_{3} & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
 \end{bmatrix} \quad ,
 \label{eq:Aq-x-oriented}
 \end{equation}
-with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{x}$.
-To illustrate the relationship between the block indices ($q$ and $p$) and the matrix indices 
-($i$ and $j$), consider the element $a_{ij}$ defined by $i = 2$ and $j = 10$, which is
-located at the upper right corner of $\mathbf{A}$, in the 2nd line and 10th column.
-By using equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}, we obtain the 
-grid indices $l(i) = 1$, $l(j) = 3$, $k(i) = 2$ and $k(j) = 2$.
-These grid indices result in the coefficients $\Delta k_{ij} = 0$ and $\Delta l_{ij} = -2$,
-which are used to compute the element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
-as well as in the block indices $q = 2$ (equation \ref{eq:q-x-oriented}) and 
-$p = 0$ (equation \ref{eq:p-x-oriented}).
-These block indices indicate that this element $a_{ij}$ appears in the main diagonal
-of the blocks $\mathbf{A}_{2}$, which are located at the corners of $\mathbf{A}$.
-To verify this, let us take the matrix indices associated with these elements.
-They are $(i, j)$ = $(1, 9)$, $(2, 10)$, $(3, 11)$, $(4, 12)$, $(9, 1)$, $(10, 2)$, 
-$(11, 3)$ and $(12, 4)$. By using these matrix indices, it is easy to verify that all
-of them produce the same grid indices $l(i)$, $l(j)$, $k(i)$ and $k(j)$ 
-(equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}) as those associated with
-the element defined by $i = 2$ and $j = 10$. Consequently, all of them produce
-elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) having the same value.
-Besides, it is also easy to verify that all these matrix indices produce the same block
-indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented}).
-By repeating this procedure for all elements $a_{ij}$, $i = 0, 1, 2, 3$, $j = 0, 1, 2$, 
-forming the matrix $\mathbf{A}$ obtained from our $x$-oriented grid (Figure 1a),
-we can verify the well-defined pattern represented by equations 
-\ref{eq:A-x-oriented-example} and \ref{eq:Aq-x-oriented}.
-This procedure can also be used to verify that the matrix $\mathbf{A}$ obtained
+with elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) defined by 
+$p = 0, \dots, P - 1$, $P = N_{x}$.
+
+This procedure can also be used to verify that the matrix $\mathbf{A}$ 
+(equation \ref{eq:predicted-data-vector}) obtained
 from the $y$-oriented grid illustrated in Figure 1b is given by
 \begin{equation}
 \mathbf{A} = \begin{bmatrix}
@@ -430,7 +429,7 @@ from the $y$-oriented grid illustrated in Figure 1b is given by
 \end{bmatrix} \quad ,
 \label{eq:A-y-oriented-example}
 \end{equation}
-where $\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, $Q = N_{x}$, 
+where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q - 1$, $Q = N_{x}$, 
 are symmetric Toeplitz matrices given by:
 \begin{equation}
 \mathbf{A}_{q} = \begin{bmatrix}
@@ -440,32 +439,34 @@ a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
 \end{bmatrix} \quad ,
 \label{eq:Aq-y-oriented}
 \end{equation}
-with elements $a^{q}_{p}$ defined by $p = 0, \dots, P - 1$, $P = N_{y}$.
+with elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) defined by 
+$p = 0, \dots, P - 1$, $P = N_{y}$.
+
+These examples (equations \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) show 
+that the entire $N \times N$ BTTB matrix $\mathbf{A}$ 
+(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}) 
+can be defined by using only the elements 
+forming its first column (or row). Notice that this column contains the gravitational effect 
+produced by a single equivalent source at all $N$ observation points.
 
 \subsection{BTTB matrix-vector product}
 
-\citet{siqueira-etal2017} developed a computationally efficient scheme for processing gravity data. 
-This scheme does not solve a linear system for estimating the parameter vector $\mathbf{p}$
-(equation \ref{eq:predicted-data-vector}).
-Instead, it uses an iterative process that corrects $\mathbf{p}$ based on the residuals. 
-Although computationally efficient, the method presented by \citet{siqueira-etal2017} requires, 
-at each iteration, the matrix-vector product $\mathbf{A}\mathbf{p}$ for computing the 
-predicted data vector $\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}).
-This step accounts for most of the total computation time of their algorithm and can suffer
+The matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation \ref{eq:delta_p_k_fast_eqlayer}) 
+required by \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method
+accounts for most of the total computation time of their algorithm and can suffer
 from RAM memory shortage when large data sets are used.
 This computational load can be drastically lessen by exploring the well-defined structure of 
 matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for the particular case in which 
 its elements $a_{ij}$ are defined by equation \ref{eq:aij-regular-grids}. 
-In this case, $\mathbf{A}$ is a symmetric BTTB matrix (as illustrated by equations
-\ref{eq:A-x-oriented-example}, \ref{eq:Aq-x-oriented}, \ref{eq:A-y-oriented-example} and
-\ref{eq:Aq-y-oriented}) and the predicted data vector 
+In this case, $\mathbf{A}$ is a symmetric BTTB matrix (equations \ref{eq:BTTB_A} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) and the predicted data vector 
 $\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}) can be efficiently
 computed by using the two-dimensional Discrete Fourier Transform (DFT).
-
+To do this, let us first rewrite $\mathbf{d}(\mathbf{p})$ and
+$\mathbf{p}$ (equation \ref{eq:predicted-data-vector}) as the following partitioned vectors:
 \begin{equation}
 \mathbf{d}(\mathbf{p}) = \begin{bmatrix}
 \mathbf{d}_{0}(\mathbf{p}) \\
-\mathbf{d}_{1}(\mathbf{p}) \\
 \vdots \\
 \mathbf{d}_{Q - 1}(\mathbf{p})
 \end{bmatrix}_{N \times 1}
@@ -475,7 +476,6 @@ and
 \begin{equation}
 \mathbf{p} = \begin{bmatrix}
 \mathbf{p}_{0} \\
-\mathbf{p}_{1} \\
 \vdots \\
 \mathbf{p}_{Q - 1}
 \end{bmatrix}_{N \times 1} \quad ,
@@ -484,39 +484,39 @@ and
 where $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$, $q = 0, \dots, Q - 1$,
 are $P \times 1$ vectors. Notice that $q$ is the block index defined by equations 
 \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}, $Q$ defines the number of blocks
-$\mathbf{A}_{q}$ forming $\mathbf{A}$ and $P$ defines the number of elements forming 
-each block $\mathbf{A}_{q}$.
-
+$\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) forming $\mathbf{A}$ (equation \ref{eq:BTTB_A}) 
+and $P$ defines the number of elements forming each block $\mathbf{A}_{q}$.
+Then, by using the partitioned vectors 
+(equations \ref{eq:parameter-vector-partitioned} and \ref{eq:predicted-data-vector-partitioned}) 
+and remembering that $N = QP$, we define the auxiliary linear system
 \begin{equation}
 \mathbf{w} = \mathbf{C} \mathbf{v} \: ,
-\label{eq:embedding-BCCB-matrix-vector-product}
+\label{eq:w_Cv}
 \end{equation}
 where
 \begin{equation}
 \mathbf{w} = \begin{bmatrix}
 \mathbf{w}_{0} \\
-\mathbf{w}_{1} \\
 \vdots \\
 \mathbf{w}_{Q - 1} \\
-\mathbf{0}_{(2QP) \times 1}
-\end{bmatrix}_{(4QP) \times 1} \quad ,
+\mathbf{0}_{2N \times 1}
+\end{bmatrix}_{4N \times 1} \quad ,
 \label{eq:w-vector}
 \end{equation}
 \begin{equation}
 \mathbf{w}_{q} = \begin{bmatrix}
 \mathbf{d}_{q}(\mathbf{p}) \\
 \mathbf{0}_{P \times 1}
-\end{bmatrix}_{(2P) \times 1}
+\end{bmatrix}_{2P \times 1}
 \label{eq:wq-vector} \quad ,
 \end{equation}
 \begin{equation}
 \mathbf{v} = \begin{bmatrix}
 \mathbf{v}_{0} \\
-\mathbf{v}_{1} \\
 \vdots \\
 \mathbf{v}_{Q - 1} \\
-\mathbf{0}_{(2QP) \times 1}
-\end{bmatrix}_{(4QP) \times 1} \quad ,
+\mathbf{0}_{2N \times 1}
+\end{bmatrix}_{4N \times 1} \quad ,
 \label{eq:v-vector}
 \end{equation}
 and
@@ -524,191 +524,184 @@ and
 \mathbf{v}_{q} = \begin{bmatrix}
 \mathbf{p}_{q} \\
 \mathbf{0}_{P \times 1}
-\end{bmatrix}_{(2P) \times 1}
+\end{bmatrix}_{2P \times 1}
 \label{eq:vq-vector} \quad ,
 \end{equation}
 with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
 equations \ref{eq:predicted-data-vector-partitioned} and 
 \ref{eq:parameter-vector-partitioned}, respectively.
+Finally $\mathbf{C}$ (equation \ref{eq:w_Cv}) is a 
+$4N \times 4N$ symmetric Block Circulant matrix with Circulant Blocks (BCCB) 
+\citep[][ p. 184]{davis1979}.
+What follows aims at showing how we use the auxiliary system 
+(equation \ref{eq:w_Cv}) to compute the 
+matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ 
+(equation \ref{eq:delta_p_k_fast_eqlayer}) in a computationally 
+efficient way by exploring the structure of matrix $\mathbf{C}$.
 
-\begin{equation}
-\tensor{C} =
-\begin{bmatrix}
-	\tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} \cr
-	\tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} \cr
-	\tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} \cr
-	\tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} \cr
-	\tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} \cr
-	\tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} & \tensor{C_{2}} \cr
-	\tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}} & \tensor{C_{1}} \cr
-	\tensor{C_{1}} & \tensor{C_{2}} & \tensor{C_{3}} & \tensor{0} & \tensor{C_{3}} & \tensor{C_{2}} & \tensor{C_{1}} & \tensor{C_{0}}
-\end{bmatrix},
-\label{eq:circulant_elements}
-\end{equation}
-where each block $\mathbf{C}_{l}$ is:
-
-\begin{equation}
-\tensor{C}_{l} =
-\begin{bmatrix}
-	\tensor{A}_{l} & \times \cr
-	\times & \tensor{A}_{l}
-\end{bmatrix} =
-\begin{bmatrix}
-	a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} & a_{1}^{\ell} \cr
-	a_{1}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} \cr
-	a_{2}^{\ell} & a_{1}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} \cr
-	0^{\ell} & a_{2}^{\ell} & a_{1}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} & a_{2}^{\ell} \cr
-	a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} & a_{0}^{\ell} & a_{0}^{\ell} & a_{1}^{\ell} \cr
-	a_{1}^{\ell} & a_{2}^{\ell} & 0^{\ell} & a_{2}^{\ell} & a_{1}^{\ell} & a_{0}^{\ell}
-\end{bmatrix}.
-\label{eq:toeplitz_circulant_element}
-\end{equation}
-
-The matrix $\mathbf{C}$ is a $4N_x N_y \times 4N_x N_y$ Block-Circulant matrix formed by Circulant-Blocks matrices. This matrix is formed by a grid of $2N_x \times 2N_x$ blocks, where each block is a $2N_y \times 2N_y$ matrix.
-
-%Instead of calculating the product $\mathbf{d} = \mathbf{A} \mathbf{p}$ (equation \ref{eq:predicted-data-vector}), we now carry the following multiplication:
-
-%\begin{equation}
-%\mathbf{C} \mathbf{v} = \mathbf{q} \: ,
-%\label{eq:BCCB_vector_product}
-%\end{equation}
-%where $\mathbf{v}$ and $\mathbf{q}$ are $4N_x N_y \times 1$ vectors given, respectively, by:
-
-%\begin{equation}
-%\mathbf{v} =
-%\begin{bmatrix}
-%	\mathbf{v}_{0} \cr
-%	\mathbf{v}_{1} \cr
-%	\vdots \cr
-%	\mathbf{v}_{N_x- 1} \cr
-%	\mathbf{0}_{(2 N_x N_y)}
-%\end{bmatrix}
-%\end{equation}
-
-%\noindent and
-%
-%\begin{equation}
-%\mathbf{q} =
-%\begin{bmatrix}
-%	\mathbf{q}_{0} \cr
-%	\mathbf{q}_{1} \cr
-%	\vdots \cr
-%	\mathbf{q}_{N_x - 1} \cr
-%	\mathbf{\dagger}_{(2 N_x N_y)}
-%\end{bmatrix} \: ,
-%\end{equation}
-%where $\mathbf{0}_{(2 N_x N_y)}$ is a $2 N_x N_y \times 1$ vector of zeros, $\mathbf{\dagger}_{(2 N_x N_y)}$ is $2 N_x N_y \times 1$ vector to be drop out and $\mathbf{v}_{\ell}$ and $\mathbf{q}_{\ell}$, $\ell = 0, \dots, N_x-1$ are:
-%
-%\begin{equation}
-%\mathbf{v}_{\ell} =
-%\begin{bmatrix}
-%	\mathbf{p}_{\ell} \cr
-%	\mathbf{0}_{(N_y)}
-%\end{bmatrix}
-%\end{equation}
-%
-%\noindent and
-%
-%\begin{equation}
-%\mathbf{q}_{\ell} =
-%\begin{bmatrix}
-%	\mathbf{d}_{\ell} \cr
-%	\mathbf{\dagger}_{(N_y)}
-%\end{bmatrix} \: ,
-%\end{equation}
-%where $\mathbf{0}_{(N_y)}$ is a $N_y \times 1$ vector of zeros, $\mathbf{\dagger}_{(N_y)}$ is a $N_y \times 1$ vector to be drop out and $\mathbf{d}_{\ell}$ and $\mathbf{p}_{\ell}$ are $N_y \times 1$ vectors partitioned from the original $\mathbf{d}$ and $\mathbf{p}$ vectors (equation \ref{eq:predicted-data-vector}).
-
-As demonstrated by \cite{grenander-szego1984}, circulant matrices can be diagonalized by taking the discrete Fourier transform (DFT), i.e., its eigenvalues can be easily calculated by a fast algorithm of DFT. For BCCB matrices \cite{chan-jin2007} demonstrate that they satisfy:
-
-\begin{equation}
-\mathbf{C} = \left(\mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right)^{\ast} \mathbf{\Lambda}\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \: ,
-\label{eq:fft_BCCB}
-\end{equation}
-
-\noindent where $\mathbf{F}_{(2N_y)}$ and $\mathbf{F}_{(2N_x)}$ are the matrices of the discrete Fourier transform, ``$\otimes$'' represents the Kronecker product, ``$\ast$'' the conjugate matrix and $\mathbf{\Lambda}$ is the diagonal matrix $4N_xN_y \times 4N_xN_y$ containing the eigenvalues of $\mathbf{C}$. By proper manipulating equation \ref{eq:fft_BCCB} it is possible to calculate the eigenvalues of the BCCB matrix using only its first column:
-
-\begin{eqnarray}
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \mathbf{C} = \mathbf{\Lambda} \, \left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \\
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{C} \, \mathbf{t}_{1} = \mathbf{\Lambda} \, \left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{t}_{1} \\
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{c}_{0} = \mathbf{\Lambda} \, \frac{1}{\sqrt{4N_xN_y}}\mathbf{1}_{(4N_xN_y)} \\
-\left( \mathbf{F}_{(2N_y)} \otimes \mathbf{F}_{(2N_x)} \right) \, \mathbf{c}_{0} = \frac{1}{\sqrt{4N_xN_y}} \mathbf{\lambda} \quad ,
-\label{eq:fft_BCCB_column}
-\end{eqnarray}
-
-\noindent where $\mathbf{t}_{1}$ is a $4N_xN_y \times 1$ vector with first element equal to 1 and all the remaining elements equal to 0, the vector $\mathbf{c}_{0}$ $4N_xN_y \times 1$ is the first column of $\mathbf{C}$, $\mathbf{1}_{(4N_xN_y)}$ is a $4N_xN_y \times 1$ with all elements equal to 1 and $\mathbf{\lambda}$ is a vector representing the diagonal of $\mathbf{\Lambda}$ (the eigenvalues of $\mathbf{C}$). Note that using one of the Kronecker product properties equation \ref{eq:fft_BCCB_column} can be calculated using the 2D-DFT \citep{jain1989}:
-
-\begin{eqnarray}
-\mathbf{F}_{(2N_x)} \mathbf{G} \, \mathbf{F}_{(2N_y)} &= \frac{1}{\sqrt{4N_xN_y}} \mathbf{L}
-\quad ,
-\label{eq:fft_BCCB_column_2D}
-\end{eqnarray}
-
-\noindent where $\mathbf{G}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the elements of the first column $\mathbf{c}_{0}$ of $\mathbf{C}$ and $\mathbf{L}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the eigenvalues $\mathbf{\lambda}$.
-
-By substituting equation \ref{eq:fft_BCCB} in equation \ref{eq:embedding-BCCB-matrix-vector-product}, using the fast calculation of the eigenvalues of BCCB matrices (equation \ref{eq:fft_BCCB_column_2D}) and using the same previous Kronecker product property, the auxiliary matrix-vetor product $\mathbf{w} = \mathbf{C} \mathbf{v}$ can be rewritten as follows:
-
-\begin{equation}
-\mathbf{F}_{(2 N_x)}^{\ast} \left[ \mathbf{L} \circ \left( \mathbf{F}_{(2N_x)} \mathbf{V} \, \mathbf{F}_{(2N_y)} \right) \right] \mathbf{F}_{(2N_y)}^{\ast} = \mathbf{W} \: ,
-\label{eq:fft_q}
-\end{equation}
-
-\noindent where ``$\circ$'' denotes the Hadamard product, $\mathbf{L}$ is a $2N_x \times 2N_y$ row-oriented matrix containing the eigenvalues of $\mathbf{C}$, and $\mathbf{V}$ and $\mathbf{Q}$ are $2N_x \times 2N_y$ row-oriented matrices obtained from the vectors $\mathbf{v}$ and $\mathbf{q}$.
-
-Note that in general, the first column of blocks forming a BCCB matrix $\mathbf{C}_{\ell}$ (equation \ref{eq:circulant_elements}) is given by:
-
+Matrix $\mathbf{C}$ (equation \ref{eq:w_Cv})
+is circulant blockwise, formed by $Q \times Q$ blocks, where
+each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is a $2P \times 2P$ circulant matrix. 
+Similarly to the BTTB matrix $\mathbf{A}$ (equations \ref{eq:BTTB_A} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}), 
+the index $q$ defines the block diagonal where $\mathbf{C}_{q}$ lies 
+within $\mathbf{C}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
+the corners of $\mathbf{C}$. Additionally, the blocks lying 
+above the main diagonal are equal to those located below.
+It is known that a circulant matrix can be defined by properly downshifting 
+its first column \citep[][ p. 221]{golub-vanloan2013}. Hence, the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:w_Cv}) can be obtained from its 
+first column of blocks, which is given by
 \begin{equation}
 \left[\mathbf{C} \right]_{(0)} = 
-\begin{bmatrix}
-\mathbf{C}_{0} \cr
-\mathbf{C}_{1} \cr
-\vdots \cr
-\mathbf{C}_{N_x-2} \cr
-\mathbf{C}_{N_x-1} \cr
-\mathbf{0} \cr
-\mathbf{C}_{N_x-1} \cr
-\mathbf{C}_{N_x-2} \cr
-\vdots \cr
-\mathbf{C}_{1}
-\end{bmatrix} \; ,
+	\begin{bmatrix}
+	\mathbf{C}_{0} \\
+	\vdots \\
+	\mathbf{C}_{Q-1} \\
+	\mathbf{0} \\
+	\mathbf{C}_{Q-1} \\
+	\vdots \\
+	\mathbf{C}_{1}
+	\end{bmatrix}_{4N \times 2P} \: ,
+	\label{eq:C-first-column-blocks}
 \end{equation}
-where each block $\mathbf{C}_{\ell}$, $\ell = 0, \dots, N_x-1$, is a $2N_y \times 2N_y$ circulant matrix and $\mathbf{0}$ is a $2N_y \times 2N_y$ matrix with all elements equal to zero. Thus, the first column $\mathbf{c}_{0}$ of a circulant matrix $\mathbf{C}$ is given by:
-
+where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros. Similarly, each block 
+$\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, can be obtained by downshifting its first 
+column
 \begin{equation}
-\mathbf{c}_{0} =
-\begin{bmatrix}
-	a_{00} \cr
-	a_{10} \cr
-	\vdots \cr
-	a_{(N_y-2)0} \cr
-	a_{N_y-1) 0} \cr
-	0 \cr
-	a_{N_y-1) 0} \cr
-	a_{(N_y-2)0} \cr
-	\vdots \cr
-	a_{10}
-\end{bmatrix} \:.
+\mathbf{c}^{q}_{0} = 
+	\begin{bmatrix}
+		a^{q}_{0} \\
+		\vdots \\
+		a^{q}_{P-1} \\
+		0 \\
+		a^{q}_{P-1} \\
+		\vdots \\
+		a^{q}_{1}
+	\end{bmatrix}_{2P \times 1} \: ,
+	\label{eq:Cq-first-column}
 \end{equation}
+where $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}), $p = 0, \dots, P-1$, are the elements 
+forming the block $\mathbf{A}_{q}$ (equations \ref{eq:Aq_block} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}).
+The downshift can be thought off as permutation that pushes the components of a column vector 
+down one notch with wraparound \citep[][ p. 20]{golub-vanloan2013}.
+To illustrate this operation, consider our $y$-oriented grid illustrated in Figure 1b. 
+In this case, the resulting 
+BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv}) is given by 
+\begin{equation}
+\mathbf{C} =
+\begin{bmatrix}
+	\mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} \\
+	\mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} \\
+	\mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} \\
+	\mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     \\
+	\mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} \\
+	\mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} \\
+	\mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} \\
+	\mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}}
+\end{bmatrix},
+\label{eq:C-y-oriented}
+\end{equation}
+where each block $\mathbf{C}_{q}$, $q = 0, 1, 2$, is represented as follows 
+\begin{equation}
+\tensor{C}_{q} =
+\begin{bmatrix}
+	a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} \\
+	a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} \\
+	a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         \\
+	0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} \\
+	a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{0} & a^{q}_{0} & a^{q}_{1} \\
+	a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
+\end{bmatrix}
+\label{eq:Cq-y-oriented}
+\end{equation}
+in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
+Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a.
 
-To complete the process, after calculating the inverse to obtain $\mathbf{W}$ it is necessary to rearrange its rows to obtain the vector $\mathbf{w}$ and also rearrange the elements of $\mathbf{w}$ to obtain the wanted vector $\mathbf{d(p)}$.
+BCCB matrices are diagonalized by the two-dimensional unitary DFT 
+\citep[][ p. 185]{davis1979}. It means that $\mathbf{C}$ (equation \ref{eq:w_Cv}) 
+satisfies 
+\begin{equation}
+\mathbf{C} = 
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)^{\ast} 
+\boldsymbol{\Lambda}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: ,
+\label{eq:C-diagonalized}
+\end{equation}
+where the symbol ``$\otimes$" denotes the Kronecker product \citep{neudecker1969},
+$\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices \citep[][ p. 31]{davis1979}, respectively, the superscritpt 
+``$\ast$" denotes the complex conjugate and $\boldsymbol{\Lambda}$ is a 
+$4QP \times 4QP$ diagonal matrix containing the eigenvalues of $\mathbf{C}$.
+By substituting equation \ref{eq:C-diagonalized} in the auxiliary system 
+(equation \ref{eq:w_Cv}) and premultiplying both
+sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$, 
+we obtain
+\begin{equation}
+\boldsymbol{\Lambda} \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+\mathbf{v} = \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+\mathbf{w} \: .
+\label{eq:vec-DFT-system}
+\end{equation}
+Now, by applying the $vec$-operator to both sides of equation \ref{eq:vec-DFT-system} 
+(see the details in Appendix A), we obtain:
+\begin{equation}
+\mathbf{F}_{2Q}^{\ast} \left[ 
+\mathbf{L} \circ \left(\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
+\right] \mathbf{F}_{2P}^{\ast} = \mathbf{W} \: ,
+\label{eq:DFT-system}
+\end{equation}
+where ``$\circ$'' denotes the Hadamard product \citep[][ p. 298]{horn_johnson1991} and 
+$\mathbf{L}$, $\mathbf{V}$ and $\mathbf{W}$ are $2Q \times 2P$ matrices obtained 
+by rearranging, along their rows, the elements forming the diagonal of matrix 
+$\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectively.
+The left side of equation \ref{eq:DFT-system} contains the two-dimensional 
+Inverse Discrete Fourier Transform (IDFT) of the term in brackets, which in turn
+represents the Hadamard product of matrix $\mathbf{L}$ (equation \ref{eq:left_side_DFT_system_3})
+and the DFT of matrix $\mathbf{V}$ (equation \ref{eq:left_side_DFT_system_1}).
+Matrix $\mathbf{L}$ contains the eigenvalues 
+of $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) and can be 
+efficiently computed by using only the first column of the BCCB matrix 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
+Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
+by using the two-dimensional Fast Fourier Transform (2D FFT).
 
-%The algorithm for computing the matrix-vector product $\mathbf{A}\mathbf{p}$ and obtaining the resulting vector $\mathbf{d(p)}$ can be summarized in the following steps:
+Therefore, at each iteration $k$th of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) 
+method (equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
+$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ by following the steps below:
 
-%1. Compute the first column of the embedded $4N_x N_y \times 4N_x N_y$ BCCB matrix $\mathbf{C}$ by using the first column of the $N_x N_y \times N_x N_y$ BTTB matrix $\mathbf{A}$;
+\begin{itemize}
+\item[\textbf{(1)}] Use equation \ref{eq:aij-regular-grids} to compute the first column of the 
+BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A});
 
-%2. Compute the eigenvalues of $\mathbf{C}$ rearranging them in rows of the $2N_x \times 2N_y$ matrix $\mathbf{L}$;
+\item[\textbf{(2)}] Compute the first column $\mathbf{c}^{q}_{0}$ (equation \ref{eq:Cq-first-column}) of each 
+block $\mathbf{C}_{q}$ to obtain the first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:w_Cv});
 
-%3. Rearrange the vector $\mathbf{v}$ in the rows of the $2N_x \times 2N_y$ matrix $\mathbf{V}$;
+\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of the matrix $\mathbf{G}$ and
+use the 2D FFT to compute matrix $\mathbf{L}$ (equation \ref{eq:DTF_G});
 
-%4. Compute the Hadammard product $\mathbf{L} \circ \tilde{\mathbf{P}}$, where $\tilde{\mathbf{P}} = \mathbf{F}_{(2N_x)} \mathbf{P} \, \mathbf{F}_{(2N_y)}$ is computed by using a fast algorithm for 2D DFT;
+\item[\textbf{(4)}] Rearrange the parameter vector $\hat{\mathbf{p}}^{k}$ 
+(equation \ref{eq:predicted-data-vector}) in its partitioned form 
+(equation \ref{eq:parameter-vector-partitioned}) to define the auxiliary vector 
+$\mathbf{v}$ (equation \ref{eq:v-vector});
 
-%5. Compute the resulting $2N_x \times 2N_y$ matrix $\mathbf{Q} = \mathbf{F}_{(2N_x)}^{\ast} \left[ \mathbf{L} \circ \tilde{\mathbf{P}}\right] \mathbf{F}_{(2N_y)}^{\ast}$ by using a fast algorithm for inverse 2D DFT;
+\item[\textbf{(5)}] Rearrange $\mathbf{v}$ to obtain matrix $\mathbf{V}$, use the 2D FFT 
+to compute its DFT and evaluate the left side of equation \ref{eq:DFT-system-preliminary};
 
-%6. Rearrange the rows of $\mathbf{Q}$ to obtain the vector $\mathbf{q}$;
+\item[\textbf{(6)}] Use the 2D FFT to compute the IDFT of the result obtained at item (5) and 
+obtain the matrix $\mathbf{W}$ (equation \ref{eq:DFT-system});
 
-%7. Rearrange the elements of $\mathbf{q}$ to obtain the vector $\mathbf{d(p)}$.
+\item[\textbf{(7)}] Use the $vec$-operator (equation \ref{eq:vec-operator}) and equations 
+\ref{eq:w-vector} and \ref{eq:wq-vector} to rearrange $\mathbf{W}$ and obtain the predicted 
+data vector $\mathbf{d}(\hat{\mathbf{p}}^{k})$.
+
+\end{itemize}
 
 
 \subsection{Computational performance}
+
 In a normal procedure of the fast equivalent layer proposed by \citet{siqueira-etal2017}, at each iteration a full matrix $\tensor{A}$ (equation \ref{eq:predicted-data-vector}) is multiplied by the estimated mass distribution parameter vector $\hat{\mathbf{p}}^k$ producing the predicted gravity data $\mathbf{d(p)}$  iteratively. As pointed in \citet{siqueira-etal2017} the number of flops (floating-point operations) necessary to estimate the $N$-dimensional parameter vector inside the iteration loop is
 
 \begin{equation}
@@ -718,7 +711,9 @@ f_0 = N^{it} (3N + 2N^2) \; ,
 
 \noindent where $N^{it}$ is the number of iterations. From equation \ref{eq:float_classic} it is clear that the matrix-vector product ($2N^2$) accounts for most of the computational complexity in this method.
 
-It is well known that FFT takes $2 N \log_2(N)$ flops \citep{chu1999inside}. Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
+PAREI AQUI (O N DOS FLOPS EH 4N NO NOSSO CASO)
+
+It is well known that FFT takes $5 N \log_2(N)$ flops \citep[][ p. 15]{vanloan1973}. Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
 
 \begin{equation}
 f_1 = 8N\log_2(4N) + N^{it} (27N + 16N\log_2(4N)).
@@ -748,9 +743,9 @@ Using a PC with a Intel Core i7 4790@3.6GHz processor and 16 Gb of RAM memory, F
 
 
 \section{Synthetic tests}
-In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
+In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
  
-The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:embedding-BCCB-matrix-vector-product}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:embedding-BCCB-matrix-vector-product}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
+The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:w_Cv}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:w_Cv}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
 
 We perform two forms of processing the gravity data (Figure \ref{fig:synthetic_data}) through the equivalent layer technique: the upward (Figure \ref{fig:upward_comparison}) and the downward (Figure \ref{fig:downward_comparison}) continuations. The upward height is 300 m and the downward  is at 50 m.   Either in the upward continuation (Figure \ref{fig:upward_comparison}) or in the downward continuation (Figure \ref{fig:downward_comparison}), the continued gravity data using the fast equivalent layer proposed by \citet{siqueira-etal2017} (Figures \ref{fig:upward_comparison}a and \ref{fig:downward_comparison}a) are in close agreement with those produced by our modification of \citet{siqueira-etal2017} method (Figures \ref{fig:upward_comparison}b and \ref{fig:downward_comparison}b). The residuals (Figures \ref{fig:upward_comparison}c and \ref{fig:downward_comparison}c) quantify this agreement since their means and standard deviations are close to zero in both continued gravity data using both methods.  All the continued gravity data shown here (Figures \ref{fig:upward_comparison} and \ref{fig:downward_comparison}) agree with the true ones (not shown). The most striking feature of these upward or the downward continuations concerns the total computation time. The computation time spent by our method is approximately $1\,500$ times faster than \citet{siqueira-etal2017} method. 
 
@@ -760,19 +755,19 @@ Test with real data are conducted with the gravity data from Caraj\'as, north of
 
 This airborne gravity survey was divided in two different areas, collected in different times, having samples spacing of 7.65 m and 15.21 m, totalizing  4,353,428 observation points. The height of the flight was fixed at 900 m. The gravity data (Figure \ref{fig:carajas_real_data}) were gridded into a regularly spaced dataset of $250\,000$ observation points ($500 \times 500$) with a grid spacing of $716.9311$ km north-south and $781.7387$ km east-west.
 
-To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}), we set an equivalent layer at 300 m deep. Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed (Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data,  show an acceptable data fitting because they have a mean close to zero (0.0003 mGal) and a small standard deviation of 0.105 mGal which corresponds to approximately 0.1 \% of the amplitude of the gravity data.
+To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}), we set an equivalent layer at 300 m deep. Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed (Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data,  show an acceptable data fitting because they have a mean close to zero (0.0003 mGal) and a small standard deviation of 0.105 mGal which corresponds to approximately 0.1 \% of the amplitude of the gravity data.
 
 These small residuals indicate that our method yielded an estimated mass distribution (not shown) that can be used in the data processing. We perform upward-continuation of the real gravity data (Figure \ref{fig:carajas_real_data}) at a constant height of $5\,000$ m over the real data. The upward-continued gravity data (Figure \ref{fig:up2000_carajas_500x500}) seem a reasonable processing because of the attenuation of the short wavelenghts. By using our approach, the processing of the $250\,000$ observations was extremely fast and took 0.216 seconds.
 
 
 \section{Conclusions}
-By exploring the Block-Toeplitz Toeplitz-block (BTTB) structure of the sensitivity matrix in the gravity data processing, we have proposed a new efficient approach for calculating the gravity-data forward modeling required in the iterative fast equivalent-layer technique grounded on excess mass constraint that does not demand  the solution of linear systems.  Its efficiency requires the use of regular grids of observations and equivalent sources (point masses). Our algorithm greatly reduces the number of  flops necessary to estimate a 2D mass distribution within the equivalent layer that fits the observed gravity data. For example, when processing one million observations the number of flops is reduced in 104 times. Traditionally, such amount of data impractically requires 7.6 Terabytes of RAM memory to handle the full sensitivity matrix. Rather, in our method, this matrix takes 61.035 Megabytes of RAM memory only.
+By exploring the BTTB structure of the sensitivity matrix in the gravity data processing, we have proposed a new efficient approach for calculating the gravity-data forward modeling required in the iterative fast equivalent-layer technique grounded on excess mass constraint that does not demand  the solution of linear systems.  Its efficiency requires the use of regular grids of observations and equivalent sources (point masses). Our algorithm greatly reduces the number of  flops necessary to estimate a 2D mass distribution within the equivalent layer that fits the observed gravity data. For example, when processing one million observations the number of flops is reduced in 104 times. Traditionally, such amount of data impractically requires 7.6 Terabytes of RAM memory to handle the full sensitivity matrix. Rather, in our method, this matrix takes 61.035 Megabytes of RAM memory only.
 
 Our method takes advantage of the symmetric BTTB system that arises when processing a harmonic function and considering that either the observations or the sources of the interpretative model (point of masses over the equivalent layer) are distributed on regular grids. Symmetric BTTB matrices can be stored by using only a single column and can be embedded into a symmetric BCCB matrix, which in turn also only needs a single column. 
 This means that only a single column  of the sensitivity matrix needs to be calculated.  Once the jth column of the sensitivity matrix represents the influence of the jth source (jth point mass) has on the predicted data, our method only requires a single point mass that set up the equivalent layer to compute the gravity-data forward modeling.
 
-Using the fast Fourier transform it is possible to calculate the eigenvalues of BCCB matrices which can
-be used to compute a matrix-vector product (gravity-data forward modeling) in a very low computational cost. We have successfully applied the proposed method to upward (or downward) synthetic gravity data. Testing on field data from the Caraj\'as Province, north of Brazil, confirms the potential of our approach in upward-continuing  gravity data with $250\,000$ observations in  about 0.2 seconds.  Our method allows, in future research, applying the equivalent layer-technique for processing and interpreting massive data set such as collected in continental and global scales studies.
+Using the 2D FFT, it is possible to calculate the eigenvalues of BCCB matrices which can
+be used to compute a matrix-vector product (gravity-data forward modeling) in a very low computational cost. We have successfully applied the proposed method to upward (or downward) synthetic gravity data. Testing on field data from the Caraj{\'a}s Province, north of Brazil, confirms the potential of our approach in upward-continuing  gravity data with $250\,000$ observations in  about 0.2 seconds.  Our method allows, in future research, applying the equivalent layer-technique for processing and interpreting massive data set such as collected in continental and global scales studies.
 
 \newpage
 
@@ -819,25 +814,25 @@ Figure~\ref{fig:bccb_fast_val}
 Figure~\ref{fig:delta_comparison}
 
 \plot{delta_comparison}{width=13.5cm}
-{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}).}
+{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}).}
 \newpage
 
 Figure~\ref{fig:delta_rho}
 
 \plot{delta_rho}{width=13.5cm}
-{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}).}
+{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017} method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}).}
 \newpage
 
 Figure~\ref{fig:upward_comparison}
 
 \plot{upward_comparison}{width=5cm}
-{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
+{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
 \newpage
 
 Figure~\ref{fig:downward_comparison}
 
 \plot{downward_comparison}{width=5cm}
-{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
+{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and (b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
 \newpage
 
 Figure~\ref{fig:carajas_real_data}
@@ -849,13 +844,13 @@ Figure~\ref{fig:carajas_real_data}
 Figure~\ref{fig:carajas_gz_predito_val}
 
 \plot{carajas_gz_predito_val}{width=8cm}
-{Caraj\'as Province, Brazil. (a) Predicted gravity data produced by our modification of the fast equivalent-layer method \citep{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}). (b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:carajas_real_data} and the predicted data in panel a, with their mean of 0.000292 mGal and standard deviation of $0.105$ mGal.}
+{Caraj\'as Province, Brazil. (a) Predicted gravity data produced by our modification of the fast equivalent-layer method \citep{siqueira-etal2017}  that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}). (b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:carajas_real_data} and the predicted data in panel a, with their mean of 0.000292 mGal and standard deviation of $0.105$ mGal.}
 \newpage
 
 Figure~\ref{fig:up2000_carajas_500x500}
 
 \plot{up2000_carajas_500x500}{width=13.5cm}
-{Caraj\'as Province, Brazil. The upward-continued gravity data using our modification of the fast equivalent layer method \citep{siqueira-etal2017} that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:embedding-BCCB-matrix-vector-product}). The total computation time is 0.216 seconds for processing of the $250,000$ observations.}
+{Caraj\'as Province, Brazil. The upward-continued gravity data using our modification of the fast equivalent layer method \citep{siqueira-etal2017} that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}). The total computation time is 0.216 seconds for processing of the $250,000$ observations.}
 \newpage
 
 %\subsubsection{Multiplot} 
@@ -936,7 +931,202 @@ Figure~\ref{fig:up2000_carajas_500x500}
 
 %This study was financed by the brazilian agencies CAPES (in the form of a scholarship), FAPERJ (grant n.$^{\circ}$ E-26 202.729/2018) and CNPq (grant n.$^{\circ}$ 308945/2017-4).
 
-%\append{Appendix example}
+\append{Computations with the 2D DFT}
+
+In the present Appendix, we deduce equation \ref{eq:DFT-system}
+by using the row-ordered $vec$-operator (here designated simply as $vec$-operator).
+This equation can be efficiently computed by using the two-dimensional 
+fast Fourier Transform. 
+This operator was implicitly used by \citet[][ p. 31]{jain1989} to 
+show the relationship between Kronecker products and separable 
+transformations. The $vec$-operator defined here 
+transforms a matrix into a column vector by stacking its rows. It is important 
+to stress that this operator is different from that defined by \citet{neudecker1969}, which 
+is most commonly found in the literature and 
+transforms a matrix into a column vector by stacking its columns.
+
+Let $\mathbf{M}$ be an arbitrary $N \times M$ matrix given by:
+\begin{equation}
+\mathbf{M} = \begin{bmatrix}
+\mathbf{m}^{\top}_{1} \\ 
+\vdots \\
+\mathbf{m}^{\top}_{N}
+\end{bmatrix} \: ,
+\label{eq:matrix-M}
+\end{equation}
+where $\mathbf{m}_{i}$, $i = 1, \dots, N$, are $M \times 1$ vectors containing 
+the rows of $\mathbf{M}$.
+The elements of this matrix can be rearranged into a column vector by using the
+$vec$-operator \citep[][ p. 31]{jain1989} as follows:
+\begin{equation}
+vec \left( \mathbf{M} \right) = \begin{bmatrix}
+\mathbf{m}_{1} \\
+\vdots \\
+\mathbf{m}_{N}
+\end{bmatrix}_{NM \times 1} \: .
+\label{eq:vec-operator}
+\end{equation}
+This rearrangement is known as lexicographic ordering \citep[][ p. 150]{jain1989}.
+
+Two important properties of the $vec$-operator (equation \ref{eq:vec-operator}) 
+are necessary to us. 
+To define the first one, consider an 
+$N \times M$ matrix $\mathbf{H}$ given by
+\begin{equation}
+\mathbf{H} = \mathbf{P} \circ \mathbf{Q} \: ,
+\label{eq:matrix-H}
+\end{equation}
+where $\mathbf{P}$ and $\mathbf{Q}$ are arbitrary $N \times M$ matrices and 
+``$\circ$" represents the Hadamard product \citep[][ p. 298]{horn_johnson1991}.
+By applying the $vec$-operator to $\mathbf{H}$ (equation \ref{eq:matrix-H}), 
+it can be shown that
+\begin{equation}
+vec \left( \mathbf{H} \right) = 
+vec \left( \mathbf{P} \right) \circ vec \left( \mathbf{Q} \right) \: .
+\label{eq:vec-matrix-H}
+\end{equation}
+To define the second important property of $vec$-operator, 
+consider an $N \times M$ matrix $\mathbf{S}$ defined by 
+the separable transformation \citet[][ p. 31]{jain1989}:
+\begin{equation}
+\mathbf{S} = \mathbf{P \, M \, Q} \: ,
+\label{eq:matrix-S}
+\end{equation}
+where $\mathbf{P}$ and $\mathbf{Q}$ are arbitrary $N \times N$ and $M \times M$ 
+matrices, respectively.
+By implicitly applying the $vec$-operator to 
+the $\mathbf{S}$ (equation \ref{eq:matrix-S}), 
+\citet[][ p. 31]{jain1989} showed that:
+\begin{equation}
+vec \left( \mathbf{S} \right) = 
+\left( \mathbf{P} \otimes \mathbf{Q}^{\top} \right) 
+vec \left( \mathbf{M} \right) \: ,
+\label{eq:vec-matrix-S}
+\end{equation}
+where ``$\otimes$" denotes the Kronecker product \citep{neudecker1969}.
+It is important to stress the difference between equation \ref{eq:vec-matrix-S}
+and that presented by \citet{neudecker1969}, which is more commonly found in 
+the literature.
+While that equation uses a $vec$-operator that transforms a matrix into a column 
+vector by stacking its columns, equation \ref{eq:vec-matrix-S} 
+uses the $vec$-operator defined by equation \ref{eq:vec-operator}, which 
+transforms a matrix into a column vector by stacking its rows.
+
+Now, let us deduce equation \ref{eq:DFT-system} by 
+using the above-defined properties (equation \ref{eq:vec-matrix-H}
+and \ref{eq:vec-matrix-S}).
+We start calling attention to the right side of equation \ref{eq:vec-DFT-system}.
+Consider that vector $\mathbf{w}$ (equation \ref{eq:vec-DFT-system}) 
+is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
+$\mathbf{W}$, whose two-dimensional DFT $\tilde{\mathbf{W}}$ is represented by the 
+following separable transformation \citep[][ p. 146]{jain1989}:
+\begin{equation}
+\tilde{\mathbf{W}} = \mathbf{F}_{2Q} \, \mathbf{W} \, \mathbf{F}_{2P} \: ,
+\label{eq:2D-DFT-W}
+\end{equation}
+where $\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices. 
+Using equation \ref{eq:vec-matrix-S} and the symmetry of unitary DFT 
+matrices, we rewrite the right side of equation \ref{eq:vec-DFT-system} 
+as follows:
+\begin{equation}
+vec \left( \tilde{\mathbf{W}} \right) = 
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+vec \left( \mathbf{W} \right) \: .
+\label{eq:right_side_DFT_system_1}
+\end{equation}
+Similarly, consider that $\mathbf{v}$ (equation \ref{eq:vec-DFT-system}) 
+is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
+$\mathbf{V}$, whose two-dimensional DFT (equation \ref{eq:2D-DFT-W}) is 
+represented by $\tilde{\mathbf{V}}$, and use
+equation \ref{eq:vec-matrix-S} to rewrite the 
+left side of equation \ref{eq:vec-DFT-system} as follows:
+\begin{equation}
+\boldsymbol{\Lambda} \, vec \left( \tilde{\mathbf{V}} \right) = 
+\boldsymbol{\Lambda}
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+vec \left( \mathbf{V} \right) \: .
+\label{eq:left_side_DFT_system_1}
+\end{equation}
+Note that both sides of equation \ref{eq:left_side_DFT_system_1}
+are defined as the product of the diagonal matrix $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) 
+and a vector. In this case, the matrix-vector product can be conveniently replaced by
+\begin{equation}
+\boldsymbol{\lambda} \circ vec \left( \tilde{\mathbf{V}} \right) = 
+\boldsymbol{\lambda} \circ
+\left( \mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+vec \left( \mathbf{V} \right) \: ,
+\label{eq:left_side_DFT_system_2}
+\end{equation}
+where $\boldsymbol{\lambda}$ is a $4QP \times 1$ vector containing the diagonal of 
+$\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}).
+Then, consider that $\boldsymbol{\lambda}$ is obtained by applying the $vec$-operator 
+(equation \ref{eq:vec-operator}) to a $2Q \times 2P$ matrix $\mathbf{L}$ and use 
+equations \ref{eq:vec-matrix-H} and \ref{eq:vec-matrix-S} to rewrite equation 
+\ref{eq:left_side_DFT_system_2} as follows:
+\begin{equation}
+vec \left( \mathbf{L} \circ \tilde{\mathbf{V}} \right) = 
+vec \left[ \mathbf{L} \circ 
+\left( \mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
+\right] \: .
+\label{eq:left_side_DFT_system_3}
+\end{equation}
+Equations \ref{eq:2D-DFT-W}, \ref{eq:right_side_DFT_system_1} and 
+\ref{eq:left_side_DFT_system_3} show that equation \ref{eq:vec-DFT-system}
+is obtained by applying the $vec$-operator to 
+\begin{equation}
+\mathbf{L} \circ \left( \mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) = 
+\mathbf{F}_{2Q} \, \mathbf{W} \, \mathbf{F}_{2P} \: .
+\label{eq:DFT-system-preliminary}
+\end{equation}
+Finally, we premultiply both sides of equation \ref{eq:DFT-system-preliminary} by 
+$\mathbf{F}_{2Q}^{\ast}$ and then postmultiply both sides of the result by 
+$\mathbf{F}_{2P}^{\ast}$ to deduce equation \ref{eq:DFT-system}.
+
+
+\append{The eigenvalues of $\mathbf{C}$}
+
+In the present Appendix, we show how to efficiently compute matrix $\mathbf{L}$
+(equations \ref{eq:left_side_DFT_system_3}, \ref{eq:DFT-system-preliminary} 
+and \ref{eq:DFT-system}) by using only the first column of the BCCB matrix
+$\mathbf{C}$ (equation \ref{eq:w_Cv}).
+
+We need first premultiply both sides of equation \ref{eq:C-diagonalized}
+by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$ to obtain
+\begin{equation}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \mathbf{C} = 
+\boldsymbol{\Lambda}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: .
+\label{eq:C-diagonalized2}
+\end{equation}
+From equation \ref{eq:C-diagonalized2}, we can easily show that 
+\citep[][ p. 77]{chan-jin2007}:
+\begin{equation}
+	\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \, 
+	\mathbf{c}_{0} = \frac{1}{\sqrt{4QP}} \, \boldsymbol{\lambda} \: ,
+	\label{eq:DFT_C_column}
+\end{equation}
+where $\mathbf{c}_{0}$ is a $4QP \times 1$ vector representing the first column of 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}) and 
+$\boldsymbol{\lambda}$ (equation \ref{eq:left_side_DFT_system_2}) is the $4QP \times 1$ 
+vector that contains the diagonal of matrix $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) 
+and is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to matrix $\mathbf{L}$.
+Now, let us conveniently consider that $\mathbf{c}_{0}$ is obtained by applying the $vec$-operator 
+to a $2Q \times 2P$ matrix $\mathbf{G}$.
+Using this matrix, the property of the $vec$-operator for separable transformations 
+(equation \ref{eq:matrix-S}) and the symmetry of unitary DFT matrices, equation \ref{eq:DFT_C_column} 
+can be rewritten as follows
+\begin{eqnarray}
+	\mathbf{F}_{2Q} \, \mathbf{G} \, \mathbf{F}_{2P} = 
+	\frac{1}{\sqrt{4QP}} \, \mathbf{L} \: .
+	\label{eq:DTF_G}
+\end{eqnarray}
+This equation shows that the eigenvalues of the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:w_Cv}), forming the rows of $\mathbf{L}$,
+are obtained by computing the two-dimensional DFT of matrix $\mathbf{G}$,
+which contains the elements forming the first column of the BCCB matrix 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}).
+
 
 %\append[equations]{Another appendix}
 
