@@ -663,7 +663,7 @@ $\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectivel
 The left side of equation \ref{eq:DFT-system} contains the two-dimensional 
 Inverse Discrete Fourier Transform (IDFT) of the term in brackets, which in turn
 represents the Hadamard product of matrix $\mathbf{L}$ (equation \ref{eq:left_side_DFT_system_3})
-and the DFT of matrix $\mathbf{V}$ (equation \ref{eq:left_side_DFT_system_1}).
+and the two-dimensional DFT of matrix $\mathbf{V}$ (equation \ref{eq:left_side_DFT_system_1}).
 Matrix $\mathbf{L}$ contains the eigenvalues 
 of $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) and can be 
 efficiently computed by using only the first column of the BCCB matrix 
@@ -722,24 +722,33 @@ with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation
 \ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
 of this method.
 
-Our method computes this matrix-vector by using a fast convolution approach.
+At each iteration of the fast equivalent-layer technique, our method computes 
+one DFT, one Hadammard product and one IDFT involving $2Q \times 2P$ matrices 
+(left side of equation \ref{eq:DFT-system}). 
+
+The Hadamard product requires $4N$ flops.
+
+Let us consider that the total number of flops required to compute a DFT/IDFT 
+by using a 2D FFT is $\kappa \, 4N \log_{2}(4N)$, where $N = QP$ and $\kappa$ is a constant
+depending on the algorithm. 
+
+Then, the resultant flops count of our method is given by:
+
+\begin{equation}
+f_1 = N^{it} \left[ 7N + \kappa \, 8N \log_{2}(4N) \right].
+\label{eq:float_bccb}
+\end{equation}
 
 PAREI AQUI
 
-1 DFT for precomputing matrix $\mathbf{L}$ (step 3)
-1 DFT + 1 Hadamard product + 1 IDFT at each iteration $k$ (steps 5 and 6)
 
-The number of flops (floating-point operations) required to compute the a DFT/IDFT 
-via FFT is $5 (4N)^{2} \log_{2}(4N)$ ?
-
-It is well known that FFT takes $5 N \log_2(N)$ flops \citep[][ p. 15]{vanloan1992}. 
 
 Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
 
-\begin{equation}
-f_1 = 8N\log_2(4N) + N^{it} (27N + 16N\log_2(4N)).
-\label{eq:float_bccb}
-\end{equation}
+%\begin{equation}
+%f_1 = 8N\log_2(4N) + N^{it} (27N + 16N\log_2(4N)).
+%\label{eq:float_bccb}
+%\end{equation}
 
 Another major improvement of this methodology is the exoneration of calculating the full sensibility matrix $\tensor{A}$ (equation \ref{eq:predicted-data-vector}). Each element needs $12$ flops (equation \ref{eq:aij}), totalizing $12N^2$ flops for the full matrix. Calculating a single column of the BTTB matrix requires $12N$ flops.
 Thus, the full flops count of the method presented by \citet{siqueira-etal2017} is
