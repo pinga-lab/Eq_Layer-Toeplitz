@@ -714,70 +714,61 @@ The number of flops (floating-point operations) necessary to estimate the
 $N \times 1$ parameter vector $\mathbf{p}$ in the fast equivalent-layer technique 
 \citep{siqueira-etal2017} is
 \begin{equation}
-f_0 = N^{it} (3N + 2N^2) \; ,
-\label{eq:float_classic}
+f_{0} = N^{it} (3N + 2N^{2}) \; ,
+\label{eq:float_fast_eqlayer}
 \end{equation}
 where $N^{it}$ is the number of iterations. In this equation, the term $2N^2$ is associated 
 with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation 
 \ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
 of this method.
-
-At each iteration of the fast equivalent-layer technique, our method computes 
+Our method replace this matrix-vector product by three operations: 
 one DFT, one Hadammard product and one IDFT involving $2Q \times 2P$ matrices 
 (left side of equation \ref{eq:DFT-system}). 
-
-The Hadamard product requires $4N$ flops.
-
-Let us consider that the total number of flops required to compute a DFT/IDFT 
-by using a 2D FFT is $\kappa \, 4N \log_{2}(4N)$, where $N = QP$ and $\kappa$ is a constant
-depending on the algorithm. 
-
+The Hadamard product requires six times $4N$ flops, $N = QP$, because the entries are 
+complex numbers.
+We consider that a DFT/IDFT requires $\kappa \, 4N \log_{2}(4N)$ flops to be computed via 2D FFT, 
+where $\kappa$ is a constant depending on the algorithm. 
 Then, the resultant flops count of our method is given by:
-
 \begin{equation}
-f_1 = N^{it} \left[ 7N + \kappa \, 8N \log_{2}(4N) \right].
+f_{1} = N^{it} \left[ 27N + \kappa \, 8N \log_{2}(4N) \right] \: .
 \label{eq:float_bccb}
 \end{equation}
+Figure \ref{fig:float} shows the flops counts $f_{0}$ and $f_{1}$ (equations \ref{eq:float_fast_eqlayer}
+and \ref{eq:float_bccb}) associated with the fast equivalent-layer technique \citep{siqueira-etal2017} and 
+our method, respectively, as a function of the number $N$ of observation points. 
+We considered a fixed number of $N^{it} = 50$ iterations and $\kappa = 5$ (equation \ref{eq:float_bccb}),
+which is compatible with a radix-2 FFT \citep[][ p. 16]{vanloan1992}.
+As we can see, the number of flops is drastically decreased in our method.
 
-PAREI AQUI
+Another advantage of our method is concerned with the real $N \times N$ matrix $\mathbf{A}$ 
+(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}).
+In the fast equivalent-layer technique, the full matrix 
+is computed once and stored during the entire iterative process.
+On the other hand, our method computes only one column of $\mathbf{A}$ 
+and uses it to compute the complex $2Q \times 2P$ matrix $\mathbf{L}$ 
+(equation \ref{eq:DTF_G}) via 2D FFT, which is stored during all iterations.
+Table \ref{tab:RAM-usage} shows the RAM memory usage needed to store the 
+full matrix $\mathbf{A}$, a single column of $\mathbf{A}$ and the full matrix 
+$\mathbf{L}$. The quantities were computed for different numbers of observations $N$. 
+Notice that $N = 1\,000\,000$ observations require nearly $7.6$ Terabytes of RAM memory 
+to store the whole matrix $\mathbf{A}$.
 
-
-
-Computing the eigenvalues of the BCCB matrix ($4N \times 4N$) and applying 2D-FFT on the parameter row-oriented matrix $\mathbf{V}$ (equation \ref{eq:fft_q}), takes $8N \log_2(4N)$ each. However, the sensitivity matrix does not change during the process thus, the eigenvalues of BCCB must be calculated only once, outside of the iteration. The multiplication of two complex numbers takes four real multiplications and two additions, which brings 6 times $4N$ flops to carry the Hadamard product. As it is necessary to compute the inverse FFT, another $8N \log_2(4N)$ must be taken in account. This lead us to a flops count in our method of
-
-%\begin{equation}
-%f_1 = 8N\log_2(4N) + N^{it} (27N + 16N\log_2(4N)).
-%\label{eq:float_bccb}
-%\end{equation}
-
-Another major improvement of this methodology is the exoneration of calculating the full sensibility matrix $\tensor{A}$ (equation \ref{eq:predicted-data-vector}). Each element needs $12$ flops (equation \ref{eq:aij}), totalizing $12N^2$ flops for the full matrix. Calculating a single column of the BTTB matrix requires $12N$ flops.
-Thus, the full flops count of the method presented by \citet{siqueira-etal2017} is
-
-\begin{equation}
-f_s = 12N^2 + N^{it} (3N + 2N^2),
-\label{eq:float_siqueira}
-\end{equation}
-
-and it is decreased in our method to
-
-\begin{equation}
-f_f = 12N + 8N \log_2(4N) + N^{it} (27N + 16N\log(4N)).
-\label{eq:float_new}
-\end{equation}
-
-
-
-
-
-
-Figure \ref{fig:float} shows the floating points to estimate the parameter vector using the fast equivalent layer by using the method of \citet{siqueira-etal2017} (equation \ref{eq:float_classic}) and our approach (equation \ref{eq:float_bccb}) versus the number of observation points varyig from $N = 5000$ to $N = 1\,000\,000$ with $50$ iterations. The number of operations is drastically decreased.
-
-Table 1 shows the system RAM memory usage needed to store the full sensitivity matrix, the single column of the sensitivity matrix to form the BTTB matrix and the BCCB eigenvalues ($8$ times greater than that required by the BTTB first column). The quantities were computed for different numbers of data (N) with the same corresponding number of equivalent sources (N). Table 1 considers that each element of the matrix is a double-precision number, which requires 8 bytes of storage, except for the BCCB complex eigenvalues, which requires 16 bytes per element. Notice that $1\,000\,000$ observation points requires nearly $7.6$ Terabytes of RAM memory to store the whole sensibility matrix of the equivalent layer.
-
-Using a PC with a Intel Core i7 4790@3.6GHz processor and 16 Gb of RAM memory, Figure \ref{fig:time_comparison}  compares the running time  of the  \citet{siqueira-etal2017} method with the one of our work, considering a constant number of iterations equal to 50. Clearly, the major advantage of our approach is its computational efficiency that allows a rapid calculation of the gravity forward modeling  with number of observations greater than $10\,000$. Because of the RAM available in this system, we could not perform this comparison with more observations. Therefore, the number of observation is limited to $22\,500$. Disregarding the RAM limitation, Figure \ref{fig:time_bccb} shows the running time of our method with 50 iterations and with the number of observations up to  25 millions. Our method requires 26:8 seconds to run one million of observations, whereas \citet{siqueira-etal2017} method took 48:3 seconds to run $22\,500$ observations
+Figure \ref{fig:time_fast_eqlayer_bccb} compares the running time of the fast equivalent-layer technique 
+\citep{siqueira-etal2017} and of our method, considering a constant number of iterations $N^{it} = 50$. 
+We used a PC with an Intel Core i7 4790@3.6GHz processor and 16 GB of RAM memory.
+The computational efficiency of our approach is significantly superior to that of the 
+fast equivalent-layer technique for a number of observations $N$ greater than $10\,000$. 
+We could not perform this comparison with a number of observations greater than $22\,500$
+due to limitations of our PC in storing the full matrix $\mathbf{A}$.
+Figure \ref{fig:time_bccb} shows the running time of our method with a number of observations 
+up to  $25$ millions. 
+These results shows that, while the running time of our method is $26.8$ seconds for 
+$N = 1\,000\,000$, the fast equivalent-layer technique spends $48.3$ seconds for $N = 22\,500$.
 
 
 \section{Synthetic tests}
+
+
 In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv})  to solve, at each iteration, the forward modeling (the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}.  We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines.  These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and $0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of $-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of $0.015$ mGal.
  
 The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. We also set a grid of equivalent point masses, each one directly beneath each observation points, located at $300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes the forward modeling using equation \ref{eq:w_Cv}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and \ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method.  These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into a BCCB matrix (equation \ref{eq:w_Cv}) yields practically the same result as the one produced by computing this matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
@@ -814,18 +805,22 @@ be used to compute a matrix-vector product (gravity-data forward modeling) in a 
 Figure~\ref{fig:float}
 
 \plot{float}{width=\textwidth}
-{floating points to estimate the parameter vector using the fast equivalent layer using \citet{siqueira-etal2017} method (equation \ref{eq:float_classic}) and our approach (equation \ref{eq:float_bccb}) versus the numbers of observation points varyig from $N = 5\,000$ to $N = 1\,000\,000$ with $50$ iterations. The number of operations is drastically decreased.}
+{Comparison between the number of flops (equations \ref{eq:float_fast_eqlayer} and \ref{eq:float_bccb}) 
+associated with the fast equivalent-layer technique \citep{siqueira-etal2017} and our method, 
+for $N$ varying from $5\,000$ to $1\,000\,000$. All values are computed with $N^{it} = 50$ iterations.}
 \newpage
 
 Figure~\ref{fig:time_comparison}
 
 \plot{time_comparison}{width=10cm}
-{time necessary to run 50 iterations of the \citet{siqueira-etal2017} method and the one presented in this work. With the limitation of $16$ Gb of RAM memory in our system, we could test only up to $22\,500$ obervation points.}
+{Comparison between the running time of the fast equivalent-layer technique \citep{siqueira-etal2017} and our method.
+The values were obtained for $N^{it} = 50$ iterations.}
 
 Figure~\ref{fig:time_bccb}
 
 \plot{time_bccb}{width=10cm}
-{time necessary to run the equivalent layer technique with 50 iterations using our approach, where the RAM is not a limitation factor. We could run up to $25$ million observation points. In comparison, $1$ million observation points took $26.8$ seconds to run, where the maximun $22\,500$ observation points in Figure \ref{fig:time_comparison}, with \citet{siqueira-etal2017} method, took 48:3 seconds.}
+{Running time of our method for a number of observations $N$ up to $25$ millions. 
+The values were obtained for $N^{it} = 50$ iterations.}
 \newpage
 
 Figure~\ref{fig:synthetic_data}
@@ -904,29 +899,35 @@ Figure~\ref{fig:up2000_carajas_500x500}
 \subsection{Tables}
 
 \begin{table}[h]
+	\label{tab:RAM-usage}
 	\begin{center}
 		\begin{tabular}{|l|c|c|c|}
 			\hline
-			\textbf{$N \times N$} & \textbf{Full RAM (Mb)} & \textbf{BTTB RAM (Mb)}  & \textbf{BCCB RAM (Mb)}\\
+			\textbf{$N$} & \textbf{Full matrix $\mathbf{A}$} & \textbf{Single column of $\mathbf{A}$} 
+			& \textbf{Full matrix $\mathbf{L}$}\\
 			\hline 
-			$100 \times 100$ & 0.0763 & 0.0000763 & 0.0006104\\
+			$100$ & 0.0763 & 0.0000763 & 0.0006104\\
 			\hline
-			$400 \times 400$ & 1.22 & 0.0031 & 0.0248\\
+			$400$ & 1.22 & 0.0031 & 0.0248\\
 			\hline
-			$2\,500 \times 2\,500$ & 48 & 0.0191 & 0.1528\\
+			$2\,500$ & 48 & 0.0191 & 0.1528\\
 			\hline
-			$10\,000 \times 10\,000$ & 763 & 0.00763 & 0.6104\\
+			$10\,000$ & 763 & 0.00763 & 0.6104\\
 			\hline
-			$40\,000 \times 40\,000$ & 12\,207 & 0.305 & 2.4416 \\
+			$40\,000$ & 12\,207 & 0.305 & 2.4416 \\
 			\hline
-			$250\,000 \times 250\,000$ & 476\,837 & 1.907 & 15.3 \\
+			$250\,000$ & 476\,837 & 1.907 & 15.3 \\
 			\hline
-			$500\,000 \times 500\,000$ & 1\,907\,349 & 3.815 & 30.518 \\
+			$500\,000$ & 1\,907\,349 & 3.815 & 30.518 \\
 			\hline
-			$1\,000\,000 \times 1\,000\,000$ & 7\,629\,395 & 7.629 & 61.035 \\
+			$1\,000\,000$ & 7\,629\,395 & 7.629 & 61.035 \\
 			\hline
 		\end{tabular}
-		\caption{Comparison between the system RAM memory usage needed to store the full matrix, the BTTB single column of the sensitivity matrix and the BCCB eigenvalues (eight times greater than the BTTB singel column). The quantities were computed for different numbers of data (N) with the same corresponding number of equivalent sources (N). This table considers that each element of the matrix is a double-precision number, which requires 8 bytes of storage, except for the BCCB complex eigenvalues, which requires 16 bytes per element.}
+		\caption{Comparison between the system RAM memory usage needed to store the full matrix $\mathbf{A}$ 
+		(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}), a single column of $\mathbf{A}$ and the 
+		full matrix $\mathbf{L}$ (equation \ref{eq:DTF_G}). The quantities are represented in megabyte (MB), for 
+		different total number of observations $N$. We consider that the elements of $\mathbf{A}$ and $\mathbf{L}$ 
+		occupy, respectively, 8 and 16 bytes each in computer memory.}
 	\end{center}
 \end{table} 
 
