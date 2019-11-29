@@ -1,12 +1,14 @@
 \renewcommand{\figdir}{Fig} % figure directory
 
+% Computational performance
+
 \plot{float}{width=\textwidth}{
 	{Comparison between the number of flops (equations \ref{eq:float_fast_eqlayer} and \ref{eq:float_bccb}) 
 	associated with the fast equivalent-layer technique \citep{siqueira-etal2017} and our method, 
-	for $N$ varying from $5\,000$ to $1\,000\,000$. All values are computed with $N^{it} = 50$ iterations.}
+	for $N$ varying from $5\,000$ to $1\,000\,000$. All values are computed with $N^{it} = 50$ 
+	iterations and $\kappa = 5$.}
 	\label{fig:float}
 }
-
 
 \plot{time_comparison}{width=10cm}{
 	{Comparison between the running time of the fast equivalent-layer technique \citep{siqueira-etal2017} and our method.
@@ -19,6 +21,8 @@
 	The values were obtained for $N^{it} = 50$ iterations.}
 	\label{fig:time_bccb}
 }
+
+% Application to synthetic data
 
 \plot{synthetic_data}{width=13.5cm}{
 	{Noise-corrupted gravity data (in color map) produced by three simulated sources  whose horizontal projections 
@@ -73,6 +77,8 @@
 	the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
 	\label{fig:downward_comparison}
 }
+
+% Application to field data
 
 \plot{carajas_real_data}{width=13.5cm}{
 	{Caraj\'as Province, Brazil. Gravity data on a regular grid of $500 \times 500$ points, totaling $250,000$ observations.

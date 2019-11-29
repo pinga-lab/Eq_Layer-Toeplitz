@@ -1,7 +1,13 @@
-\begin{table}[h]
-	\label{tab:RAM-usage}
+\tabl{RAM-usage}{Comparison between the system RAM memory usage needed to store the full 
+matrix $\mathbf{A}$ (equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}), a single 
+column of $\mathbf{A}$ and the full matrix $\mathbf{L}$ (equation \ref{eq:DTF_G}). The quantities 
+are represented in megabyte (MB), for different total number of observations $N$. We consider 
+that the elements of $\mathbf{A}$ and $\mathbf{L}$ occupy, respectively, 8 and 16 bytes each 
+in computer memory.
+\label{tab:RAM-usage}
+}{
 	\begin{center}
-		\begin{tabular}{|l|c|c|c|}
+		\begin{tabular}[]{|l|c|c|c|}
 			\hline
 			\textbf{$N$} & \textbf{Full matrix $\mathbf{A}$} & \textbf{Single column of $\mathbf{A}$} 
 			& \textbf{Full matrix $\mathbf{L}$}\\
@@ -23,10 +29,5 @@
 			$1\,000\,000$ & 7\,629\,395 & 7.629 & 61.035 \\
 			\hline
 		\end{tabular}
-		\caption{Comparison between the system RAM memory usage needed to store the full matrix $\mathbf{A}$ 
-		(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}), a single column of $\mathbf{A}$ and the 
-		full matrix $\mathbf{L}$ (equation \ref{eq:DTF_G}). The quantities are represented in megabyte (MB), for 
-		different total number of observations $N$. We consider that the elements of $\mathbf{A}$ and $\mathbf{L}$ 
-		occupy, respectively, 8 and 16 bytes each in computer memory.}
-	\end{center}
-\end{table} 
+	\end{center} 
+}

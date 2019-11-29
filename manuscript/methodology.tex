@@ -598,7 +598,7 @@ efficiently computed by using only the first column of the BCCB matrix
 $\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
 Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
 by using the two-dimensional Fast Fourier Transform (2D FFT).
-This approach is a two-dimensional discrete convolution \citep[e.g.,][ p. 213]{vanloan1992}.
+This approach is a fast two-dimensional discrete convolution \citep[e.g.,][ p. 213]{vanloan1992}.
 
 At each iteration $k$th of the fast equivalent-layer technique, 
 (equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
@@ -690,5 +690,5 @@ We could not perform this comparison with a number of observations greater than 
 due to limitations of our PC in storing the full matrix $\mathbf{A}$.
 Figure \ref{fig:time_bccb} shows the running time of our method with a number of observations 
 up to  $25$ millions. 
-These results shows that, while the running time of our method is $26.8$ seconds for 
-$N = 1\,000\,000$, the fast equivalent-layer technique spends $48.3$ seconds for $N = 22\,500$.
+These results shows that, while the running time of our method is $\approx 30.9$ seconds for 
+$N = 1\,000\,000$, the fast equivalent-layer technique spends $\approx 46.8$ seconds for $N = 22\,500$.
