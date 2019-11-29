@@ -1,0 +1,694 @@
+\section{Methodology}
+
+\subsection{Equivalent-layer technique for gravity data processing}
+
+Let $d^{o}_{i}$ be the observed gravity data at
+the point $(x_{i}, y_{i}, z_{i})$, $i = 1, ..., N$, of a local Cartesian
+system with $x$ axis pointing to north, the $y$ axis pointing to east and 
+the $z$ axis pointing downward.
+Let us consider an equivalent layer compose by a set of $N$ point masses 
+(equivalent sources) over a layer located at depth $z_0$ ($z_0 >z_i$) and whose 
+$x$- and $y$- coordinates of each point mass coincide with the corresponding coordinates 
+of the observation directly above.
+There is a linear relationship that maps the unknown mass distribution onto the gravity 
+data given by
+\begin{equation}
+\mathbf{d}(\mathbf{p}) = \mathbf{A} \mathbf{p} \: ,
+\label{eq:predicted-data-vector}
+\end{equation}
+where $\mathbf{d}$ is an $N \times 1$ vector whose $i$th element is the predicted gravity 
+data at the $i$th point ($x_i$,$y_i$,$z_i$), $\mathbf{p}$ is the unknown $N \times 1$ 
+parameter vector whose $j$th element $p_j$  is the mass of the $j$th equivalent source 
+(point mass) at the $j$th Cartesian coordinates ($x_j$,$y_j$,$z_0$) and $\mathbf{A}$ 
+is an $N \times N$  sensitivity matrix whose $ij$th element is given by 
+\begin{equation}
+a_{ij}= \frac{c_{g} \, G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
+(y_{i} - y_{j})^{2} +	(z_{i} - z_{0})^{2} \right]^{\frac{3}{2}}} \; ,
+\label{eq:aij}
+\end{equation}
+where $G$ is the Newton's gravitational constant and $c_{g} = 10^{5}$ 
+transforms from $\mathrm{m/s^2}$ to mGal.
+Notice that the sensitivity matrix depends on the $i$th coordinates of the observations 
+and the $j$th coordinates of the equivalent sources. For convenience, we designate 
+these coordinates as \textit{matrix coordinates} and the indices $i$ and $j$ as 
+\textit{matrix indices}.
+In the classical equivalent-layer technique, we estimate the regularized parameter vector 
+from the observed gravity data $\mathbf{d}^{o}$ by
+\begin{equation}
+\hat{\mathbf{p}} = \left( \mathbf{A}^{\top}\mathbf{A} + 
+\mu \, \mathbf{I} \right)^{-1}
+\mathbf{A}^{\top} \mathbf{d}^{o} \: .
+\label{eq:estimated-p-parameter-space}
+\end{equation}
+
+\subsection{Fast equivalent-layer technique}
+\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass 
+distribution over the equivalent layer based on the excess of mass and the positive correlation 
+between the observed gravity data and the masses on the equivalent layer. Those authors showed 
+that the fast equivalent-layer technique has a better computational efficiency than the 
+classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the 
+dataset totalize at least 200 observation points, even using a large number of iterations.
+
+Considering one equivalent source (point mass) directly beneath each observation point, 
+the iteration of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
+starts by an initial approximation of mass distribution given by
+\begin{equation}
+\hat{\mathbf{p}}^0 = \tilde{\mathbf{A}}^{-1} \mathbf{d}^{o} \: ,
+\label{eq:p0_fast_eqlayer}
+\end{equation}
+where $\tilde{\mathbf{A}}^{-1}$ is an $N \times N$ diagonal matrix with elements
+\begin{equation}
+\tilde{a}_{ii}^{-1} = \frac{\Delta s_i}{(2 \pi \, G \, c_g)} \: ,
+\label{eq:aii_tilde_inv_fast_eqlayer}
+\end{equation}
+where $\Delta s_i$ is the $i$th element of surface area located at the $i$th horizontal 
+coordinates $x_i$ and $y_i$ of the $i$th observation.
+At the $k$th iteration, the masses of the equivalent sources are updated by
+\begin{equation}
+\hat{\mathbf{p}}^{k+1} = \hat{\mathbf{p}}^{k} + \mathbf{\Delta} \hat{\mathbf{p}}^{k} \: ,
+\label{eq:p_k+1_fast_eqlayer}
+\end{equation}
+where the mass correction is given by
+\begin{equation}
+\mathbf{\Delta} \hat{\mathbf{p}}^{k+1} = \tilde{\mathbf{A}}^{-1} (\mathbf{d}^{o} - \mathbf{A} \hat{\mathbf{p}}^{k}) \: .
+\label{eq:delta_p_k_fast_eqlayer}
+\end{equation}
+
+At the $k$th iteration of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method, 
+the matrix-vector product 
+$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ must be calculated to get a 
+new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
+Considering the limitation of 16 Gb of RAM 
+memory in our system, we could run their method only up to 22 500 observation points. 
+Hence, for very large data sets it is costful and can be overwhelming in terms of RAM 
+memory to maintain such operation.
+
+\subsection{Structure of matrix $\mathbf{A}$ for regular grids}
+
+Consider that the observed data are located on an $N_{x} \times N_{y}$ regular grid of
+points regularly spaced from $\Delta x$ and $\Delta y$ along the $x$ and $y$ directions,
+respectively, on a horizontal plane defined by the constant vertical coordinate $z_{1} < z_{0}$. 
+As a consequence, a given pair of matrix coordinates $(x_{i}, y_{i})$, defined by the matrix index 
+$i$, $i = 1, \dots, N = N_{x} N_{y}$, is equivalent to a pair of coordinates $(x_{k}, y_{l})$
+given by:
+\begin{equation}
+x_{i} \equiv x_{k} = x_{1} + \left[ k(i) - 1 \right] \, \Delta x \: , 
+\label{eq:xi}
+\end{equation}
+and
+\begin{equation}
+y_{i} \equiv y_{l} = y_{1} + \left[ l(i) - 1 \right] \, \Delta y \: ,
+\label{eq:yi}
+\end{equation}
+where $k(i)$ and $l(i)$ are integer functions of the matrix index $i$.
+These equations can also be used to define the matrix coordinates 
+$x_{j}$ and $y_{j}$ associated with the $j$-th equivalent source,
+$j = 1, \dots, N = N_{x}N_{y}$. In this case, the integer functions
+are evaluated by using the index $j$ instead of $i$.
+For convenience, we designate $x_{k}$ and $y_{l}$ as \textit{grid coordinates}
+and the indices $k$ and $l$ as \textit{grid indices}, which are computed with
+the integer functions.
+
+The integer functions assume different forms depending on the 
+orientation of the regular grid of data.
+Consider the case in which the grid is oriented along the
+$x$-axis (Figure 1a). For convenience, we designate these grids as 
+$x$-\textit{oriented grids}. For them, we have the following integer functions:
+\begin{equation}
+i(k, l) = (l - 1) \, N_{x} + k \quad ,
+\label{eq:i-x-oriented}
+\end{equation}
+\begin{equation}
+l(i) = \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil
+\label{eq:l-x-oriented}
+\end{equation}
+and
+\begin{equation}
+k(i)  = i - \Bigg\lceil \frac{i}{N_{x}} \Bigg\rceil N_{x} + N_{x} \quad ,
+\label{eq:k-x-oriented}
+\end{equation}
+where $\lceil \cdot \rceil$ denotes the ceiling function \citep[][ p. 67]{graham-etal1994}.
+These integer functions are defined in terms of the matrix index $i$, but they can 
+be defined in the same way by using the index $j$.
+Figure 1a illustrates an $x$-oriented grid defined by $N_{x} = 4$ and $N_{y} = 3$.
+In this example, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index $i = 7$ (or $j = 7$), 
+are equivalent to the grid coordinates $x_{3}$ and $y_{2}$, which are defined by the grid indices
+$k = 3$ and $l = 2$, respectively. These indices are computed with equations \ref{eq:l-x-oriented}
+and \ref{eq:k-x-oriented}, by using the matrix index $i = 7$ (or $j = 7$).
+
+Now, consider the case in which the regular grid of data is oriented along 
+the $y$-axis (Figure 1b). For convenience, we call them $y$-\textit{oriented grids}.
+Similarly to $x$-oriented grids, we have the following integer functions associated with
+$y$-oriented grids:
+\begin{equation}
+i(k, l) = (k - 1) \, N_{y} + l \quad ,
+\label{eq:i-y-oriented}
+\end{equation}
+\begin{equation}
+k(i) = \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil
+\label{eq:k-y-oriented}
+\end{equation}
+and
+\begin{equation}
+l(i) = i - \Bigg\lceil \frac{i}{N_{y}} \Bigg\rceil N_{y} + N_{y} \quad .
+\label{eq:l-y-oriented}
+\end{equation}
+Figure 1b illustrates an $y$-oriented grid defined by $N_{x} = 4$ and $N_{y} = 3$.
+In this example, the matrix coordinates $x_{7}$ and $y_{7}$, defined by the matrix index 
+$i = 7$ (or $j = 7$), are equivalent to the grid coordinates $x_{3}$ and $y_{1}$, which are 
+defined by the grid indices $k = 3$ and $l = 1$, respectively. Differently from the example
+shown in Figure 1a, the grid indices of the present example are 
+computed with equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, by using the 
+matrix index $i = 7$ (or $j = 7$).
+
+The element $a_{ij}$ (equation \ref{eq:aij}) can be rewritten 
+by using equations \ref{eq:xi} and \ref{eq:yi}, giving rise to:
+\begin{equation}
+a_{ij} = \frac{c_{g} \, G \, \Delta z}{ \left[ 
+	\left( \Delta k_{ij} \, \Delta x \right)^{2} + 
+	\left( \Delta l_{ij} \, \Delta y \right)^{2} + 
+	\left( \Delta z \right)^{2} \right]^{\frac{3}{2}}} \: ,
+\label{eq:aij-regular-grids}
+\end{equation}
+where $\Delta z = z_{0} - z_{1}$, 
+$\Delta k_{ij} = k(i) - k(j)$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
+$\Delta l_{ij} = l(i) - l(j)$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}).
+Notice that the structure of matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for 
+the case in which its elements are given by $a_{ij}$ (equation \ref{eq:aij-regular-grids}) is 
+defined by the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$.
+
+For $x$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
+computed by using equations \ref{eq:k-x-oriented} and \ref{eq:l-x-oriented}, respectively.
+In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is 
+composed of $N_{y} \times N_{y}$ blocks, where each block is formed by $N_{x} \times N_{x}$ elements.
+For $y$-oriented grids, the coefficients $\Delta k_{ij}$ and $\Delta l_{ij}$ are 
+computed by using equations \ref{eq:k-y-oriented} and \ref{eq:l-y-oriented}, respectively.
+In this case, $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) is a 
+composed of $N_{x} \times N_{x}$ blocks, where each block is formed by $N_{y} \times N_{y}$ elements.
+In both cases, $\mathbf{A}$ is Toeplitz blockwise, i.e., the blocks lying at the same block 
+diagonal are equal to each other.
+Besides, the blocks located above the main diagonal are equal to those 
+located below and each block is itself a Toeplitz matrix.
+These symmetries come from the fact that the coefficients
+$\Delta k_{ij}$ and $\Delta l_{ij}$ are squared at the denominator of 
+$a_{ij}$ (equation \ref{eq:aij-regular-grids}).
+Matrices with this well-defined pattern are called 
+Doubly Block Toeplitz \citep[][ p. 28]{jain1989} or symmetric Block-Toeplitz Toeplitz-Block (BTTB),
+for example. We opted for using the second term.
+
+This well-defined pattern is better represented by using the \textit{block indices} $q$ and $p$. 
+We represent $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) as a grid of $Q \times Q$ blocks 
+$\mathbf{A}_{q}$, $q = 0, \dots, Q - 1$, given by
+\begin{equation}
+	\mathbf{A} = \begin{bmatrix}
+	\mathbf{A}_{0}   & \mathbf{A}_{1} & \cdots         & \mathbf{A}_{Q-1} \\
+	\mathbf{A}_{1}   & \mathbf{A}_{0} & \ddots         & \vdots           \\ 
+	\vdots           & \ddots         & \ddots         & \mathbf{A}_{1}   \\
+	\mathbf{A}_{Q-1} & \cdots         & \mathbf{A}_{1} & \mathbf{A}_{0}                 
+	\end{bmatrix}_{N \times N} \: ,
+	\label{eq:BTTB_A}
+\end{equation}
+where each block has $P \times P$ elements conveniently represented by $a^{q}_{p}$, 
+$p = 0, \dots, P - 1$, as follows:
+\begin{equation}
+	\mathbf{A}_{q} = \begin{bmatrix}
+	a^{q}_{0}   & a^{q}_{1} & \cdots    & a^{q}_{P-1} \\
+	a^{q}_{1}   & a^{q}_{0} & \ddots    & \vdots           \\ 
+	\vdots      & \ddots    & \ddots    & a^{q}_{1}   \\
+	a^{q}_{P-1} & \cdots    & a^{q}_{1} & a^{q}_{0}                 
+	\end{bmatrix}_{P \times P} \: ,
+	\label{eq:Aq_block}
+\end{equation}
+with $N = QP$. The index $q$ defines the block diagonal where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) 
+lies within the BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A}). 
+This index varies from $0$, at the main diagonal, to $Q - 1$, at
+the corners of $\mathbf{A}$. Similarly, the index $p$ defines the diagonal where $a^{q}_{p}$ 
+lies within $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}). This index varies from $0$, 
+at the main diagonal, to $P - 1$, at the corners of $\mathbf{A}_{q}$.
+For $x$-oriented grids, $Q = N_{y}$, $P = N_{x}$ and the block indices
+$q$ and $p$ are defined, respectively, by the following integer functions 
+of the matrix indices $i$ and $j$:
+\begin{equation}
+q(i, j) = \; \mid l(i) - l(j) \mid
+\label{eq:q-x-oriented}
+\end{equation}
+and
+\begin{equation}
+p(i, j) = \; \mid k(i) - k(j) \mid \quad ,
+\label{eq:p-x-oriented}
+\end{equation}
+where $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-x-oriented} 
+and $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-x-oriented}.
+For $y$-oriented grids, $Q = N_{x}$, $P = N_{y}$ and the block indices
+$q$ and $p$ are defined, respectively, by the following integer functions 
+of the matrix indices $i$ and $j$:
+\begin{equation}
+q(i, j) = \; \mid k(i) - k(j) \mid 
+\label{eq:q-y-oriented}
+\end{equation}
+and
+\begin{equation}
+p(i, j) = \; \mid l(i) - l(j) \mid \quad ,
+\label{eq:p-y-oriented}
+\end{equation}
+where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}
+and $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
+Notice that, for each element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+defined by matrix indices $i$ and $j$, there is a corresponding block element
+$a^{q}_{p}$, defined by block indices $q$ (equations \ref{eq:q-x-oriented} and 
+\ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}),
+so that
+\begin{equation}
+	a^{q}_{p} \equiv a_{ij} \quad .
+	\label{eq:aqp_equiv_aij}
+\end{equation}
+We also stress that matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) defined 
+by elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) in terms of matrix indices 
+$i$ and $j$ is strictly the same BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A}) defined 
+by the blocks $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) and block elements 
+$a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) in terms of the block indices 
+$q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and $p$ 
+(equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}).
+
+It is important noting that different matrix indices $i$ or $j$ produce the same 
+absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} and
+\ref{eq:k-y-oriented}) and $l$ (equations \ref{eq:l-x-oriented} and
+\ref{eq:l-y-oriented}). As a consequence, different pairs of matrix indices $i$
+and $j$ generate the same absolute values for the coefficients $\Delta k_{ij}$ and
+$\Delta l_{ij}$ that compose the denominator of $a_{ij}$ 
+(equation \ref{eq:aij-regular-grids}) and also the same values for the block indices
+$q$ (equations \ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}) and 
+$p$ (equations \ref{eq:p-x-oriented} and \ref{eq:p-y-oriented}), as well as the same
+block element $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}). 
+It means that elements $a_{ij}$ defined
+by different matrix indices $i$ and $j$ have the same value. The key point for
+understanding the structure of BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A})
+is then, given a single element $a_{ij}$
+defined by matrix indices $i$ and $j$, compute the grid indices 
+$k$ (equations \ref{eq:k-x-oriented} and \ref{eq:k-y-oriented}) and
+$l$ (equations \ref{eq:l-x-oriented} and \ref{eq:l-y-oriented}).
+These grid indices are used to 
+(1) compute the coefficients $\Delta k_{ij}$ and 
+$\Delta l_{ij}$ and determine the value of $a_{ij}$ with equation 
+\ref{eq:aij-regular-grids} and 
+(2) compute the block indices $q$ (equations \ref{eq:q-x-oriented}, 
+and \ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} and
+and \ref{eq:p-y-oriented}) and determine the corresponding block element $a^{q}_{p}$ 
+(equation \ref{eq:aqp_equiv_aij}) forming $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}). 
+
+Consider the $x$-oriented grid of $N_{x} \times N_{y}$ points shown in Figure 1a, 
+with $N_{x} = 4$, $N_{y} = 3$ and $N = N_{x} \, N_{y} = 12$.
+To illustrate the relationship between the matrix indices ($i$ and $j$) and 
+the block indices ($q$ and $p$), consider the element $a_{ij}$ defined by 
+$i = 2$ and $j = 10$, which is
+located at the upper right corner of $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}), 
+in the 2nd line and 10th column.
+By using equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}, we obtain the 
+grid indices $l(i) = 1$, $l(j) = 3$, $k(i) = 2$ and $k(j) = 2$.
+These grid indices result in the coefficients $\Delta k_{ij} = 0$ and $\Delta l_{ij} = -2$,
+which are used to compute the element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+as well as in the block indices $q = 2$ (equation \ref{eq:q-x-oriented}) and 
+$p = 0$ (equation \ref{eq:p-x-oriented}).
+These block indices indicate that this element $a_{ij}$ appears in the main diagonal
+of the blocks $\mathbf{A}_{2}$ (equation \ref{eq:Aq_block}), which are located at the corners 
+of $\mathbf{A}$ (equation \ref{eq:BTTB_A}).
+To verify this, let us take the matrix indices associated with these elements.
+They are $(i, j)$ = $(1, 9)$, $(2, 10)$, $(3, 11)$, $(4, 12)$, $(9, 1)$, $(10, 2)$, 
+$(11, 3)$ and $(12, 4)$. By using these matrix indices, it is easy to verify that all
+of them produce the same grid indices $l(i)$, $l(j)$, $k(i)$ and $k(j)$ 
+(equations \ref{eq:l-x-oriented} and \ref{eq:k-x-oriented}) as those associated with
+the element defined by $i = 2$ and $j = 10$. Consequently, all of them produce
+elements $a_{ij}$ (equation \ref{eq:aij-regular-grids}) having the same value.
+Besides, it is also easy to verify that all these matrix indices produce the same block
+indices $q = 2$ (equation \ref{eq:q-x-oriented}) and $p = 0$ (equation \ref{eq:p-x-oriented})
+and the same block element $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
+By repeating this procedure for all elements $a_{ij}$, $i = 1, \dots, 12$, $j = 1, \dots, 12$, 
+forming the matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) obtained from our 
+$x$-oriented grid (Figure 1a), we can verify that
+\begin{equation}
+\mathbf{A} = \begin{bmatrix}
+\mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
+\mathbf{A}_{1} & \mathbf{A}_{0} & \mathbf{A}_{1} \\
+\mathbf{A}_{2} & \mathbf{A}_{1} & \mathbf{A}_{0}
+\end{bmatrix} \quad ,
+\label{eq:A-x-oriented-example}
+\end{equation}
+where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q -1$, $Q = N_{y}$, 
+are symmetric Toeplitz matrices given by:
+\begin{equation}
+\mathbf{A}_{q} = \begin{bmatrix}
+a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & a^{q}_{3} \\
+a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} \\
+a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} \\
+a^{q}_{3} & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
+\end{bmatrix} \quad ,
+\label{eq:Aq-x-oriented}
+\end{equation}
+with elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) defined by 
+$p = 0, \dots, P - 1$, $P = N_{x}$.
+
+This procedure can also be used to verify that the matrix $\mathbf{A}$ 
+(equation \ref{eq:predicted-data-vector}) obtained
+from the $y$-oriented grid illustrated in Figure 1b is given by
+\begin{equation}
+\mathbf{A} = \begin{bmatrix}
+\mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} & \mathbf{A}_{3} \\
+\mathbf{A}_{1} & \mathbf{A}_{0} & \mathbf{A}_{1} & \mathbf{A}_{2} \\
+\mathbf{A}_{2} & \mathbf{A}_{1} & \mathbf{A}_{0} & \mathbf{A}_{1} \\
+\mathbf{A}_{3} & \mathbf{A}_{2} & \mathbf{A}_{1} & \mathbf{A}_{0}
+\end{bmatrix} \quad ,
+\label{eq:A-y-oriented-example}
+\end{equation}
+where $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q - 1$, $Q = N_{x}$, 
+are symmetric Toeplitz matrices given by:
+\begin{equation}
+\mathbf{A}_{q} = \begin{bmatrix}
+a^{q}_{0} & a^{q}_{1} & a^{q}_{2} \\
+a^{q}_{1} & a^{q}_{0} & a^{q}_{1} \\
+a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
+\end{bmatrix} \quad ,
+\label{eq:Aq-y-oriented}
+\end{equation}
+with elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) defined by 
+$p = 0, \dots, P - 1$, $P = N_{y}$.
+
+These examples (equations \ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) show 
+that the entire $N \times N$ BTTB matrix $\mathbf{A}$ 
+(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}) 
+can be defined by using only the elements 
+forming its first column (or row). Notice that this column contains the gravitational effect 
+produced by a single equivalent source at all $N$ observation points.
+
+\subsection{BTTB matrix-vector product}
+
+The matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation 
+\ref{eq:delta_p_k_fast_eqlayer}) required by the fast equivalent-layer 
+technique \citep{siqueira-etal2017} accounts for most of its total computation time 
+and can cause RAM memory shortage when large data sets are used.
+This computational load can be drastically lessen by exploring the well-defined structure of 
+matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for the particular case in which 
+its elements $a_{ij}$ are defined by equation \ref{eq:aij-regular-grids}. 
+In this case, $\mathbf{A}$ is a symmetric BTTB matrix (equations \ref{eq:BTTB_A} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}) and the predicted data vector 
+$\mathbf{d}(\mathbf{p})$ (equation \ref{eq:predicted-data-vector}) can be efficiently
+computed by using the two-dimensional Discrete Fourier Transform (DFT).
+To do this, let us first rewrite $\mathbf{d}(\mathbf{p})$ and
+$\mathbf{p}$ (equation \ref{eq:predicted-data-vector}) as the following partitioned vectors:
+\begin{equation}
+\mathbf{d}(\mathbf{p}) = \begin{bmatrix}
+\mathbf{d}_{0}(\mathbf{p}) \\
+\vdots \\
+\mathbf{d}_{Q - 1}(\mathbf{p})
+\end{bmatrix}_{N \times 1}
+\label{eq:predicted-data-vector-partitioned}
+\end{equation}
+and
+\begin{equation}
+\mathbf{p} = \begin{bmatrix}
+\mathbf{p}_{0} \\
+\vdots \\
+\mathbf{p}_{Q - 1}
+\end{bmatrix}_{N \times 1} \quad ,
+\label{eq:parameter-vector-partitioned}
+\end{equation}
+where $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$, $q = 0, \dots, Q - 1$,
+are $P \times 1$ vectors. Notice that $q$ is the block index defined by equations 
+\ref{eq:q-x-oriented} and \ref{eq:q-y-oriented}, $Q$ defines the number of blocks
+$\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}) forming $\mathbf{A}$ (equation \ref{eq:BTTB_A}) 
+and $P$ defines the number of elements forming each block $\mathbf{A}_{q}$.
+Then, by using the partitioned vectors 
+(equations \ref{eq:parameter-vector-partitioned} and \ref{eq:predicted-data-vector-partitioned}) 
+and remembering that $N = QP$, we define the auxiliary linear system
+\begin{equation}
+\mathbf{w} = \mathbf{C} \mathbf{v} \: ,
+\label{eq:w_Cv}
+\end{equation}
+where
+\begin{equation}
+\mathbf{w} = \begin{bmatrix}
+\mathbf{w}_{0} \\
+\vdots \\
+\mathbf{w}_{Q - 1} \\
+\mathbf{0}_{2N \times 1}
+\end{bmatrix}_{4N \times 1} \quad ,
+\label{eq:w-vector}
+\end{equation}
+\begin{equation}
+\mathbf{w}_{q} = \begin{bmatrix}
+\mathbf{d}_{q}(\mathbf{p}) \\
+\mathbf{0}_{P \times 1}
+\end{bmatrix}_{2P \times 1}
+\label{eq:wq-vector} \quad ,
+\end{equation}
+\begin{equation}
+\mathbf{v} = \begin{bmatrix}
+\mathbf{v}_{0} \\
+\vdots \\
+\mathbf{v}_{Q - 1} \\
+\mathbf{0}_{2N \times 1}
+\end{bmatrix}_{4N \times 1} \quad ,
+\label{eq:v-vector}
+\end{equation}
+and
+\begin{equation}
+\mathbf{v}_{q} = \begin{bmatrix}
+\mathbf{p}_{q} \\
+\mathbf{0}_{P \times 1}
+\end{bmatrix}_{2P \times 1}
+\label{eq:vq-vector} \quad ,
+\end{equation}
+with $\mathbf{d}_{q}(\mathbf{p})$ and $\mathbf{p}_{q}$ defined by
+equations \ref{eq:predicted-data-vector-partitioned} and 
+\ref{eq:parameter-vector-partitioned}, respectively.
+Finally $\mathbf{C}$ (equation \ref{eq:w_Cv}) is a 
+$4N \times 4N$ symmetric Block Circulant matrix with Circulant Blocks (BCCB) 
+\citep[][ p. 184]{davis1979}.
+What follows shows a step-by-step description of how we use the auxiliary 
+system (equation \ref{eq:w_Cv}) to compute the matrix-vector product 
+$\tensor{A} \hat{\mathbf{p}}^{k}$ (equation \ref{eq:delta_p_k_fast_eqlayer}) in 
+a computationally efficient way by exploring the structure of matrix $\mathbf{C}$.
+We show that this approach, that have been used in potential-field methods
+\citep[e.g.,][]{zhang-wong2015, zhang-etal2016, qiang_etal2019}, is actually a fast 
+convolution method \citep[e.g.,][ p. 213]{vanloan1992}.
+
+Matrix $\mathbf{C}$ (equation \ref{eq:w_Cv})
+is circulant blockwise, formed by $Q \times Q$ blocks, where
+each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is a $2P \times 2P$ circulant matrix. 
+Similarly to the BTTB matrix $\mathbf{A}$ (equations \ref{eq:BTTB_A} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}), 
+the index $q$ defines the block diagonal where $\mathbf{C}_{q}$ lies 
+within $\mathbf{C}$. This index varies from $0$, at the main diagonal, to $Q - 1$, at
+the corners of $\mathbf{C}$. Additionally, the blocks lying 
+above the main diagonal are equal to those located below.
+It is well-known that a circulant matrix can be defined by properly downshifting 
+its first column \citep[][ p. 206]{vanloan1992}. Hence, the BCCB matrix $\mathbf{C}$ 
+(equation \ref{eq:w_Cv}) can be obtained from its 
+first column of blocks, which is given by
+\begin{equation}
+\left[\mathbf{C} \right]_{(0)} = 
+	\begin{bmatrix}
+	\mathbf{C}_{0} \\
+	\vdots \\
+	\mathbf{C}_{Q-1} \\
+	\mathbf{0} \\
+	\mathbf{C}_{Q-1} \\
+	\vdots \\
+	\mathbf{C}_{1}
+	\end{bmatrix}_{4N \times 2P} \: ,
+	\label{eq:C-first-column-blocks}
+\end{equation}
+where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros. Similarly, each block 
+$\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, can be obtained by downshifting its first 
+column
+\begin{equation}
+\mathbf{c}^{q}_{0} = 
+	\begin{bmatrix}
+		a^{q}_{0} \\
+		\vdots \\
+		a^{q}_{P-1} \\
+		0 \\
+		a^{q}_{P-1} \\
+		\vdots \\
+		a^{q}_{1}
+	\end{bmatrix}_{2P \times 1} \: ,
+	\label{eq:Cq-first-column}
+\end{equation}
+where $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}), $p = 0, \dots, P-1$, are the elements 
+forming the block $\mathbf{A}_{q}$ (equations \ref{eq:Aq_block} and 
+\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}).
+The downshift can be thought off as permutation that pushes the components of a column vector 
+down one notch with wraparound \citep[][ p. 20]{golub-vanloan2013}.
+To illustrate this operation, consider our $y$-oriented grid illustrated in Figure 1b. 
+In this case, the resulting 
+BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv}) is given by 
+\begin{equation}
+\mathbf{C} =
+\begin{bmatrix}
+	\mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} \\
+	\mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} \\
+	\mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} \\
+	\mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     \\
+	\mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} \\
+	\mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} \\
+	\mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} \\
+	\mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}}
+\end{bmatrix},
+\label{eq:C-y-oriented}
+\end{equation}
+where each block $\mathbf{C}_{q}$, $q = 0, 1, 2$, is represented as follows 
+\begin{equation}
+\tensor{C}_{q} =
+\begin{bmatrix}
+	a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} \\
+	a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} \\
+	a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         \\
+	0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} \\
+	a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{0} & a^{q}_{0} & a^{q}_{1} \\
+	a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
+\end{bmatrix}
+\label{eq:Cq-y-oriented}
+\end{equation}
+in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
+Similar matrices are obtained for our $x$-oriented grid illustrated in Figure 1a.
+
+BCCB matrices are diagonalized by the two-dimensional unitary DFT 
+\citep[][ p. 185]{davis1979}. It means that $\mathbf{C}$ (equation \ref{eq:w_Cv}) 
+satisfies 
+\begin{equation}
+\mathbf{C} = 
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)^{\ast} 
+\boldsymbol{\Lambda}
+\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: ,
+\label{eq:C-diagonalized}
+\end{equation}
+where the symbol ``$\otimes$" denotes the Kronecker product \citep{neudecker1969},
+$\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
+unitary DFT matrices \citep[][ p. 31]{davis1979}, respectively, the superscritpt 
+``$\ast$" denotes the complex conjugate and $\boldsymbol{\Lambda}$ is a 
+$4QP \times 4QP$ diagonal matrix containing the eigenvalues of $\mathbf{C}$.
+By substituting equation \ref{eq:C-diagonalized} in the auxiliary system 
+(equation \ref{eq:w_Cv}) and premultiplying both
+sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$, 
+we obtain
+\begin{equation}
+\boldsymbol{\Lambda} \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+\mathbf{v} = \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
+\mathbf{w} \: .
+\label{eq:vec-DFT-system}
+\end{equation}
+Now, by applying the $vec$-operator to both sides of equation \ref{eq:vec-DFT-system} 
+(see the details in Appendix A), we obtain:
+\begin{equation}
+\mathbf{F}_{2Q}^{\ast} \left[ 
+\mathbf{L} \circ \left(\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
+\right] \mathbf{F}_{2P}^{\ast} = \mathbf{W} \: ,
+\label{eq:DFT-system}
+\end{equation}
+where ``$\circ$'' denotes the Hadamard product \citep[][ p. 298]{horn_johnson1991} and 
+$\mathbf{L}$, $\mathbf{V}$ and $\mathbf{W}$ are $2Q \times 2P$ matrices obtained 
+by rearranging, along their rows, the elements forming the diagonal of matrix 
+$\boldsymbol{\Lambda}$, vector $\mathbf{v}$ and vector $\mathbf{w}$, respectively.
+The left side of equation \ref{eq:DFT-system} contains the two-dimensional 
+Inverse Discrete Fourier Transform (IDFT) of the term in brackets, which in turn
+represents the Hadamard product of matrix $\mathbf{L}$ (equation \ref{eq:left_side_DFT_system_3})
+and the two-dimensional DFT of matrix $\mathbf{V}$ (equation \ref{eq:left_side_DFT_system_1}).
+Matrix $\mathbf{L}$ contains the eigenvalues 
+of $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) and can be 
+efficiently computed by using only the first column of the BCCB matrix 
+$\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
+Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
+by using the two-dimensional Fast Fourier Transform (2D FFT).
+This approach is a two-dimensional discrete convolution \citep[e.g.,][ p. 213]{vanloan1992}.
+
+At each iteration $k$th of the fast equivalent-layer technique, 
+(equation \ref{eq:delta_p_k_fast_eqlayer}), we efficiently compute 
+$\mathbf{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ by following 
+the steps below:
+
+\begin{itemize}
+\item[\textbf{(1)}] Use equation \ref{eq:aij-regular-grids} to compute the first column 
+of each block $\mathbf{A}_{q}$ (equation \ref{eq:Aq_block}), $q = 0, \dots, Q-1$, forming 
+the BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A});
+
+\item[\textbf{(2)}] Rearrange the first column of $\mathbf{A}$ according to equations 
+\ref{eq:C-first-column-blocks} and \ref{eq:Cq-first-column} to obtain the
+first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv});
+
+\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of matrix $\mathbf{G}$ and
+use the 2D FFT to compute matrix $\mathbf{L}$ (equation \ref{eq:DTF_G});
+
+\item[\textbf{(4)}] Rearrange the parameter vector $\hat{\mathbf{p}}^{k}$ 
+(equation \ref{eq:predicted-data-vector}) in its partitioned form 
+(equation \ref{eq:parameter-vector-partitioned}) to define the auxiliary vector 
+$\mathbf{v}$ (equation \ref{eq:v-vector});
+
+\item[\textbf{(5)}] Rearrange $\mathbf{v}$ to obtain matrix $\mathbf{V}$, use the 2D FFT 
+to compute its DFT and evaluate the left side of equation \ref{eq:DFT-system-preliminary};
+
+\item[\textbf{(6)}] Use the 2D FFT to compute the IDFT of the result obtained at item (5) and 
+obtain the matrix $\mathbf{W}$ (equation \ref{eq:DFT-system});
+
+\item[\textbf{(7)}] Use the $vec$-operator (equation \ref{eq:vec-operator}) and equations 
+\ref{eq:w-vector} and \ref{eq:wq-vector} to rearrange $\mathbf{W}$ and obtain the predicted 
+data vector $\mathbf{d}(\hat{\mathbf{p}}^{k})$.
+
+\end{itemize}
+
+
+\subsection{Computational performance}
+
+
+The number of flops (floating-point operations) necessary to estimate the 
+$N \times 1$ parameter vector $\mathbf{p}$ in the fast equivalent-layer technique 
+\citep{siqueira-etal2017} is
+\begin{equation}
+f_{0} = N^{it} (3N + 2N^{2}) \; ,
+\label{eq:float_fast_eqlayer}
+\end{equation}
+where $N^{it}$ is the number of iterations. In this equation, the term $2N^2$ is associated 
+with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation 
+\ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
+of this method.
+Our method replace this matrix-vector product by three operations: 
+one DFT, one Hadammard product and one IDFT involving $2Q \times 2P$ matrices 
+(left side of equation \ref{eq:DFT-system}). 
+The Hadamard product requires six times $4N$ flops, $N = QP$, because the entries are 
+complex numbers.
+We consider that a DFT/IDFT requires $\kappa \, 4N \log_{2}(4N)$ flops to be computed via 2D FFT, 
+where $\kappa$ is a constant depending on the algorithm. 
+Then, the resultant flops count of our method is given by:
+\begin{equation}
+f_{1} = N^{it} \left[ 27N + \kappa \, 8N \log_{2}(4N) \right] \: .
+\label{eq:float_bccb}
+\end{equation}
+Figure \ref{fig:float} shows the flops counts $f_{0}$ and $f_{1}$ (equations \ref{eq:float_fast_eqlayer}
+and \ref{eq:float_bccb}) associated with the fast equivalent-layer technique \citep{siqueira-etal2017} and 
+our method, respectively, as a function of the number $N$ of observation points. 
+We considered a fixed number of $N^{it} = 50$ iterations and $\kappa = 5$ (equation \ref{eq:float_bccb}),
+which is compatible with a radix-2 FFT \citep[][ p. 16]{vanloan1992}.
+As we can see, the number of flops is drastically decreased in our method.
+
+Another advantage of our method is concerned with the real $N \times N$ matrix $\mathbf{A}$ 
+(equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}).
+In the fast equivalent-layer technique, the full matrix 
+is computed once and stored during the entire iterative process.
+On the other hand, our method computes only one column of $\mathbf{A}$ 
+and uses it to compute the complex $2Q \times 2P$ matrix $\mathbf{L}$ 
+(equation \ref{eq:DTF_G}) via 2D FFT, which is stored during all iterations.
+Table \ref{tab:RAM-usage} shows the RAM memory usage needed to store the 
+full matrix $\mathbf{A}$, a single column of $\mathbf{A}$ and the full matrix 
+$\mathbf{L}$. The quantities were computed for different numbers of observations $N$. 
+Notice that $N = 1\,000\,000$ observations require nearly $7.6$ Terabytes of RAM memory 
+to store the whole matrix $\mathbf{A}$.
+
+Figure \ref{fig:time_fast_eqlayer_bccb} compares the running time of the fast equivalent-layer technique 
+\citep{siqueira-etal2017} and of our method, considering a constant number of iterations $N^{it} = 50$. 
+We used a PC with an Intel Core i7 4790@3.6GHz processor and 16 GB of RAM memory.
+The computational efficiency of our approach is significantly superior to that of the 
+fast equivalent-layer technique for a number of observations $N$ greater than $10\,000$. 
+We could not perform this comparison with a number of observations greater than $22\,500$
+due to limitations of our PC in storing the full matrix $\mathbf{A}$.
+Figure \ref{fig:time_bccb} shows the running time of our method with a number of observations 
+up to  $25$ millions. 
+These results shows that, while the running time of our method is $26.8$ seconds for 
+$N = 1\,000\,000$, the fast equivalent-layer technique spends $48.3$ seconds for $N = 22\,500$.

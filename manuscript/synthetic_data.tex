@@ -1,0 +1,46 @@
+\section{Synthetic tests}
+
+
+In this section, we  investigate the effectiveness of using the properties of BTTB and BCCB matrices 
+(equation \ref{eq:w_Cv})  to solve, at each iteration, the forward modeling (the matrix-vector product 
+$\mathbf{A} \hat{\mathbf{p}}^k$)  required in the fast equivalent-layer method proposed by \citet{siqueira-etal2017}. 
+We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines. 
+These sources are two vertical prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) and 
+$0.4\, \mathrm{g/cm^3}$ (upper-right prism) and a sphere with radius of $1\,000$ m with density contrast of 
+$-0.5\, \mathrm{g/cm^3}$. Figure \ref{fig:synthetic_data}  shows the vertical component of gravity field generated 
+by these sources contaminated with additive pseudorandom Gaussian noise with zero mean and standard deviation of 
+$0.015$ mGal.
+ 
+The advantage of using the structures of BTTB and BCCB matrices to compute forward modeling in  the fast-equivalent 
+layer method \cite[]{siqueira-etal2017} is grounded on the use of regular grids of data and equivalent sources. 
+Hence, we created $10\,000$ observation points regularly spaced in a grid of $100 \times 100$ at $100$ m height. 
+We also set a grid of equivalent point masses, each one directly beneath each observation points, located at 
+$300$ m deep.  Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a  show the fitted gravity data 
+obtained, respectively, by the fast equivalent layer method and by our modified form of this method that computes 
+the forward modeling using equation \ref{eq:w_Cv}. The corresponding residuals (Figures \ref{fig:classic_fast_val}b 
+and \ref{fig:bccb_fast_val}b), defined as the difference between the observed (Figure  \ref{fig:synthetic_data}) 
+and fitted gravity data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to 
+zero  and standard deviations of 0.0144 mGal.  Therefore, Figures \ref{fig:classic_fast_val} and 
+\ref{fig:bccb_fast_val} show that \citet{siqueira-etal2017} method and our modified version of this method produced 
+virtually the same results. This excellent agreement is confirmed in Figures \ref{fig:delta_comparison} and 
+\ref{fig:delta_rho} which shows that there are virtually no differences, respectively,  in the fitted data presented 
+in Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b and in the estimated mass distributions within 
+the equivalent layers (not shown) yielded by both \citet{siqueira-etal2017} method and our modification of this method. 
+These results (Figures \ref{fig:delta_comparison} and \ref{fig:delta_rho})  show that computing the matrix-vector 
+product ($\mathbf{A} \hat{\mathbf{p}}^k$), required in the forward modeling, by means of embedding the BTTB matrix into 
+a BCCB matrix (equation \ref{eq:w_Cv}) yields practically the same result as the one produced by computing this 
+matrix-vector product  with a full matrix $\mathbf{A}$ as used in \citet{siqueira-etal2017}.
+
+We perform two forms of processing the gravity data (Figure \ref{fig:synthetic_data}) through the equivalent layer 
+technique: the upward (Figure \ref{fig:upward_comparison}) and the downward (Figure \ref{fig:downward_comparison}) 
+continuations. The upward height is 300 m and the downward  is at 50 m.   Either in the upward continuation 
+(Figure \ref{fig:upward_comparison}) or in the downward continuation (Figure \ref{fig:downward_comparison}), the 
+continued gravity data using the fast equivalent layer proposed by \citet{siqueira-etal2017} 
+(Figures \ref{fig:upward_comparison}a and \ref{fig:downward_comparison}a) are in close agreement with those produced 
+by our modification of \citet{siqueira-etal2017} method (Figures \ref{fig:upward_comparison}b and 
+\ref{fig:downward_comparison}b). The residuals (Figures \ref{fig:upward_comparison}c and \ref{fig:downward_comparison}c)
+quantify this agreement since their means and standard deviations are close to zero in both continued gravity data using 
+both methods.  All the continued gravity data shown here (Figures \ref{fig:upward_comparison} and 
+\ref{fig:downward_comparison}) agree with the true ones (not shown). The most striking feature of these upward or 
+the downward continuations concerns the total computation time. The computation time spent by our method is 
+approximately $1\,500$ times faster than \citet{siqueira-etal2017} method. 

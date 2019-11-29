@@ -1,0 +1,24 @@
+\section{Field data test}
+Test with real data are conducted with the gravity data from Caraj\'as, north of Brazil, were provided by the  Geological 
+Survey of Brazil (CPRM). The real aerogravimetric data were collected in 113 flight lines along north–south direction 
+with flight line spacing  of 3 km and tie lines along east–west direction at 12 km.
+
+This airborne gravity survey was divided in two different areas, collected in different times, having samples spacing of 
+$7.65$ m and $15.21$ m, totalizing  $4\,353\,428$ observation points. The height of the flight was fixed at 900 m. 
+The gravity data (Figure \ref{fig:carajas_real_data}) were gridded into a regularly spaced dataset of $250\,000$ 
+observation points ($500 \times 500$) with a grid spacing of $716.9311$ km north-south and $781.7387$ km east-west.
+
+To apply our modification of the fast equivalent-layer method \cite[]{siqueira-etal2017}  that computes the forward 
+modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}), we set an equivalent layer at 300 m deep. 
+Figure \ref{fig:carajas_gz_predito_val}a shows the fitted gravity data after 50 iterations by applying our method. 
+The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed 
+(Figure \ref{fig:carajas_real_data}) and the predicted (Figure \ref{fig:carajas_gz_predito_val}a) data, show an 
+acceptable data fitting because they have a mean close to zero ($0.0003$ mGal) and a small standard deviation of 
+$0.105$ mGal which corresponds to approximately $0.1$ \% of the amplitude of the gravity data.
+
+These small residuals indicate that our method yielded an estimated mass distribution (not shown) that can be used in 
+the data processing. We perform upward-continuation of the real gravity data (Figure \ref{fig:carajas_real_data}) at 
+a constant height of $5\,000$ m over the real data. The upward-continued gravity data 
+(Figure \ref{fig:up2000_carajas_500x500}) seem a reasonable processing because of the attenuation of the short 
+wavelenghts. By using our approach, the processing of the $250\,000$ observations was extremely fast and took 
+$0.216$ seconds.
