@@ -25,56 +25,57 @@
 % Application to synthetic data
 
 \plot{synthetic_data}{width=13.5cm}{
-	{Noise-corrupted gravity data (in color map) produced by three simulated sources  whose horizontal projections 
-	are shown in black lines. The simulated sources are: two polygonal prisms, with density contrast of 
-	$0.35\,	\mathrm{g/cm^3}$ (upper-left body) and $0.4\, \mathrm{g/cm^3}$ (upper-right body), and a sphere with 
-	radius of $1\,000$ m with density contrast	of $-0.5\, \mathrm{g/cm^3}.$}
+	{Noise-corrupted gravity data (in color map) produced by three synthetic sources: 
+	a sphere with density contrast $-0.5\, \mathrm{g/cm^3}$ and 
+	two rectangular prisms with density contrasts $0.35\, \mathrm{g/cm^3}$ (upper-left body) and 
+	$0.4\, \mathrm{g/cm^3}$ (upper-right body). The black lines represent the horizontal projection 
+	of the sources.}
 	\label{fig:synthetic_data}
 }
 
 \plot{classic_fast_val}{width=8cm}{
-	{(a) Fitted gravity data produced by the fast equivalent-layer technique proposed by \citet{siqueira-etal2017}. 
-	(b) Gravity residuals, defined as the difference between the observed data in Figure \ref{fig:synthetic_data} and 
-	the predicted data in panel a, with their mean of $8.264e^{-7}$ and standard deviation of $0.0144$ mGal.}
+	{(a) Predicted data produced by the fast equivalent-layer technique \citep{siqueira-etal2017}. 
+	(b) Residuals between the simulated (Figure \ref{fig:synthetic_data}) and 
+	predicted (shown in a) data. The mean and standard deviation are $8.264 \times 10^{-7}$ and $0.0144$ mGal,
+	respectively.}
 	\label{fig:classic_fast_val}
 }
 
 \plot{bccb_fast_val}{width=8cm}{
-	{(a) Fitted gravity data produced by our modification of the fast equivalent layer \citep{siqueira-etal2017}. 
-	(b) Gravity residuals, defined as the difference between the observed data in Figure 4 and the predicted data in 
-	panel a, with their mean of $8.264e^{-7}$ and standard deviation of $0.0144$ mGal.}
+	{(a) Predicted data produced by our method. 
+	(b) Residuals between the simulated (Figure \ref{fig:synthetic_data}) and 
+	predicted (shown in a) data. The mean and standard deviation are $8.264 \times 10^{-7}$ and $0.0144$ mGal,
+	respectively.}
 	\label{fig:bccb_fast_val}
 }
 
 \plot{delta_comparison}{width=13.5cm}{
-	{Difference between the fitted gravity data produced by \citet{siqueira-etal2017} method 
-	(Figure \ref{fig:classic_fast_val}a) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}a) 
-	that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}).}
+	{Difference between the predicted data produced by the fast equivalent-layer technique 
+	(Figure \ref{fig:classic_fast_val}a) and by our method (Figure \ref{fig:bccb_fast_val}a).}
 	\label{fig:delta_comparison}
 }
 
 \plot{delta_rho}{width=13.5cm}{
-	{Difference between the estimated mass distribution within the equivalent layer produced by \citet{siqueira-etal2017}
-	method (Figure \ref{fig:classic_fast_val}) and by our modified form of this method (Figure \ref{fig:bccb_fast_val}) 
-	that computes the forward modeling using the properties of BTTB and BCCB matrices (equation \ref{eq:w_Cv}).}
+	{Difference between the estimated mass distribution within the equivalent layers produced by 
+	the fast equivalent-layer technique (not shown) and by our method (not shown).}
 	\label{fig:delta_rho}
 }
 
 \plot{upward_comparison}{width=5cm}{
-	{The upward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and 
-	(b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices 
-	(equation \ref{eq:w_Cv}) to calculate the forward modeling.  (c) Residuals, defined as the difference between 
-	panels a and b with their mean of $-5.938e^{-18}$ and standard deviation of $8.701e^{-18}$.  The total computation 
-	times in the \citet{siqueira-etal2017} method and in our approach are $7.62026$ and $0.00834$ seconds, respectively.}
+	{The upward-continued gravity data obtained with (a) the fast equivalent-layer technique 
+	\citep{siqueira-etal2017} and (b) our method. (c) Residuals between 
+	panels a and b with mean $-5.938 \times 10^{-18}$ mGal and standard deviation $8.701 \times 10^{-18}$ mGal. 
+	The total computation times spent by the fast equivalent-layer technique and our method 
+	are $7.62026$ and $0.00834$ seconds, respectively.}
 	\label{fig:upward_comparison}
 }
 
 \plot{downward_comparison}{width=5cm}{
-	{The downward-continued gravity data using: (a) the fast equivalent layer proposed by \citet{siqueira-etal2017} and 
-	(b) our modified form of \citet{siqueira-etal2017} method by using the properties of BTTB and BCCB matrices 
-	(equation \ref{eq:w_Cv}) to calculate the forward modeling.  (c) Residuals, defined as the difference between panels 
-	a and b with their mean of $5.914e^{-18}$ and standard deviation of $9.014e^{-18}$.  The total computation times in 
-	the \citet{siqueira-etal2017} method and in our approach are $7.59654$ and $0.00547$ seconds, respectively.}
+	{The downward-continued gravity data obtained with (a) the fast equivalent-layer technique 
+	\citep{siqueira-etal2017} and (b) our method. (c) Residuals between 
+	panels a and b with mean $5.914 \times 10^{-18}$ mGal and standard deviation $9.014 \times 10^{-18}$ mGal. 
+	The total computation times spent by the fast equivalent-layer technique and our method 
+	are $7.59654$ and $0.00547$ seconds, respectively.}
 	\label{fig:downward_comparison}
 }
 
