@@ -1,4 +1,4 @@
-\section{Synthetic tests}
+\section{Application to synthetic data}
 
 We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines. 
 These sources are a sphere with radius of $1\,000$ m with density contrast of 
@@ -7,16 +7,17 @@ and $0.4\, \mathrm{g/cm^3}$ (upper-right prism).
 Figure \ref{fig:synthetic_data} shows the gravity disturbance (vertical component of gravitational attraction) 
 produced by these sources. The synthetic data are contaminated with additive pseudo-random Gaussian 
 noise with zero mean and standard deviation of $0.015$ mGal.
-We created $10\,000$ observation points regularly spaced on a grid of $100 \times 100$, on a 
-horizontal plane at $-100$ m, and set a grid of equivalent point masses, each one directly beneath each 
-observation point, located at depth $300$ m. 
+We created $N = 10\,000$ observation points regularly spaced on a grid of $100 \times 100$, on a 
+horizontal plane at $z_{1} = -100$ m, and set a grid of equivalent point masses, each one directly beneath each 
+observation point, located at depth $z_{0} = 300$ m. 
 
 Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a show the data fits 
 obtained, respectively, by the fast equivalent-layer technique \citep{siqueira-etal2017} 
 and by our method. The corresponding residuals (Figures \ref{fig:classic_fast_val}b 
 and \ref{fig:bccb_fast_val}b), defined as the difference between the simulated (Figure \ref{fig:synthetic_data}) 
-and predicted data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a), show means close to 
-zero and standard deviations of $0.0144$ mGal, indicating that both methods produced virtually the same results.
+and predicted data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a) after $N^{it} = XXXX$ iterations, 
+show means close to zero and standard deviations of $0.0144$ mGal, indicating that both methods produced virtually 
+the same results.
 This excellent agreement is confirmed by Figures \ref{fig:delta_comparison} and 
 \ref{fig:delta_rho}. They show that there are virtually no differences between, respectively, 
 the predicted data (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b) and the 
@@ -33,5 +34,5 @@ quantify this agreement since their means and standard deviations are close to z
 
 The continued gravity data obtained with both methods agree with the true ones (not shown).
 The difference is that the computation time spent by our method is 
-approximately $1\,500$ times faster than that of the fast-equivalent-layer 
+approximately $1\,500$ times smaller than that of the fast-equivalent-layer 
 technique \citep{siqueira-etal2017}. 
