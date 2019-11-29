@@ -1,25 +1,27 @@
 \section{Conclusions}
-By exploring the BTTB structure of the sensitivity matrix in the gravity data processing, we have proposed a new 
-efficient approach for calculating the gravity-data forward modeling required in the iterative fast equivalent-layer 
-technique grounded on excess mass constraint that does not demand  the solution of linear systems.  Its efficiency 
-requires the use of regular grids of observations and equivalent sources (point masses). Our algorithm greatly reduces 
-the number of  flops necessary to estimate a 2D mass distribution within the equivalent layer that fits the observed 
-gravity data. For example, when processing one million observations the number of flops is reduced in 104 times. 
-Traditionally, such amount of data impractically requires 7.6 Terabytes of RAM memory to handle the full sensitivity 
-matrix. Rather, in our method, this matrix takes 61.035 Megabytes of RAM memory only.
 
-Our method takes advantage of the symmetric BTTB system that arises when processing a harmonic function and considering 
-that either the observations or the sources of the interpretative model (point of masses over the equivalent layer) 
-are distributed on regular grids. Symmetric BTTB matrices can be stored by using only a single column and can be 
-embedded into a symmetric BCCB matrix, which in turn also only needs a single column. 
-This means that only a single column  of the sensitivity matrix needs to be calculated.  Once the jth column of the 
-sensitivity matrix represents the influence of the jth source (jth point mass) has on the predicted data, our method 
-only requires a single point mass that set up the equivalent layer to compute the gravity-data forward modeling.
-
-Using the 2D FFT, it is possible to calculate the eigenvalues of BCCB matrices which can
-be used to compute a matrix-vector product (gravity-data forward modeling) in a very low computational cost. 
-We have successfully applied the proposed method to upward (or downward) synthetic gravity data. Testing on field 
-data from the Caraj{\'a}s Province, north of Brazil, confirms the potential of our approach in upward-continuing 
-gravity data with $250\,000$ observations in  about 0.2 seconds.  Our method allows, in future research, applying 
-the equivalent layer-technique for processing and interpreting massive data set such as collected in continental 
-and global scales studies.
+We show that the sensitivity matrix associated with the equivalent layer technique 
+for processing gravity data has a BTTB structure when the following conditions are
+satisfied: (i) the observed data are disposed at a regular grid on a horizontal plane
+and (ii) the equivalent sources (point masses) are placed at a constant depth, one directly 
+beneath each observation point.
+By exploring the BTTB structure of the sensitivity matrix, we formulate the forward modeling as a 
+fast FFT convolution that requires only one column of the sensitivity matrix 
+and propose an efficient approach for optimizing the computational time of an 
+iterative method called fast equivalent-layer technique.
+This iterative method is grounded on the excess mass constraint and does not demand the solution of 
+linear systems.
+Our approach greatly reduces the number of flops and the RAM memory necessary to estimate a 
+2D mass distribution within a planar equivalent layer that fits the observed gravity data. 
+For example, the number of flops of the fast equivalent-layer technique is reduced by two orders 
+of magnitude when processing one million of observations by using our approach. 
+Traditionally, such amount of data impractically requires $7.6$ Terabytes of RAM memory to handle 
+the full sensitivity matrix whereas our method takes only $61.035$ Megabytes.
+This drastic reduction comes from the fact that, by using only one column of the sensitivity matrix,
+our method is able to compute the gravity data produced by the whole equivalent layer with a single 
+point mass via FFT.
+We have successfully applied the proposed method to compute the upward/downward continuation of 
+synthetic gravity data. Application to field data over the Caraj{\'a}s Province, north of Brazil, 
+confirms the potential of our approach in processing a gravity data set with $250\,000$ observations 
+in approximately $0.2$ seconds. Further studies need to be carried out in order to apply our 
+method to process other potential-field data.
