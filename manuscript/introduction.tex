@@ -1,61 +1,113 @@
 \section{Introduction}
 
-The equivalent layer is a well-known technique for processing potential-field data in applied geophysics since 1960. 
-It comes from potential theory as a mathematical solution of the Laplace's equation, in the region above the sources, 
-by using the Dirichlet boundary condition \citep{kellogg1929}.
-This theory states that any potential-field data produced by an arbitrary 3D physical-property distribution can be 
-exactly reproduced by a fictitious layer located at any depth and having a continuous 2D physical-property  
-distribution. In practical situations, the layer is approximated by a finite set of sources (e.g., point masses or 
-dipoles) and their physical properties are estimated by solving a linear system of equations that yield an 
+The equivalent layer is a well-known technique for processing potential-field data in applied geophysics 
+since the 60's. 
+It comes from potential theory as a mathematical solution of the Laplace's equation, in the region above the
+sources, by using the Dirichlet boundary condition \citep{kellogg1929}.
+This theory states that any potential-field data produced by an arbitrary 3D physical-property distribution can 
+be exactly reproduced by a fictitious layer located at any depth and having a continuous 2D physical-property  
+distribution. In practical situations, the layer is approximated by a finite set of sources (e.g., point masses 
+or dipoles) and their physical properties are estimated by solving a linear system of equations that yield an 
 acceptable potential-field data fit. These fictitious sources are called equivalent sources.
 
-Many previous works have used the equivalent layer as a processing technique of potential-field data. 
-\citet{dampney1969} used the equivalent-layer technique for gridding and for computing the upward 
-continuation of the potential-field data. \citet{cordell1992} and \citet{mendonca-silva1994} used it for 
-interpolating and gridding potential-field data. \citet{emilia1973}, \citet{hansen-miyazaki1984} and 
-\citet{li-oldenburg2010} used it for upward continuation of the potential-field data. \citet{silva1986}, 
-\citet{leao-silva1989}, \citet{guspi-novara2009}, and \citet{oliveirajr-etal2013} used it for reducing the 
-magnetic data to the pole. \citet{boggs-dransfield2004} used it for combining multiple data sets and 
-\citet{barnes-lumley2011} for gradient-data processing.
+Many previous works have used the equivalent layer to perform different potential-field data 
+transformations such as gridding \citep[e.g.,][]{dampney1969, cordell1992, mendonca-silva1994},
+upward/downward continuation \citep[e.g.,][]{emilia1973, hansen-miyazaki1984, 
+li-oldenburg2010}, reduction to the pole \citep[e.g.,]{silva1986, leao-silva1989, guspi-novara2009, 
+oliveirajr-etal2013}, combining multiple data sets \citep[e.g.,][]{boggs-dransfield2004} and 
+gradient data processing \citep[e.g.,][]{barnes-lumley2011}.
 
-The classic equivalent-layer formulation consists in estimating the physical-property distribution within a layer, 
-composed by a set of equivalent sources, by solving a linear system of equations formed by harmonic functions 
-(e.g.,the inverse of the distance between the observation point and the equivalent source). When these observation 
-points and equivalent sources are regularly spaced, a Toeplitz system arises. Toeplitz systems are well-known in 
-many branches of science as in (1) mathematics, for solving partial and ordinary diferential equations 
-\citep[e.g.,][]{lin-etal2003}; (2) image processing \citep[e.g.,][]{chan-etal1999} and; (3) computational 
-neuroscience \citep[e.g.,][]{wray-green1994}. \citet{jin2003} and \citet{chan-jin2007} give many examples of 
-applications for Toeplitz systems.
+Although the use of the equivalent-layer technique increased over the last decades, one of the biggest 
+problems is still its high computational cost for processing large-data sets. 
+This problem propelled several studies to improve the computational efficiency of the 
+equivalent layer technique. 
+\citet{leao-silva1989} developed a fast method for processing a regular grid of potential-field data.
+The method consists in estimating an equivalent layer which exactly reproduces the potential-field data 
+within a small data window. The data window is shifted over the whole gridded data set in a procedure similar 
+to a discrete convolution. 
+The equivalent layer extends beyond the moving-data window and is located at a depth between two and six 
+times the grid spacing of the observations. For each data window, the equivalent layer is estimated by 
+solving an underdetermined linear system.
+After estimating an equivalent layer, the transformed-potential field is computed only at the center of the 
+moving-data window. The use of a small moving-data window greatly reduces the total number of floating-point 
+operations (\textit{flops}) and RAM memory storage. The computational efficiency of this method relies on the 
+strategy of constructing the equivalent layer by successively solving small linear systems instead of solving 
+just one large linear system for the entire equivalent layer. 
+\citet{mendonca-silva1994} also followed the strategy of solving successive small linear systems for 
+constructing an equivalent layer. Their method is based on the  equivalent-data concept, which 
+consists in determining a subset of all potential-field data (named equivalent-data set), such that the 
+interpolating surface that fits the chosen subset also automatically fits all remaining data. 
+The equivalent data set is obtained by iteratively introducing the potential-field observation with the 
+greatest residual in the preceding iteration. By applying to the interpolation problem, the method is 
+optimized by approximating dot products by the discrete form of an analytic integration that can be 
+evaluated with less computational effort. According to the authors, the equivalent-data set is usually 
+smaller than the total number of potential-field observations, leading to computational savings. 
+The authors also pointed out that the computational efficiency of the method depends on the number of 
+equivalent data. If the potential-field anomaly is nonsmooth, the number of equivalent data can be large and 
+the method will be less efficient than the classical approach.
 
-In potential-field methods, the properties of Toeplitz system were used for downward continuation 
-\citep{zhang-etal2016} and for 3D gravity-data inversion using a 2D multilayer model \citep{zhang-wong2015}. 
-In the particular case of gravity data, the kernel generates a linear system with a matrix known as symmetric 
-Block-Toeplitz Toeplitz-Block (BTTB).
+By following a different strategy, \citet{li-oldenburg2010} developed a rapid method that transforms the 
+dense sensitivity matrix associated with the linear system into a sparse one by using a wavelet technique. 
+After obtaining a sparse representation of the sensitivity matrix, those authors estimate the 
+physical-property distribution within the equivalent layer by using an overdetermined formulation. 
+Those authors pointed out that, given the sparse representation, their method reduces the computational time 
+required for solving the linear system by as many as two orders of magnitude if compared with the same 
+formulation using a dense matrix. 
+\citet{barnes-lumley2011} followed a similar strategy and transformed the dense sensitivity matrix 
+into a sparse one. However, differently from \citet{li-oldenburg2010}, their method operates in the space 
+domain by grouping equivalent sources far from an observation point into blocks with average physical 
+property. This procedure aims at reducing the memory storage and achieving computational efficiency 
+by solving the transformed linear system with a weighted-least-squares conjugate-gradient algorithm.
+Notice that, instead of constructing the equivalent layer by solving successive small linear systems, 
+these last two methods first transform the large linear system into a sparse one and then take advantage of 
+this sparseness.
 
-INCLUIR \citet{qiang_etal2019}
+\citet{oliveirajr-etal2013} developed a fast method based on the reparameterization of the physical-property 
+distribution within the equivalent layer. Those authors divided the equivalent layer into a regular grid of 
+equivalent-source windows inside which the physical-property distribution is described by bivariate 
+polynomial functions. By using this polynomial representation, the inverse problem for estimating the 
+equivalent layer is posed in the space of the total number of polynomial coefficients within all 
+equivalent-source windows instead of in the space of the total number of equivalent sources. According to 
+\citet{oliveirajr-etal2013}, the computational efficiency of their method relies on the fact that the total 
+number of polynomial coefficients needed to describe the physical property distribution within the 
+equivalent layer is generally much smaller than the number of equivalent sources, leading to a very smaller 
+linear system to be solved. Those authors could verify that the total number of \textit{flops} needed for 
+building and solving the linear inverse problem of estimating the total number of polynomial coefficients can 
+be reduced by as many as three and four orders of magnitude, respectively, if compared with the same inverse 
+problem of estimating the physical property of each equivalent source via Cholesky decomposition.
 
-A wide variety of applications in mathematics and engineers that fall into Toeplitz systems propelled the development 
-of a large variety of  methods for solving them. 
-%Direct methods were conceived by \citet{levinson1946} and by \citet{trench1964}. Currently the conjugate gradient 
-%is used in most cases.
-\citet{grenander-szego1984} noticed that a circulant matrix can be diagonalized by taking the Fast Fourier Trasform 
-(FFT) of its first column, making it possible to calculate the matrix-vector product and solve the system with 
-low computational cost \citep{strang-aarikka1986, olkin1986}. \citet{chan-jin2007} show some preconditioners to embedd 
-the Toeplitz and BTTB matrices into, respectively, circulant matrices and Block-Circulant Circulant-Block (BCCB) by 
-solving the system applying the conjugate gradient method.
+There is another class of methods that iteratively estimates the physical-property distribution within 
+the equivalent layer without solving linear systems.
+The method presented by \citet{cordell1992} and after generalized by \citet{guspi-novara2009} updates 
+the physical property of the sources, which are located below each potential-field data, using a 
+procedure that removes the maximum residual between the observed and predicted data.
+\citet{xia-sprowl1991} and \citet{xia-etal1993} developed 
+fast iterative schemes for updating the physical-property distribution
+within the equivalent layer in the wavenumber and space domains, respectively.
+Grounded on excess mass constraint, \cite{siqueira-etal2017} developed an iterative scheme 
+starting with a mass distribution within the equivalent layer that is proportional to observed gravity data.
+Then, their method iteratively adds mass corrections that are proportional to the gravity residuals.
+The total number of \textit{flops} required by these iterative methods for estimating the physical-property 
+distribution within the equivalent layer depends on the total number of iterations, however this number is 
+generally much smaller than the total number of \textit{flops} required to solve a large-scaled linear system. 
+Generally, the most computational expensive step in each iteration of these methods is the forward problem 
+of calculating the potential-field data produced by the equivalent layer.
 
-Although the use of the equivalent-layer technique increased over the last decades, one of the biggest problem is still 
-its high computational cost for processing large-data sets. \citet{siqueira-etal2017} developed a computationally 
-efficient scheme for processing gravity data. This scheme does not solve a linear system, instead uses an iterative 
-process that corrects the physical-property distribution over the equivalent layer by adding mass corrections that 
-are proportional to the gravity residual. Although efficient, the method presented by \citet{siqueira-etal2017} requires, 
-at each iteration,  the full computation of the forward problem to guarantee the convergence of the algorithm. The 
-time spent on forward modeling accounts for most of the total computation time of their method.
+In the present work, we show that the sensitivity matrix associated with a planar equivalent layer 
+of point masses has a very well-defined structure called Block-Toeplitz Toeplitz-Block (BTTB) for 
+the case in which (i) the observed gravity data is located on a regularly spaced grid at constant 
+height and (ii) there is one point mass directly beneath each observation point.
+By using this property, we propose an efficient algorithm based on fast FFT convolution 
+\citep[e.g.,][ p. 207]{vanloan1992} for computing the forward problem at each iteration of 
+the fast equivalent-layer technique proposed by \citet{siqueira-etal2017}.
+Our method uses the gravitational effect produced by a single point mass to compute the 
+effect produced by the whole equivalent layer, which results in a drastic reduction 
+not only in the number of flops, but also in the RAM memory usage of the fast equivalent-layer technique.
+This technique have been successfully used in potential-field methods for 
+3D gravity inversion \citep{zhang-wong2015}, downward continuation 
+\citep{zhang-etal2016} and 3D magnetic modeling \citep{qiang_etal2019}.
+Tests with synthetic and field data illustrate the good performance of our method in processing 
+large gravity data sets.
 
-We propose the use of BTTB and BCCB matrices properties to efficiently  solve the forward modeling in method of 
-\citet{siqueira-etal2017}, resulting in a very faster parameter estimation and the possibility to use very large 
-datasets. Here, we show how the system memory (RAM) usage can be drastically decreased by calculating only the 
-first column of the BTTB matrix and embedding into a BCCB matrix. Using the Szeg\"{o} theorema  combined with 
-\cite{strang-aarikka1986}, the matrix-vector product can be accomplished with very low cost, reducing in some 
-orders of magnitude the number of operations required to complete the process. We present synthetic tests to validate 
-our proposal and real field data from Caraj\'as, Brazil to demonstrate its applicability.
+
+
