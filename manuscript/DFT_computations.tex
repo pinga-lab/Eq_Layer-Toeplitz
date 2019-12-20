@@ -2,7 +2,7 @@
 
 In the present Appendix, we deduce equation \ref{eq:DFT-system}
 by using the row-ordered $vec$-operator (here designated simply as $vec$-operator).
-This equation can be efficiently computed by using the two-dimensional 
+This equation can be efficiently computed by using the 2D 
 fast Fourier Transform. 
 This operator was implicitly used by \citet[][ p. 31]{jain1989} to 
 show the relationship between Kronecker products and separable 
@@ -85,7 +85,7 @@ and \ref{eq:vec-matrix-S}).
 We start calling attention to the right side of equation \ref{eq:vec-DFT-system}.
 Consider that vector $\mathbf{w}$ (equation \ref{eq:vec-DFT-system}) 
 is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
-$\mathbf{W}$, whose two-dimensional DFT $\tilde{\mathbf{W}}$ is represented by the 
+$\mathbf{W}$, whose 2D DFT $\tilde{\mathbf{W}}$ is represented by the 
 following separable transformation \citep[][ p. 146]{jain1989}:
 \begin{equation}
 \tilde{\mathbf{W}} = \mathbf{F}_{2Q} \, \mathbf{W} \, \mathbf{F}_{2P} \: ,
@@ -104,9 +104,9 @@ vec \left( \mathbf{W} \right) \: .
 \end{equation}
 Similarly, consider that $\mathbf{v}$ (equation \ref{eq:vec-DFT-system}) 
 is obtained by applying the $vec$-operator (equation \ref{eq:vec-operator}) to a matrix 
-$\mathbf{V}$, whose two-dimensional DFT (equation \ref{eq:2D-DFT-W}) is 
-represented by $\tilde{\mathbf{V}}$, and use
-equation \ref{eq:vec-matrix-S} to rewrite the 
+$\mathbf{V}$, whose 2D DFT (equation \ref{eq:2D-DFT-W}) is 
+represented by $\tilde{\mathbf{V}}$. Using equation \ref{eq:vec-matrix-S} and the symmetry 
+of unitary DFT matrices, we can rewrite the 
 left side of equation \ref{eq:vec-DFT-system} as follows:
 \begin{equation}
 \boldsymbol{\Lambda} \, vec \left( \tilde{\mathbf{V}} \right) = 
@@ -128,7 +128,7 @@ vec \left( \mathbf{V} \right) \: ,
 where $\boldsymbol{\lambda}$ is a $4QP \times 1$ vector containing the diagonal of 
 $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}).
 Then, consider that $\boldsymbol{\lambda}$ is obtained by applying the $vec$-operator 
-(equation \ref{eq:vec-operator}) to a $2Q \times 2P$ matrix $\mathbf{L}$ and use 
+(equation \ref{eq:vec-operator}) to a $2Q \times 2P$ matrix $\mathbf{L}$, we can use 
 equations \ref{eq:vec-matrix-H} and \ref{eq:vec-matrix-S} to rewrite equation 
 \ref{eq:left_side_DFT_system_2} as follows:
 \begin{equation}

@@ -7,7 +7,7 @@ sources, by using the Dirichlet boundary condition \citep{kellogg1929}.
 This theory states that any potential-field data produced by an arbitrary 3D physical-property distribution can 
 be exactly reproduced by a fictitious layer located at any depth and having a continuous 2D physical-property  
 distribution. In practical situations, the layer is approximated by a finite set of sources (e.g., point masses 
-or dipoles) and their physical properties are estimated by solving a linear system of equations that yield an 
+or dipoles) and their physical properties are estimated by solving a linear system of equations that yields an 
 acceptable potential-field data fit. These fictitious sources are called equivalent sources.
 
 Many previous works have used the equivalent layer to perform different potential-field data 
@@ -97,15 +97,15 @@ In the present work, we show that the sensitivity matrix associated with a plana
 of point masses has a very well-defined structure called Block-Toeplitz Toeplitz-Block (BTTB) for 
 the case in which (i) the observed gravity data is located on a regularly spaced grid at constant 
 height and (ii) there is one point mass directly beneath each observation point.
+This technique have been successfully used in potential-field methods for 
+3D gravity inversion \citep{zhang-wong2015}, downward continuation 
+\citep{zhang-etal2016} and 3D magnetic modeling \citep{qiang_etal2019}.
 By using this property, we propose an efficient algorithm based on fast FFT convolution 
 \citep[e.g.,][ p. 207]{vanloan1992} for computing the forward problem at each iteration of 
 the fast equivalent-layer technique proposed by \citet{siqueira-etal2017}.
 Our method uses the gravitational effect produced by a single point mass to compute the 
 effect produced by the whole equivalent layer, which results in a drastic reduction 
 not only in the number of flops, but also in the RAM memory usage of the fast equivalent-layer technique.
-This technique have been successfully used in potential-field methods for 
-3D gravity inversion \citep{zhang-wong2015}, downward continuation 
-\citep{zhang-etal2016} and 3D magnetic modeling \citep{qiang_etal2019}.
 Tests with synthetic and field data illustrate the good performance of our method in processing 
 large gravity data sets.
 
