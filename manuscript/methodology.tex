@@ -463,112 +463,17 @@ equations \ref{eq:predicted-data-vector-partitioned} and
 \ref{eq:parameter-vector-partitioned}, respectively.
 Finally $\mathbf{C}$ (equation \ref{eq:w_Cv}) is a 
 $4N \times 4N$ symmetric Block Circulant matrix with Circulant Blocks (BCCB) 
-\citep[][ p. 184]{davis1979}.
+\citep[][ p. 184]{davis1979}. A detailed description of this matrix and
+some of its relevant properties are presented in Appendix A. 
+
 What follows shows a step-by-step description of how we use the auxiliary 
 system (equation \ref{eq:w_Cv}) to compute the matrix-vector product 
 $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation \ref{eq:delta_p_k_fast_eqlayer}) in 
 a computationally efficient way by exploring the structure of matrix $\mathbf{C}$.
-
-Matrix $\mathbf{C}$ (equation \ref{eq:w_Cv})
-is circulant blockwise, formed by $2Q \times 2Q$ blocks, where
-each block $\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, is a $2P \times 2P$ circulant matrix. 
-Similarly to the BTTB matrix $\mathbf{A}$ (equations \ref{eq:BTTB_A} and 
-\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}), the index $q$ 
-varies from $0$ to $Q - 1$. 
-
-Additionally, the blocks lying 
-above the main diagonal are equal to those located below.
-
-It is well-known that a circulant matrix can be defined by properly downshifting 
-its first column \citep[][ p. 206]{vanloan1992}. Hence, the BCCB matrix $\mathbf{C}$ 
-(equation \ref{eq:w_Cv}) can be obtained from its 
-first column of blocks, which is given by
-\begin{equation}
-\left[\mathbf{C} \right]_{(0)} = 
-	\begin{bmatrix}
-	\mathbf{C}_{0} \\
-	\vdots \\
-	\mathbf{C}_{Q-1} \\
-	\mathbf{0} \\
-	\mathbf{C}_{Q-1} \\
-	\vdots \\
-	\mathbf{C}_{1}
-	\end{bmatrix}_{4N \times 2P} \: ,
-	\label{eq:C-first-column-blocks}
-\end{equation}
-where $\mathbf{0}$ is a $2P \times 2P$ matrix of zeros. Similarly, each block 
-$\mathbf{C}_{q}$, $q = 0, \dots, Q-1$, can be obtained by downshifting its first 
-column
-\begin{equation}
-\mathbf{c}^{q}_{0} = 
-	\begin{bmatrix}
-		a^{q}_{0} \\
-		\vdots \\
-		a^{q}_{P-1} \\
-		0 \\
-		a^{q}_{P-1} \\
-		\vdots \\
-		a^{q}_{1}
-	\end{bmatrix}_{2P \times 1} \: ,
-	\label{eq:Cq-first-column}
-\end{equation}
-where $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}), $p = 0, \dots, P-1$, are the elements 
-forming the block $\mathbf{A}_{q}$ (equations \ref{eq:Aq_block} and 
-\ref{eq:A-x-oriented-example}--\ref{eq:Aq-y-oriented}).
-The downshift can be thought off as permutation that pushes the components of a column vector 
-down one notch with wraparound \citep[][ p. 20]{golub-vanloan2013}.
-To illustrate this operation, consider our $y$-oriented grid illustrated in Figure \ref{fig:methodology}b. 
-In this case, the resulting 
-BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv}) is given by 
-\begin{equation}
-\mathbf{C} =
-\begin{bmatrix}
-	\mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} \\
-	\mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} \\
-	\mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} \\
-	\mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     \\
-	\mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} \\
-	\mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} & \mathbf{C_{2}} \\
-	\mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}} & \mathbf{C_{1}} \\
-	\mathbf{C_{1}} & \mathbf{C_{2}} & \mathbf{C_{3}} & \mathbf{0}     & \mathbf{C_{3}} & \mathbf{C_{2}} & \mathbf{C_{1}} & \mathbf{C_{0}}
-\end{bmatrix}_{4N \times 4N},
-\label{eq:C-y-oriented}
-\end{equation}
-where each block $\mathbf{C}_{q}$, $q = 0, 1, 2$, is represented as follows 
-\begin{equation}
-\tensor{C}_{q} =
-\begin{bmatrix}
-	a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} \\
-	a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} \\
-	a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} & 0         \\
-	0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0} & a^{q}_{1} & a^{q}_{2} \\
-	a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{0} & a^{q}_{0} & a^{q}_{1} \\
-	a^{q}_{1} & a^{q}_{2} & 0         & a^{q}_{2} & a^{q}_{1} & a^{q}_{0}
-\end{bmatrix}_{2P \times 2P}
-\label{eq:Cq-y-oriented}
-\end{equation}
-in terms of the block elements $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}).
-Similar matrices are obtained for our $x$-oriented grid illustrated in Figure \ref{fig:methodology}a.
-
-BCCB matrices are diagonalized by the 2D unitary DFT 
-\citep[][ p. 185]{davis1979}. It means that $\mathbf{C}$ (equation \ref{eq:w_Cv}) 
-satisfies 
-\begin{equation}
-\mathbf{C} = 
-\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)^{\ast} 
-\boldsymbol{\Lambda}
-\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) \: ,
-\label{eq:C-diagonalized}
-\end{equation}
-where the symbol ``$\otimes$" denotes the Kronecker product \citep{neudecker1969},
-$\mathbf{F}_{2Q}$ and $\mathbf{F}_{2P}$ are the $2Q \times 2Q$ and $2P \times 2P$ 
-unitary DFT matrices \citep[][ p. 31]{davis1979}, respectively, the superscritpt 
-``$\ast$" denotes the complex conjugate and $\boldsymbol{\Lambda}$ is a 
-$4QP \times 4QP$ diagonal matrix containing the eigenvalues of $\mathbf{C}$.
 By substituting equation \ref{eq:C-diagonalized} in the auxiliary system 
 (equation \ref{eq:w_Cv}) and premultiplying both
-sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$, 
-we obtain
+sides of the result by $\left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right)$
+(see the details in Appendix A), we obtain
 \begin{equation}
 \boldsymbol{\Lambda} \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
 \mathbf{v} = \left(\mathbf{F}_{2Q} \otimes \mathbf{F}_{2P} \right) 
@@ -576,7 +481,7 @@ we obtain
 \label{eq:vec-DFT-system}
 \end{equation}
 Now, by applying the $vec$-operator to both sides of equation \ref{eq:vec-DFT-system} 
-(see the details in Appendix A), we obtain:
+(see the details in Appendix B), we obtain:
 \begin{equation}
 \mathbf{F}_{2Q}^{\ast} \left[ 
 \mathbf{L} \circ \left(\mathbf{F}_{2Q} \, \mathbf{V} \, \mathbf{F}_{2P} \right) 
@@ -594,7 +499,7 @@ and the 2D DFT of matrix $\mathbf{V}$ (equation \ref{eq:left_side_DFT_system_1})
 Matrix $\mathbf{L}$ contains the eigenvalues 
 of $\boldsymbol{\Lambda}$ (equation \ref{eq:C-diagonalized}) and can be 
 efficiently computed by using only the first column of the BCCB matrix 
-$\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix B).
+$\mathbf{C}$ (equation \ref{eq:w_Cv}) (see the details in Appendix C).
 Here, we evaluate equation \ref{eq:DFT-system} and compute matrix $\mathbf{L}$
 by using the 2D Fast Fourier Transform (2D FFT).
 This approach, that have been used in potential-field methods
@@ -651,7 +556,7 @@ with the matrix-vector product $\mathbf{A} \hat{\mathbf{p}}^{k}$ (equation
 \ref{eq:delta_p_k_fast_eqlayer}) and accounts for most of the computational complexity 
 of this method.
 Our method replace this matrix-vector product by three operations: 
-one DFT, one Hadammard product and one IDFT involving $2Q \times 2P$ matrices 
+one DFT, one Hadamard product and one IDFT involving $2Q \times 2P$ matrices 
 (left side of equation \ref{eq:DFT-system}). 
 The Hadamard product requires $24N$ flops, $N = QP$, because the entries are 
 complex numbers.
