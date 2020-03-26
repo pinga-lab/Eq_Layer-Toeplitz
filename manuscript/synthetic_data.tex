@@ -11,28 +11,26 @@ We created $N = 10\,000$ observation points regularly spaced on a grid of $100 \
 horizontal plane at $z_{1} = -100$ m, and set a grid of equivalent point masses, each one directly beneath each 
 observation point, located at depth $z_{0} = 300$ m. 
 
-Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a show the data fits 
+Figures \ref{fig:comparison_datafits}a and \ref{fig:comparison_datafits}b show the data fits 
 obtained, respectively, by the fast equivalent-layer technique \citep{siqueira-etal2017} 
-and by our method. The corresponding residuals (Figures \ref{fig:classic_fast_val}b 
-and \ref{fig:bccb_fast_val}b), defined as the difference between the simulated (Figure \ref{fig:synthetic_data}) 
-and predicted data (Figures \ref{fig:classic_fast_val}a and \ref{fig:bccb_fast_val}a) after $N^{it} = 23$ iterations, 
-show means close to zero and standard deviations of $0.0144$ mGal, indicating that both methods produced virtually 
-the same results.
-This excellent agreement is confirmed by Figures \ref{fig:delta_comparison} and 
-\ref{fig:delta_rho}. They show that there are virtually no differences between, respectively, 
-the predicted data (Figures \ref{fig:classic_fast_val}b and \ref{fig:bccb_fast_val}b) and the 
-estimated mass distributions within the equivalent layers (not shown) yielded by 
-both methods. 
+and by our method. They represent the differences between the simulated data (Figure \ref{fig:synthetic_data}) and the predicted data produced by both methods 
+(not shown) after $N^{it} = 23$ iterations. 
+As we can see, both methods produced virtually the same results.
+This excellent agreement is confirmed by Figure \ref{fig:comparison_datafits}c, which shows 
+the differences between the predicted data produced by both methods.
 
 We performed the upward and downward continuations of the simulated gravity data 
-(Figure \ref{fig:synthetic_data}) by using the estimated equivalent layers.
-The results show that the continued gravity data obtained by using the 
-fast equivalent-layer (Figures \ref{fig:upward_comparison}a and \ref{fig:downward_comparison}a) 
-are in close agreement with those produced by our method (Figures \ref{fig:upward_comparison}b and 
-\ref{fig:downward_comparison}b). The residuals (Figures \ref{fig:upward_comparison}c and \ref{fig:downward_comparison}c)
-quantify this agreement since their means and standard deviations are close to zero. 
-
-The continued gravity data obtained with both methods agree with the true ones (not shown).
-The difference is that the computation time spent by our method is 
-approximately $1\,500$ times smaller than that of the fast-equivalent-layer 
+(Figure \ref{fig:synthetic_data}) by using the fast equivalent-layer technique 
+and our method.
+Figure \ref{fig:upward_comparison} shows that the upward-continued gravity data obtained 
+by using both methods are in close agreement with those produced by the synthetic 
+bodies at $z = XXXX$ m (Figure \ref{fig:upward_comparison}a).
+As we can see in Figures \ref{fig:upward_comparison}b and \ref{fig:upward_comparison}c,
+the residuals between the upward-continued and true data have their means and standard 
+deviations close to zero. 
+Figure \ref{fig:downward_comparison} shows similar results obtained by using both 
+methods to compute downward continuation of gravity data.
+It is important to stress that, although both methods are able to produce a reliable 
+upward/downward continuation of gravity data, the computation time spent by our method 
+is approximately $1\,500$ times smaller than that of the fast equivalent-layer 
 technique \citep{siqueira-etal2017}. 
