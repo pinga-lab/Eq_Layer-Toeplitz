@@ -1,15 +1,21 @@
 \section{Application to synthetic data}
 
-We simulated three sources whose horizontal projections are shown in Figure \ref{fig:synthetic_data} as black lines. 
-These sources are a sphere with radius of $1\,000$ m with density contrast of 
-$-0.5\, \mathrm{g/cm^3}$ and two rectangular prisms with density contrasts of $0.35\, \mathrm{g/cm^3}$ (upper-left prism) 
-and $0.4\, \mathrm{g/cm^3}$ (upper-right prism). 
-Figure \ref{fig:synthetic_data} shows the gravity disturbance (vertical component of gravitational attraction) 
-produced by these sources. The synthetic data are contaminated with additive pseudorandom Gaussian 
-noise with zero mean and standard deviation of $0.015$ mGal.
-We created $N = 10\,000$ observation points regularly spaced on a grid of $100 \times 100$, on a 
-horizontal plane at $z_{1} = -100$ m, and set a grid of equivalent point masses, each one directly beneath each 
-observation point, located at depth $z_{0} = 300$ m. 
+We have simulated three sources whose horizontal projections are shown in 
+Figure \ref{fig:synthetic_data} as black lines. 
+These sources are a sphere with density contrast  
+$-1.25\, \mathrm{g/cm^3}$ and two rectangular prisms with density contrasts 
+$1.00\, \mathrm{g/cm^3}$ (upper-left prism) 
+and $1.30\, \mathrm{g/cm^3}$ (upper-right prism). 
+Figure \ref{fig:synthetic_data} shows the gravity disturbance (vertical component of 
+gravitational attraction) produced by these sources. 
+The synthetic data are contaminated with additive pseudorandom Gaussian 
+noise with zero mean and standard deviation of $0.1 \, \mathrm{mGal}$.
+The data are computed at $N = 10\,000$ observation points that are regularly spaced on a 
+$100 \times 100$ grid, at $z_{1} = -100$ m. 
+We have set a grid of equivalent sources, each one directly beneath each 
+observation point, located at $z_{0} = 300$ m. 
+
+PAREI AQUI
 
 Figures \ref{fig:comparison_datafits}a and \ref{fig:comparison_datafits}b show the data fits 
 obtained, respectively, by the fast equivalent-layer technique \citep{siqueira-etal2017} 
@@ -24,7 +30,7 @@ We performed the upward and downward continuations of the simulated gravity data
 and our method.
 Figure \ref{fig:upward_comparison} shows that the upward-continued gravity data obtained 
 by using both methods are in close agreement with those produced by the synthetic 
-bodies at $z = XXXX$ m (Figure \ref{fig:upward_comparison}a).
+bodies at $z = -300$ m (Figure \ref{fig:upward_comparison}a).
 As we can see in Figures \ref{fig:upward_comparison}b and \ref{fig:upward_comparison}c,
 the residuals between the upward-continued and true data have their means and standard 
 deviations close to zero. 
