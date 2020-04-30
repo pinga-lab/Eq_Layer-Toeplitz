@@ -13,9 +13,14 @@ can be calculated using the 2D Fast Fourier Transform (2D FFT), which can be use
 compute the matrix-vector product of the forward modeling in the fast equivalent-layer technique. As a result, 
 our method is efficient to process very large datasets using either fine- or mid-grid meshes. The larger the 
 dataset, the faster and more efficient our method becomes compared to the available equivalent-layer techniques. 
-Synthetic tests demonstrate the ability of our method to satisfactorily upward- and downward-continuing the 
-gravity data. For example, while our method requires 26.8 seconds to run one million of observations, the fast 
-equivalent-layer technique required 48.3 seconds to run 22,500 observations. Test with real data from Caraj{\'a}s, 
-Brazil, shows its applicability to process very large dataset at low computational cost.
+Tests with synthetic data demonstrate the ability of our method to satisfactorily upward-
+and downward-continuing the gravity data.
+Our results show very small border effects and noise amplification compared to those 
+produced by the classical approach in the Fourier domain.
+Besides, they show that while the running time of our method is $\approx 30.9$ seconds for 
+processing $N = 1\,000\,000$ observations, the fast equivalent-layer technique spent 
+$\approx 46.8$ seconds with $N = 22\,500$.
+A test with field data from Caraj{\'a}s province, Brazil, illustrates the low computational 
+cost of our method to process a large data set composed of $N = 250\,000$ observations.
 
 \end{abstract}
