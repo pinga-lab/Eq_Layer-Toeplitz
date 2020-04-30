@@ -11,9 +11,10 @@ and propose an efficient approach for optimizing the computational time of an
 iterative method called fast equivalent-layer technique.
 This iterative method is grounded on the excess mass constraint and does not demand the solution of 
 linear systems.
-Our approach greatly reduces the number of flops and the RAM memory necessary to estimate a 
+Compared to the fast equivalent-layer technique, 
+our approach greatly reduces the number of flops and the RAM memory necessary to estimate a 
 2D mass distribution within a planar equivalent layer that fits the observed gravity data. 
-For example, the number of flops of the fast equivalent-layer technique is reduced by two orders 
+For example, the number of flops is reduced by two orders 
 of magnitude when processing one million of observations by using our approach. 
 Traditionally, such amount of data impractically requires $7.6$ Terabytes of RAM memory to handle 
 the full sensitivity matrix whereas our method takes only $61.035$ Megabytes.
@@ -21,7 +22,9 @@ This drastic reduction comes from the fact that, by using only one column of the
 our method is able to compute the gravity data produced by the whole equivalent layer with a single 
 point mass via FFT.
 We have successfully applied the proposed method to compute the upward/downward continuation of 
-synthetic gravity data. Application to field data over the Caraj{\'a}s Province, north of Brazil, 
-confirms the potential of our approach in processing a gravity data set with $250\,000$ observations 
-in approximately $0.2$ seconds. Further studies need to be carried out in order to apply our 
-method to process other potential-field data.
+synthetic gravity data. 
+Our results show that our method produces considerably smaller border effects and 
+noise amplification compared to the classical Fourier approach, 
+which computes the Fourier transform of the observed data.
+Application to field data over the Caraj{\'a}s Province, north of Brazil, 
+confirms the potential of our approach in processing a gravity data set with $250\,000$ observations in approximately $0.2$ seconds. Further studies need to be carried out in order to apply our method to process other potential-field data.
