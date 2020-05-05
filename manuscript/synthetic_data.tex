@@ -10,12 +10,12 @@ Figure \ref{fig:synthetic_data} shows the gravity disturbance (vertical componen
 gravitational attraction) produced by these sources. 
 The synthetic data are contaminated with additive pseudorandom Gaussian 
 noise with zero mean and standard deviation of $0.1 \, \mathrm{mGal}$.
-The data are computed at $N = 10\,000$ observation points that are regularly spaced on a 
+The data are computed at $N = 10,000$ observation points that are regularly spaced on a 
 $100 \times 100$ grid, at $z_{1} = -100$ m. 
 We have set a grid of equivalent sources, each one directly beneath each 
 observation point, at $z_{0} = 300$ m. 
 
-Figures \ref{fig:comparison_datafits}a and \ref{fig:comparison_datafits}b show the data fits 
+Figure \ref{fig:comparison_datafits}a and \ref{fig:comparison_datafits}b show the data fits 
 obtained, respectively, by the fast equivalent-layer technique \citep{siqueira-etal2017} 
 and by our method. They represent the differences between the simulated data (Figure \ref{fig:synthetic_data}) and the predicted data produced by both methods 
 (not shown) after $N^{it} = 40$ iterations. 
@@ -39,37 +39,40 @@ to each other.
 Notice that the absolute values of the residuals produced by the classical Fourier 
 approach (Figure \ref{fig:upward_comparison}d) are $\approx 10$ times greater than
 those produced by our method and the fast equivalent-layer technique 
-(Figures \ref{fig:upward_comparison}b and \ref{fig:upward_comparison}c), 
+(Figure \ref{fig:upward_comparison}b and \ref{fig:upward_comparison}c), 
 with maximum values concentrated at the border of the simulated area.
-We opted for showing the results produced by all methods without removing the border 
-effects in order to properly compare them to each other.
-We can also notice that, differently from the results produced by the other methods, 
-that obtained with the classical Fourier approach exhibits a slight noise amplification.
+Differently from the results yield by our method (Figure \ref{fig:upward_comparison}b) 
+and the fast equivalent-layer technique (Figure \ref{fig:upward_comparison}c), 
+that obtained with the classical Fourier approach exhibits a slight noise 
+amplification (Figure \ref{fig:upward_comparison}d).
 
 Figure \ref{fig:downward_comparison} shows the results obtained by using all 
 methods to compute downward continuation of gravity data.
 In this case, the maximum absolute values of the residuals produced by the 
 classical Fourier approach (Figure \ref{fig:downward_comparison}d) are 
-$\approx 20$ times greater than those produced by our method and the fast equivalent-layer technique (Figures \ref{fig:downward_comparison}b and \ref{fig:downward_comparison}c).
-It is also important to stress that the result produced by the classical Fourier approach 
-exhibits a considerable noise amplification when compared to the other methods.
+$\approx 20$ times greater than those produced by our method and the fast equivalent-layer technique (Figure \ref{fig:downward_comparison}b and \ref{fig:downward_comparison}c).
 This noise amplification is a well-known problem of the downward continuation 
 produced by the classical Fourier approach \citep[e.g., ][ p. 320]{blakely1996}.
 
-Another important aspect to be pointed out about the results we obtained with 
-synthetic data (Figures \ref{fig:upward_comparison} and \ref{fig:downward_comparison})
+We opted for showing all the results (Figures \ref{fig:upward_comparison} and 
+\ref{fig:downward_comparison}) produced by all methods without removing the border 
+effects in order to properly compare them to each other.
+We also stress that no padding function to expand the data was used in applying 
+our method, the fast equivalent-layer technique or the Fourier approach.
+Another important aspect to be pointed out about these results 
 is the computational times spent by our method and the fast equivalent-layer technique. 
-The total computational time required by our method to estimate the physical property 
-distribution on the equivalent layer and perform the upward/downward continuation 
+The total computational time required by our method to estimate the physical-property 
+distribution on the equivalent layer and to perform the upward/downward continuations 
 is about two orders of magnitude lower than that spent by the fast equivalent-layer technique.
 This significant reduction in computational time was obtained by using a data set 
-composed of $N = 10\,000$ observation points. Considerably better results can be 
+composed of $N = 10,000$ observation points. Considerably better results can be 
 obtained with larger data sets.
 
-Finally, we did not compare the total computational times spent by our method and the classical 
-Fourier approach, but we can affirm that the second is smaller. 
-While the classical approach needs basically one DFT/IDFT of the data, 
-our method requires one DFT/IDFT per iteration. 
-On the other hand, the considerably smaller noise amplification and 
+Finally, we did not compare the total computational times spent by our method 
+and the classical Fourier approach, but we can affirm that the second is smaller. 
+Because  the Fourier approach requires only one DFT/IDFT of the data, whereas 
+our method requires one DFT/IDFT per iteration, it is computationally faster 
+than our method.
+However, the considerably smaller noise amplification and practically nonexistent 
 border effect are the main advantages of our method over the classical Fourier 
 approach, especially in the downward continuation.

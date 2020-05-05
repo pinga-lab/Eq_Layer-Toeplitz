@@ -13,7 +13,7 @@
 \plot{Figure2}{width=\textwidth}{
 	{Comparison between the number of flops (equations \ref{eq:float_fast_eqlayer} and \ref{eq:float_bccb}) 
 	associated with the fast equivalent-layer technique \citep{siqueira-etal2017} and our method, 
-	for $N$ varying from $5\,000$ to $1\,000\,000$. All values are computed with $N^{it} = 50$ 
+	for $N$ varying from $5,000$ to $1,000,000$. All values are computed with $N^{it} = 50$ 
 	iterations and $\kappa = 5$.}
 	\label{fig:float}
 }
@@ -38,18 +38,14 @@
 	a sphere with density contrast $-1.25\, \mathrm{g/cm^3}$ and 
 	two rectangular prisms with density contrasts $1.00\, \mathrm{g/cm^3}$ (upper-left body) and 
 	$1.30\, \mathrm{g/cm^3}$ (upper-right body). 
-	The synthetic data are contaminated with a pseudorandom Gaussian noise having null mean 
-	and standard deviation equal to $0.1 \, \mathrm{mGal}$.
 	The black lines represent the horizontal projection of the sources.}
 	\label{fig:synthetic_data}
 }
 
 \plot{deltas_gz_med}{width=6cm}{
 	{Application to synthetic data. 
-	(a) Residuals between the simulated data (Figure \ref{fig:synthetic_data}) and 
-	predicted data produced by the fast equivalent-layer technique \citep{siqueira-etal2017}. 
-	(b) Residuals between the simulated data (Figure \ref{fig:synthetic_data}) and 
-	predicted data produced by our method. 
+	Residuals between the simulated data (Figure \ref{fig:synthetic_data}) and 
+	predicted data produced by: (a) the fast equivalent-layer technique \citep{siqueira-etal2017} and (b) our method. 
 	The mean ($-4.493 \times 10^{-5}$ mGal) and standard deviation ($0.093$ mGal) for residuals
 	shown in a and b are exactly the same.
 	(c) Difference between the predicted data produced by the fast equivalent-layer technique 
@@ -62,14 +58,12 @@
 \plot{upward_fourier_med}{width=13.5cm}{
 	{Application to synthetic data.
 	(a) Noise-free gravity data produced by the synthetic sources at $z = -300$ m.
-	(b) Residuals between the data shown in a and the upward-continued 
-	data obtained with our method (not shown), with 
-	mean $0.003$ mGal and standard deviation $0.034$ mGal. 
-	(c) Residuals between the data shown in a and the upward-continued 
-	data obtained with the fast equivalent-layer technique (not shown), with 
-	mean $0.003$ mGal and standard deviation $0.034$ mGal.
-	(d) Residuals between the data shown in a and the upward-continued 
-	data obtained with the classical Fourier approach (not shown), with 
+	Residuals between the data shown in a and the upward-continued 
+	data obtained by: (b) our method (not shown), with 
+	mean $0.003$ mGal and standard deviation $0.034$ mGal, 
+	(c) the fast equivalent-layer technique (not shown), with 
+	mean $0.003$ mGal and standard deviation $0.034$ mGal and 
+	(d) the classical Fourier approach (not shown), with 
 	mean $-0.030$ mGal and standard deviation $0.262$ mGal.
 	Values shown in b, c and d have the same scale. 	 
 	The computation times spent by the fast equivalent-layer technique and 
@@ -80,14 +74,12 @@
 \plot{downward_fourier_med}{width=13.5cm}{
 	{Application to synthetic data. 
 	(a) Noise-free gravity data produced by the synthetic sources at $z = -50$ m.
-	(b) Residuals between the data shown in a and the downward-continued 
-	data obtained with our method (not shown), with 
-	mean $-0.001$ mGal and standard deviation $0.038$ mGal. 
-	(c) Residuals between the data shown in a and the downward-continued 
-	data obtained with the fast equivalent-layer technique (not shown), with 
-	mean $-0.001$ mGal and standard deviation $0.038$ mGal.
-	(d) Residuals between the data shown in a and the downward-continued 
-	data obtained with the classical Fourier approach (not shown), with 
+	Residuals between the data shown in a and the downward-continued 
+	data obtained by: (b) our method (not shown), with 
+	mean $-0.001$ mGal and standard deviation $0.038$ mGal, 
+	(c) the fast equivalent-layer technique (not shown), with 
+	mean $-0.001$ mGal and standard deviation $0.038$ mGal and 
+	(d) the classical Fourier approach (not shown), with 
 	mean $-0.030$ mGal and standard deviation $0.262$ mGal.
 	Values shown in b, c and d have the same scale.	 
 	The computation times spent by the fast equivalent-layer technique and 
@@ -115,7 +107,7 @@
 
 \plot{Figure14}{width=13.5cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
-	The upward-continued gravity data obtained with our method $5\,000$ m above the 
+	The upward-continued gravity data obtained with our method $5,000$ m above the 
 	observed data (Figure \ref{fig:carajas_real_data}).
 	The total computation time for processing of the $250,000$ observations was $0.216$ seconds.}
 	\label{fig:up2000_carajas_500x500}

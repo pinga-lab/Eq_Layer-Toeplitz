@@ -4,8 +4,8 @@
 
 Let $d^{o}_{i}$ be the observed gravity data at
 the point $(x_{i}, y_{i}, z_{i})$, $i = 1, ..., N$, of a local Cartesian
-system with $x$ axis pointing to north, the $y$ axis pointing to east and 
-the $z$ axis pointing downward.
+system with $x$-axis pointing to north, the $y$-axis pointing to east and 
+the $z$-axis pointing downward.
 Let us consider an equivalent layer composed by a set of $N$ point masses 
 (equivalent sources) over a layer located at depth $z_0$ ($z_0 >z_i$) and whose 
 $x$- and $y$- coordinates of each point mass coincides with the corresponding coordinates 
@@ -80,14 +80,14 @@ the matrix-vector product
 $\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ must be calculated to get a 
 new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
 Considering the limitation of 16 Gb of RAM memory in our system, we could run the 
-\citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method only up to 22 500 observation points;
+\citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method only up to $22,500$  observation points;
 Otherwise, it is costly and can be prohibitive in terms of RAM 
 memory to maintain such operation.
 
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
 Consider that the observed data are located on an $N_{x} \times N_{y}$ regular grid of
-points regularly spaced by $\Delta x$ and $\Delta y$ along the $x$ and $y$ directions,
+points regularly spaced by $\Delta x$ and $\Delta y$ along the $x$- and $y$-directions,
 respectively, on a horizontal plane defined by the constant vertical coordinate $z_{1} < z_{0}$. 
 As a consequence, a given pair of matrix coordinates $(x_{i}, y_{i})$, defined by the matrix index 
 $i$, $i = 1, \dots, N = N_{x} N_{y}$, is equivalent to a pair of coordinates $(x_{k}, y_{l})$
@@ -520,8 +520,9 @@ the BTTB matrix $\mathbf{A}$ (equation \ref{eq:BTTB_A});
 \ref{eq:C-first-column-blocks} and \ref{eq:Cq-first-column} to obtain the
 first column $\mathbf{c}_{0}$ of the BCCB matrix $\mathbf{C}$ (equation \ref{eq:w_Cv});
 
-\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of matrix $\mathbf{G}$ and
-use the 2D FFT to compute matrix $\mathbf{L}$ (equation \ref{eq:DTF_G});
+\item[\textbf{(3)}] Rearrange $\mathbf{c}_{0}$ along the rows of matrix $\mathbf{G}$
+(equation \ref{eq:DFT_G}) and use the 2D FFT to compute matrix $\mathbf{L}$ 
+(equation \ref{eq:DFT_G});
 
 \item[\textbf{(4)}] Rearrange the parameter vector $\hat{\mathbf{p}}^{k}$ 
 (equation \ref{eq:predicted-data-vector}) in its partitioned form 
@@ -580,21 +581,21 @@ In the fast equivalent-layer technique, the full matrix
 is computed once and stored during the entire iterative process.
 On the other hand, our method computes only one column of $\mathbf{A}$ 
 and uses it to compute the complex $2Q \times 2P$ matrix $\mathbf{L}$ 
-(equation \ref{eq:DTF_G}) via 2D FFT, which is stored during all iterations.
+(equation \ref{eq:DFT_G}) via 2D FFT, which is stored during all iterations.
 Table \ref{tab:RAM-usage} shows the RAM memory usage needed to store the 
 full matrix $\mathbf{A}$, a single column of $\mathbf{A}$ and the full matrix 
 $\mathbf{L}$. These quantities were computed for different numbers of observations $N$. 
-Notice that $N = 1\,000\,000$ observations require nearly $7.6$ Terabytes of RAM memory 
+Notice that $N = 1,000,000$ observations require nearly $7.6$ Terabytes of RAM memory 
 to store the whole matrix $\mathbf{A}$.
 
 Figure \ref{fig:time_fast_eqlayer_bccb} compares the running time of the fast equivalent-layer technique 
 \citep{siqueira-etal2017} and of our method, considering a constant number of iterations $N^{it} = 50$. 
 We used a PC with an Intel Core i7 4790@3.6GHz processor and 16 GB of RAM memory.
 The computational efficiency of our approach is significantly superior to that of the 
-fast equivalent-layer technique for a number of observations $N$ greater than $10\,000$. 
-We could not perform this comparison with a number of observations greater than $22\,500$
+fast equivalent-layer technique for a number of observations $N$ greater than $10,000$. 
+We could not perform this comparison with a number of observations greater than $22,500$
 due to limitations of our PC in storing the full matrix $\mathbf{A}$.
 Figure \ref{fig:time_bccb} shows the running time of our method with a number of observations 
 up to  $25$ millions. 
 These results shows that, while the running time of our method is $\approx 30.9$ seconds for 
-$N = 1\,000\,000$, the fast equivalent-layer technique spends $\approx 46.8$ seconds for $N = 22\,500$.
+$N = 1,000,000$, the fast equivalent-layer technique spends $\approx 46.8$ seconds for $N = 22,500$.
