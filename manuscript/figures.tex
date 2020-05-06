@@ -46,10 +46,8 @@
 	{Application to synthetic data. 
 	Residuals between the simulated data (Figure \ref{fig:synthetic_data}) and 
 	predicted data produced by: (a) the fast equivalent-layer technique \citep{siqueira-etal2017} and (b) our method. 
-	The mean ($-4.493 \times 10^{-5}$ mGal) and standard deviation ($0.093$ mGal) for residuals
-	shown in a and b are exactly the same.
-	(c) Difference between the predicted data produced by the fast equivalent-layer technique 
-	and our method.
+	The mean ($-4.493 \times 10^{-5}$ mGal) and standard deviation ($0.093$ mGal) for residuals shown in a and b are exactly the same.
+	(c) Difference between a and b.
 	The computation times spent by the fast equivalent-layer technique and 
 	our method were $10.416$ and $0.177$ seconds, respectively.}
 	\label{fig:comparison_datafits}
@@ -64,8 +62,7 @@
 	(c) the fast equivalent-layer technique (not shown), with 
 	mean $0.003$ mGal and standard deviation $0.034$ mGal and 
 	(d) the classical Fourier approach (not shown), with 
-	mean $-0.030$ mGal and standard deviation $0.262$ mGal.
-	Values shown in b, c and d have the same scale. 	 
+	mean $-0.030$ mGal and standard deviation $0.262$ mGal. 
 	The computation times spent by the fast equivalent-layer technique and 
 	our method were $8.697$ and $0.005$ seconds, respectively.}
 	\label{fig:upward_comparison}
@@ -81,7 +78,6 @@
 	mean $-0.001$ mGal and standard deviation $0.038$ mGal and 
 	(d) the classical Fourier approach (not shown), with 
 	mean $-0.030$ mGal and standard deviation $0.262$ mGal.
-	Values shown in b, c and d have the same scale.	 
 	The computation times spent by the fast equivalent-layer technique and 
 	our method were $8.795$ and $0.004$ seconds, respectively.}
 	\label{fig:downward_comparison}
@@ -89,15 +85,15 @@
 
 % Application to field data
 
-\plot{Figure12}{width=13.5cm}{
+\plot{carajas_real_data}{width=13.5cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
 	Observed gravity data on a regular grid of $500 \times 500$ points, totaling $N = 250,000$ 
-	observations. The inset shows the study area (blue rectangle) which covers the southeast part of 
+	observations. The inset shows the study area (red rectangle) which covers the southeast part of 
 	the state of Par{\'a}, north of Brazil.}
 	\label{fig:carajas_real_data}
 }
 
-\plot{Figure13_r1}{width=8cm}{
+\plot{carajas_gz_predito}{width=8cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
 	(a) Predicted data produced by our method. (b) Residuals between the observed  
 	(Figure \ref{fig:carajas_real_data}) and the predicted data (panel a), with mean 
@@ -105,7 +101,7 @@
 	\label{fig:carajas_gz_predito_val}
 }
 
-\plot{Figure14}{width=13.5cm}{
+\plot{up5000_carajas_500x500}{width=13.5cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
 	The upward-continued gravity data obtained with our method $5,000$ m above the 
 	observed data (Figure \ref{fig:carajas_real_data}).
