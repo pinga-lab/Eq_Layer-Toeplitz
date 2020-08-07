@@ -13,7 +13,7 @@ acceptable potential-field data fit. These fictitious sources are called equival
 Many previous works have used the equivalent layer to perform different potential-field data 
 transformations such as gridding \citep[e.g.,][]{dampney1969, cordell1992, mendonca-silva1994},
 upward/downward continuation \citep[e.g.,][]{emilia1973, hansen-miyazaki1984, 
-li-oldenburg2010}, reduction to the pole \citep[e.g.,]{silva1986, leao-silva1989, guspi-novara2009, 
+li-oldenburg2010}, reduction to the pole \citep[e.g.,][]{silva1986, leao-silva1989, guspi-novara2009, 
 oliveirajr-etal2013}, combining multiple data sets \citep[e.g.,][]{boggs-dransfield2004} and 
 gradient data processing \citep[e.g.,][]{barnes-lumley2011}.
 
@@ -23,7 +23,7 @@ This problem propelled several studies to improve the computational efficiency o
 equivalent layer technique. 
 \citet{leao-silva1989} developed a fast method for processing a regular grid of potential-field data.
 The method consists in estimating an equivalent layer which exactly reproduces the potential-field data 
-within a small data window. The data window is shifted over the whole gridded data set in a procedure similar 
+within a small data window. The data window is shifted over the whole gridded data in a procedure similar 
 to a discrete convolution. 
 The equivalent layer extends beyond the moving-data window and is located at a depth between two and six 
 times the grid spacing of the observations. For each data window, the equivalent layer is estimated by 
@@ -37,7 +37,7 @@ just one large linear system for the entire equivalent layer.
 constructing an equivalent layer. Their method is based on the  equivalent-data concept, which 
 consists in determining a subset of all potential-field data (named equivalent-data set), such that the 
 interpolating surface that fits the chosen subset also automatically fits all remaining data. 
-The equivalent data set is obtained by iteratively introducing the potential-field observation with the 
+The equivalent-data set is obtained by iteratively introducing the potential-field observation with the 
 greatest residual in the preceding iteration. By applying to the interpolation problem, the method is 
 optimized by approximating dot products by the discrete form of an analytic integration that can be 
 evaluated with less computational effort. According to the authors, the equivalent-data set is usually 
@@ -69,7 +69,7 @@ polynomial functions. By using this polynomial representation, the inverse probl
 equivalent layer is posed in the space of the total number of polynomial coefficients within all 
 equivalent-source windows instead of in the space of the total number of equivalent sources. According to 
 \citet{oliveirajr-etal2013}, the computational efficiency of their method relies on the fact that the total 
-number of polynomial coefficients needed to describe the physical property distribution within the 
+number of polynomial coefficients needed to describe the physical-property distribution within the 
 equivalent layer is generally much smaller than the number of equivalent sources, leading to a very smaller 
 linear system to be solved. Those authors could verify that the total number of \textit{flops} needed for 
 building and solving the linear inverse problem of estimating the total number of polynomial coefficients can 
@@ -78,7 +78,7 @@ problem of estimating the physical property of each equivalent source via Choles
 
 There is another class of methods that iteratively estimates the physical-property distribution within 
 the equivalent layer without solving linear systems.
-The method presented by \citet{cordell1992} and after generalized by \citet{guspi-novara2009} updates 
+The method presented by \citet{cordell1992}, and later generalized by \citet{guspi-novara2009}, updates 
 the physical property of the sources, which are located below each potential-field data, using a 
 procedure that removes the maximum residual between the observed and predicted data.
 \citet{xia-sprowl1991} and \citet{xia-etal1993} developed 
@@ -100,7 +100,7 @@ height and (ii) there is one point mass directly beneath each observation point.
 This technique have been successfully used in potential-field methods for 
 3D gravity inversion \citep{zhang-wong2015}, downward continuation 
 \citep{zhang-etal2016} and 3D magnetic modeling \citep{qiang_etal2019}.
-By using this property, we propose an efficient algorithm based on fast FFT convolution 
+By using this property, we propose an efficient algorithm based on FFT convolution 
 \citep[e.g.,][ p. 207]{vanloan1992} for computing the forward problem at each iteration of 
 the fast equivalent-layer technique proposed by \citet{siqueira-etal2017}.
 Our method uses the gravitational effect produced by a single point mass to compute the 

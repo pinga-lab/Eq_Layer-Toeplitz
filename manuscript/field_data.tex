@@ -4,21 +4,21 @@ We applied our method to airborne gravity data from Caraj{\'a}s, north of Brazil
 the Geological Survey of Brazil (CPRM). The data were collected along $131$ north-south flight lines separated 
 by $3$ km and $29$ east-west tie lines separated by $12$ km.
 This data set was divided in two different areas, collected in different times, having samples spacing of 
-$7.65$ m and $15.21$ m along the lines, totalizing  $4\,353\,428$ observation points at a fixed height 
+$7.65$ m and $15.21$ m along the lines, totalizing  $5,492,551$ observation points at a fixed height 
 of $900$ m ($z_{1} = -900$ m). 
 The gravity data were interpolated (Figure \ref{fig:carajas_real_data}) into a regularly spaced grid of 
-$500 \times 500$ observation points ($N = 250\,000$) with a grid spacing of $716.9311$ m north-south and 
-$781.7387$ m east-west.
+$500 \times 500$ observation points ($N = 250,000$) with a grid spacing of 
+$\approx 717$ m north-south and $\approx 782$ m east-west.
 
 To apply our method, we set an equivalent layer at $z_{0} = 300$ m. 
 Figure \ref{fig:carajas_gz_predito_val}a shows the predicted data obtained with our method after 
 $N^{it} = 50$ iterations.
 The residuals (Figure \ref{fig:carajas_gz_predito_val}b), defined as the difference between the observed 
 (Figure \ref{fig:carajas_real_data}) and predicted (Figure \ref{fig:carajas_gz_predito_val}a) data, show a 
-very good data fit with mean close to zero ($0.0003$ mGal) and small standard deviation ($0.105$ mGal), 
+very good data fit with mean close to zero ($0.0003$ mGal) and small standard deviation ($0.1160$ mGal), 
 which corresponds to approximately $0.1$ \% of the maximum amplitude of the gravity data.
 By using the estimated mass distribution (not shown), we performed an upward-continuation of the 
-observed gravity data to a horizontal plane located $5\,000$ m above. Figure \ref{fig:up2000_carajas_500x500} 
+observed gravity data to a horizontal plane located $5,000$ m above. Figure \ref{fig:up2000_carajas_500x500} 
 shows a very consistent upward-continued gravity data, with a clear attenuation of the short 
-wavelengths. By using our approach, the processing of the $250\,000$ observations took only 
+wavelengths. By using our approach, the processing of the $250,000$ observations took only 
 $0.216$ seconds.
