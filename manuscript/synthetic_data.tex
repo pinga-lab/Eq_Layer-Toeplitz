@@ -36,7 +36,7 @@ As we can see, the residuals between the true data at $z = -300$ m
 using our method (Figure \ref{fig:upward_comparison}b) and 
 the fast equivalent-layer technique (Figure \ref{fig:upward_comparison}c) are very similar 
 to each other.
-Notice that the absolute values of the residuals produced by the classical Fourier 
+Note that the absolute values of the residuals produced by the classical Fourier 
 approach (Figure \ref{fig:upward_comparison}d) are $\approx 10$ times greater than
 those produced by our method and the fast equivalent-layer technique 
 (Figure \ref{fig:upward_comparison}b and \ref{fig:upward_comparison}c), 
@@ -59,9 +59,10 @@ We opted for showing all the results (Figures \ref{fig:upward_comparison} and
 effects in order to properly compare them to each other.
 We also stress that no padding function to expand the data was used in applying 
 our method, the fast equivalent-layer technique or the Fourier approach.
+It is important to stress that the Fourier method shows heavy border effects at large 
+altitudes if no padding is made \citep{baniamerian_etal2017}. 
 Another important aspect to be pointed out about these results 
-is the computational times spent by our method and the fast equivalent-layer technique. 
-The total computational time required by our method to estimate the physical-property 
+is that the computational time required by our method to estimate the physical-property 
 distribution on the equivalent layer and to perform the upward/downward continuations 
 is about two orders of magnitude lower than that spent by the fast equivalent-layer technique.
 This significant reduction in computational time was obtained by using a data set 
@@ -71,8 +72,9 @@ obtained with larger data sets.
 Finally, we did not compare the total computational times spent by our method 
 and the classical Fourier approach, but we can affirm that the second is smaller. 
 Because  the Fourier approach requires only one DFT/IDFT of the data, whereas 
-our method requires one DFT/IDFT per iteration, it is computationally faster 
+our method requires one DFT/IDFT per iteration, the former is computationally faster 
 than our method.
 However, the considerably smaller noise amplification and practically nonexistent 
-border effect are the main advantages of our method over the classical Fourier 
-approach, especially in the downward continuation.
+border effects obtained without applying any padding function to expand 
+the data are the main advantages of our method over the classical Fourier 
+approach, especially in the downward continuation. 
