@@ -1,20 +1,11 @@
 help:
 	@echo "Available makes:"
-	@echo "manuscript - compile the latex files to build the manuscript"
 	@echo "figs - rename, convert to tiff and set colorpace, dpi and size of figures"
 	@echo "clean - remove unused files"
 
 all:
-	make manuscript
 	make figs
 	make clean
-
-# Compile the manuscript
-manuscript:
-	pdflatex manuscript.tex
-	bibtex references
-	pdflatex manuscript.tex
-	pdflatex manuscript.tex
 
 # Convert and rename figures
 figs:
