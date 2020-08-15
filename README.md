@@ -1,53 +1,53 @@
-# Fast equivalent layer for gravity data processing with BTTB systems
+# Convolutional equivalent layer for gravity data processing
 
 by
 [Diego Takahashi](http://www.pinga-lab.org/people/tomazella.html)<sup>1</sup>,
 [Vanderlei C. Oliveira Jr.](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup> and
-[Valéria C. F. Barbosa](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup>
+[Val{\'e}ria C. F. Barbosa](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup>
 
-<sup>1</sup>[Observatório Nacional](http://www.on.br/index.php/pt-br/)
+<sup>1</sup>[Observat{\'o}rio Nacional](http://www.on.br/index.php/pt-br/)
 
-This work will be submitted for publication in
+This work was accepted for publication in
 [*Geophysics*](https://seg.org/Publications/Journals/Geophysics).
 
 
 ## Abstract
 
-We have developed an efficient and very fast equivalent layer technique for gravity data 
-processing by modifying an iterative method grounded on excess mass constraint that does not 
-require the solution of linear systems. Taking advantage of the properties related to the 
-symmetric Block-Toeplitz Toeplitz-block (BTTB) and Block-Circulant Circulant-Block (BCCB) 
-matrices, that raises when regular grids of observation points and equivalent sources 
-(point masses) are used to set up a fictitious equivalent layer, we have developed an 
-algorithm which greatly reduces the number of flops and memory RAM necessary to estimate 
-of a 2D mass distribution over the equivalent layer. The algorithm is based on the structure 
-of symmetric BTTB matrix, where all its elements consist of the elements of the first row, 
-which in turn can be embedded into a symmetric BCCB matrix. Likewise, only the first row of 
-the BCCB matrix is needed to reconstruct the full matrix completely. From the first column 
-of BCCB matrix, its eigenvalues can be calculated using the fast Fourier transform, which 
-can be used to readily compute the matrix-vector product. As a result, our method is 
-efficient to process very large datasets using either fine- or mid-grid meshes. The larger 
-the dataset, the faster and more efficient our method becomes compared to the available 
-equivalent-layer techniques. Synthetic tests demonstrate the ability of our method to 
-satisfactorily upward- and downward-continuing the gravity data.
+We develop an efficient and very fast equivalent-layer technique for gravity data processing
+by modifying an iterative method grounded on an excess mass constraint that does not
+require the solution of linear systems. Taking advantage of the symmetric Block-Toeplitz
+Toeplitz-Block (BTTB) structure of the sensitivity matrix, that arises when regular grids
+of observation points and equivalent sources (point masses) are used to set up a fictitious
+equivalent layer, we develop an algorithm that greatly reduces the computational complexity
+and RAM memory necessary to estimate a 2D mass distribution over the equivalent layer.
+The structure of symmetric BTTB matrix consists of the elements of the first column of
+the sensitivity matrix, which in turn can be embedded into a symmetric Block-Circulant
+Circulant-Block (BCCB) matrix. Likewise, only the first column of the BCCB matrix is
+needed to reconstruct the full sensitivity matrix completely. From the first column of BCCB
+matrix, its eigenvalues can be calculated using the 2D Fast Fourier Transform (2D FFT),
+which can be used to readily compute the matrix-vector product of the forward modeling
+in the fast equivalent-layer technique. As a result, our method is eficient for processing
+1
+very large datasets. Tests with synthetic data demonstrate the ability of our method to
+satisfactorily upward- and downward-continuing gravity data. Our results show very small
+border effects and noise amplification compared to those produced by the classical approach
+in the Fourier domain. Besides, they show that while the running time of our method
+is $\approx 30.9$ seconds for processing N = 1, 000, 000 observations, the fast equivalent-layer
+technique spent $\approx 46.8$ seconds with N = 22, 500. A test with field data from Caraj{\'a}s
+Province, Brazil, illustrates the low computational cost of our method to process a large
+data set composed of N = 250, 000 observations.
 
-![](manuscript/Fig/sensibility_grav_mod.png)
+![](manuscript/Fig/Figure2.png)
 
-**Figure 1:** *symmetric block-toeplitz toeplitz-block structure of the gravimetric sensibility 
-matrix that arises when using the equivalent-layer technique for regular grids of data and 
-equivalent sources.*
-
-![](manuscript/Fig/float.png)
-
-**Figure 2:** *floating points to estimate the parameter vector using the fast equivalent 
+**Figure 1:** *floating points to estimate the parameter vector using the fast equivalent 
 layer with Siqueira et al.'s method and our approach versus the numbers of observation 
 points varyig from N = 5000 to N = 1000000 with $50$ iterations. The number of operations 
 is drastically decreased.*
 
 
-![](manuscript/Fig/time_comparison.png)
+![](manuscript/Fig/Figure3.png)
 
-**Figure 3:** *time necessary to run 50 iterations of the Siqueira et al.'s method and the 
+**Figure 2:** *time necessary to run 50 iterations of the Siqueira et al.'s method and the 
 one presented in this work. With the limitation of 16 Gb of memory RAM in our system, we 
 chose to test only up to 22500 obervation points.*
 
@@ -57,7 +57,7 @@ chose to test only up to 22500 obervation points.*
 You can download a copy of all the files in this repository by cloning the
 [git](https://git-scm.com/) repository:
 
-    git clone https://github.com/DiegoTaka/Eq_Layer-Toeplitz.git
+    git clone https://github.com/pinga-lab/Eq_Layer-Toeplitz.git
 
 
 All source code used to generate the results and figures in the paper are in
@@ -69,7 +69,7 @@ The calculations and figure generation are all run inside
 You can view a static (non-executable) version of the notebooks in the
 [nbviewer](https://nbviewer.jupyter.org/) webservice:
 
-http://nbviewer.jupyter.org/github/DiegoTaka/Eq_Layer-Toeplitz
+http://nbviewer.jupyter.org/github/pinga-lab/Eq_Layer-Toeplitz
 
 See sections below for instructions on executing the code.
 
