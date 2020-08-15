@@ -3,9 +3,9 @@
 by
 [Diego Takahashi](http://www.pinga-lab.org/people/tomazella.html)<sup>1</sup>,
 [Vanderlei C. Oliveira Jr.](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup> and
-[Val{\'e}ria C. F. Barbosa](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup>
+[Valéria C. F. Barbosa](http://www.pinga-lab.org/people/oliveira-jr.html)<sup>1</sup>
 
-<sup>1</sup>[Observat{\'o}rio Nacional](http://www.on.br/index.php/pt-br/)
+<sup>1</sup>[Observatório Nacional](http://www.on.br/index.php/pt-br/)
 
 This work was accepted for publication in
 [*Geophysics*](https://seg.org/Publications/Journals/Geophysics).
@@ -32,16 +32,16 @@ very large datasets. Tests with synthetic data demonstrate the ability of our me
 satisfactorily upward- and downward-continuing gravity data. Our results show very small
 border effects and noise amplification compared to those produced by the classical approach
 in the Fourier domain. Besides, they show that while the running time of our method
-is $\approx 30.9$ seconds for processing N = 1, 000, 000 observations, the fast equivalent-layer
-technique spent $\approx 46.8$ seconds with N = 22, 500. A test with field data from Caraj{\'a}s
+is nearly 30.9 seconds for processing N = 1,000,000 observations, the fast equivalent-layer
+technique spent approximately 46.8 seconds with N = 22,500. A test with field data from Carajás
 Province, Brazil, illustrates the low computational cost of our method to process a large
-data set composed of N = 250, 000 observations.
+data set composed of N = 250,000 observations.
 
 ![](manuscript/Fig/Figure2.png)
 
 **Figure 1:** *floating points to estimate the parameter vector using the fast equivalent 
 layer with Siqueira et al.'s method and our approach versus the numbers of observation 
-points varyig from N = 5000 to N = 1000000 with $50$ iterations. The number of operations 
+points varyig from N = 5,000 to N = 1,000,000 with 50 iterations. The number of operations 
 is drastically decreased.*
 
 
@@ -49,7 +49,12 @@ is drastically decreased.*
 
 **Figure 2:** *time necessary to run 50 iterations of the Siqueira et al.'s method and the 
 one presented in this work. With the limitation of 16 Gb of memory RAM in our system, we 
-chose to test only up to 22500 obervation points.*
+chose to test only up to 22,500 obervation points.*
+
+![](manuscript/Fig/Figure4.png)
+
+**Figure 3:** *time necessary to run 50 iterations of this method. We run up to 25,000,000 
+observation points. The time to processes 1,000,000 observation points was approximately 30.9.
 
 
 ## Reproducing the results
