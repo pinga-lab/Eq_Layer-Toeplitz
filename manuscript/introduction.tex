@@ -1,8 +1,8 @@
 \section{Introduction}
 
 The equivalent layer is a well-known technique for processing potential-field data in applied geophysics 
-since the 60's. 
-It comes from potential theory as a mathematical solution of the Laplace's equation, in the region above the
+since the 1960's. 
+It comes from potential theory as a mathematical solution of Laplace's equation, in the region above the
 sources, by using the Dirichlet boundary condition \citep{kellogg1929}.
 This theory states that any potential-field data produced by an arbitrary 3D physical-property distribution can 
 be exactly reproduced by a fictitious layer located at any depth and having a continuous 2D physical-property  
@@ -19,9 +19,9 @@ gradient data processing \citep[e.g.,][]{barnes-lumley2011}.
 
 Although the use of the equivalent-layer technique increased over the last decades, one of the biggest 
 problems is still its high computational cost for processing large-data sets. 
-This problem propelled several studies to improve the computational efficiency of the 
+This problem propelled several studies aimed at improving the computational efficiency of the 
 equivalent layer technique. 
-\citet{leao-silva1989} developed a fast method for processing a regular grid of potential-field data.
+\citet{leao-silva1989} develop a fast method for processing a regular grid of potential-field data.
 The method consists in estimating an equivalent layer which exactly reproduces the potential-field data 
 within a small data window. The data window is shifted over the whole gridded data in a procedure similar 
 to a discrete convolution. 
@@ -33,11 +33,11 @@ moving-data window. The use of a small moving-data window greatly reduces the to
 operations (\textit{flops}) and RAM memory storage. The computational efficiency of this method relies on the 
 strategy of constructing the equivalent layer by successively solving small linear systems instead of solving 
 just one large linear system for the entire equivalent layer. 
-\citet{mendonca-silva1994} also followed the strategy of solving successive small linear systems for 
+\citet{mendonca-silva1994} also follow the strategy of solving successive small linear systems for 
 constructing an equivalent layer. Their method is based on the  equivalent-data concept, which 
 consists in determining a subset of all potential-field data (named equivalent-data set), such that the 
 interpolating surface that fits the chosen subset also automatically fits all remaining data. 
-The equivalent-data set is obtained by iteratively introducing the potential-field observation with the 
+The equivalent data set is obtained by iteratively introducing the potential-field observation with the 
 greatest residual in the preceding iteration. By applying to the interpolation problem, the method is 
 optimized by approximating dot products by the discrete form of an analytic integration that can be 
 evaluated with less computational effort. According to the authors, the equivalent-data set is usually 
@@ -46,23 +46,23 @@ The authors also pointed out that the computational efficiency of the method dep
 equivalent data. If the potential-field anomaly is nonsmooth, the number of equivalent data can be large and 
 the method will be less efficient than the classical approach.
 
-By following a different strategy, \citet{li-oldenburg2010} developed a rapid method that transforms the 
+By following a different strategy, \citet{li-oldenburg2010} develop a rapid method that transforms the 
 dense sensitivity matrix associated with the linear system into a sparse one by using a wavelet technique. 
 After obtaining a sparse representation of the sensitivity matrix, those authors estimate the 
 physical-property distribution within the equivalent layer by using an overdetermined formulation. 
 Those authors pointed out that, given the sparse representation, their method reduces the computational time 
 required for solving the linear system by as many as two orders of magnitude if compared with the same 
 formulation using a dense matrix. 
-\citet{barnes-lumley2011} followed a similar strategy and transformed the dense sensitivity matrix 
+\citet{barnes-lumley2011} follow a similar strategy and transformed the dense sensitivity matrix 
 into a sparse one. However, differently from \citet{li-oldenburg2010}, their method operates in the space 
 domain by grouping equivalent sources far from an observation point into blocks with average physical 
 property. This procedure aims at reducing the memory storage and achieving computational efficiency 
 by solving the transformed linear system with a weighted-least-squares conjugate-gradient algorithm.
-Notice that, instead of constructing the equivalent layer by solving successive small linear systems, 
+Note that, instead of constructing the equivalent layer by solving successive small linear systems, 
 these last two methods first transform the large linear system into a sparse one and then take advantage of 
 this sparseness.
 
-\citet{oliveirajr-etal2013} developed a fast method based on the reparameterization of the physical-property 
+\citet{oliveirajr-etal2013} develop a fast method based on the reparameterization of the physical-property 
 distribution within the equivalent layer. Those authors divided the equivalent layer into a regular grid of 
 equivalent-source windows inside which the physical-property distribution is described by bivariate 
 polynomial functions. By using this polynomial representation, the inverse problem for estimating the 
@@ -81,10 +81,10 @@ the equivalent layer without solving linear systems.
 The method presented by \citet{cordell1992}, and later generalized by \citet{guspi-novara2009}, updates 
 the physical property of the sources, which are located below each potential-field data, using a 
 procedure that removes the maximum residual between the observed and predicted data.
-\citet{xia-sprowl1991} and \citet{xia-etal1993} developed 
+\citet{xia-sprowl1991} and \citet{xia-etal1993} develop 
 fast iterative schemes for updating the physical-property distribution
 within the equivalent layer in the wavenumber and space domains, respectively.
-Grounded on excess mass constraint, \cite{siqueira-etal2017} developed an iterative scheme 
+Grounded on excess mass constraint, \cite{siqueira-etal2017} develop an iterative scheme 
 starting with a mass distribution within the equivalent layer that is proportional to observed gravity data.
 Then, their method iteratively adds mass corrections that are proportional to the gravity residuals.
 The total number of \textit{flops} required by these iterative methods for estimating the physical-property 
@@ -95,8 +95,8 @@ of calculating the potential-field data produced by the equivalent layer.
 
 In the present work, we show that the sensitivity matrix associated with a planar equivalent layer 
 of point masses has a very well-defined structure called Block-Toeplitz Toeplitz-Block (BTTB) for 
-the case in which (i) the observed gravity data is located on a regularly spaced grid at constant 
-height and (ii) there is one point mass directly beneath each observation point.
+the case in which (1) the observed gravity data is located on a regularly spaced grid at constant 
+height and (2) there is one point mass directly beneath each observation point.
 This technique have been successfully used in potential-field methods for 
 3D gravity inversion \citep{zhang-wong2015}, downward continuation 
 \citep{zhang-etal2016} and 3D magnetic modeling \citep{qiang_etal2019}.

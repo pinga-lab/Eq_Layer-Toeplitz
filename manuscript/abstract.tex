@@ -1,13 +1,13 @@
 \begin{abstract}
 
-We have developed an efficient and very fast equivalent-layer technique for 
-gravity data processing by modifying an iterative method grounded on excess mass 
+We develop an efficient and very fast equivalent-layer technique for 
+gravity data processing by modifying an iterative method grounded on an excess mass 
 constraint that does not require the solution of linear systems. 
-Taking advantage of the symmetric Block-Toeplitz Toeplitz-block (BTTB) structure 
-of the sensitivity matrix, that raises when regular grids of observation points 
+Taking advantage of the symmetric Block-Toeplitz Toeplitz-Block (BTTB) structure 
+of the sensitivity matrix, that arises when regular grids of observation points 
 and equivalent sources (point masses) are used to set up a fictitious 
-equivalent layer, we have developed an algorithm which greatly reduces the number 
-of flops and RAM memory necessary to estimate a 2D mass distribution over the 
+equivalent layer, we develop an algorithm that greatly reduces the computational 
+complexity and RAM memory necessary to estimate a 2D mass distribution over the 
 equivalent layer. 
 The structure of symmetric BTTB matrix consists of the elements of the first column of 
 the sensitivity matrix, which in turn can be embedded into a symmetric 
@@ -17,9 +17,9 @@ to reconstruct the full sensitivity matrix completely. From the first column of
 BCCB matrix, its eigenvalues can be calculated using the 2D Fast Fourier Transform 
 (2D FFT), which can be used to readily compute the matrix-vector product of the 
 forward modeling in the fast equivalent-layer technique. 
-As a result, our method is efficient to process very large datasets. 
+As a result, our method is efficient for processing very large datasets. 
 Tests with synthetic data demonstrate the ability of our method to satisfactorily upward-
-and downward-continuing the gravity data.
+and downward-continuing gravity data.
 Our results show very small border effects and noise amplification compared to those 
 produced by the classical approach in the Fourier domain.
 Besides, they show that while the running time of our method is $\approx 30.9$ seconds for 

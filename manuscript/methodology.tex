@@ -28,7 +28,7 @@ a_{ij}= \frac{c_{g} \, G \, (z_{0} - z_{i})}{\left[(x_{i} - x_{j})^{2} +
 \end{equation}
 where $G$ is the Newton's gravitational constant and $c_{g} = 10^{5}$ 
 transforms from $\mathrm{m/s^2}$ to mGal.
-Notice that the sensitivity matrix depends on the $i$th coordinate of the observation 
+Note that the sensitivity matrix depends on the $i$th coordinate of the observation 
 and the $j$th coordinate of the equivalent source. For convenience, we designate 
 these coordinates as \textit{matrix coordinates} and the indices $i$ and $j$ as 
 \textit{matrix indices}.
@@ -43,12 +43,12 @@ from the observed gravity data $\mathbf{d}^{o}$ by
 
 \subsection{Fast equivalent-layer technique}
 
-\citet{siqueira-etal2017} developed an iterative least-squares method to estimate the mass 
+\citet{siqueira-etal2017} develop an iterative least-squares method to estimate the mass 
 distribution over the equivalent layer based on the excess of mass and the positive correlation 
 between the observed gravity data and the masses on the equivalent layer. They showed 
 that the fast equivalent-layer technique has a better computational efficiency than the 
 classical equivalent layer approach (equation \ref{eq:estimated-p-parameter-space}) if the 
-dataset is greater than at least 200 observation points, even using a large number of iterations.
+dataset is greater than 200 observation points, even using a large number of iterations.
 
 Considering one equivalent source (point mass) directly beneath each observation point, 
 the iteration of the \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method 
@@ -77,7 +77,8 @@ where the mass correction is given by
 
 At the $k$th iteration of \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method, 
 the matrix-vector product 
-$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ must be calculated to get a 
+$\tensor{A} \hat{\mathbf{p}}^{k} = \mathbf{d}(\hat{\mathbf{p}}^{k})$ must be calculated 
+to obtain a 
 new residual $\mathbf{d^0} - \tensor{A} \hat{\mathbf{p}}^{k}$, which represents a bottleneck. 
 Considering the limitation of 16 Gb of RAM memory in our system, we could run the 
 \citeauthor{siqueira-etal2017}'s~(\citeyear{siqueira-etal2017}) method only up to $22,500$  observation points;
@@ -87,7 +88,7 @@ memory to maintain such operation.
 \subsection{Structure of matrix $\mathbf{A}$ for regular grids}
 
 Consider that the observed data are located on an $N_{x} \times N_{y}$ regular grid of
-points regularly spaced by $\Delta x$ and $\Delta y$ along the $x$- and $y$-directions,
+points spaced by $\Delta x$ and $\Delta y$ along the $x$- and $y$-directions,
 respectively, on a horizontal plane defined by the constant vertical coordinate $z_{1} < z_{0}$. 
 As a consequence, a given pair of matrix coordinates $(x_{i}, y_{i})$, defined by the matrix index 
 $i$, $i = 1, \dots, N = N_{x} N_{y}$, is equivalent to a pair of coordinates $(x_{k}, y_{l})$
@@ -254,7 +255,7 @@ p(i, j) = \; \mid l(i) - l(j) \mid \quad ,
 \end{equation}
 where $k(i)$ and $k(j)$ are defined by equation \ref{eq:k-y-oriented}
 and $l(i)$ and $l(j)$ are defined by equation \ref{eq:l-y-oriented}.
-Notice that, for each element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
+Note that, for each element $a_{ij}$ (equation \ref{eq:aij-regular-grids}),
 defined by matrix indices $i$ and $j$, there is a corresponding block element
 $a^{q}_{p}$, defined by block indices $q$ (equations \ref{eq:q-x-oriented} or 
 \ref{eq:q-y-oriented}) and $p$ (equations \ref{eq:p-x-oriented} or \ref{eq:p-y-oriented}),
@@ -271,7 +272,7 @@ $a^{q}_{p}$ (equation \ref{eq:aqp_equiv_aij}) in terms of the block indices
 $q$ (equations \ref{eq:q-x-oriented} or \ref{eq:q-y-oriented}) and $p$ 
 (equations \ref{eq:p-x-oriented} or \ref{eq:p-y-oriented}).
 
-It is important noting that different matrix indices $i$ or $j$ produce the same 
+It is important to note that different matrix indices $i$ or $j$ produce the same 
 absolute values for the grid indices $k$ (equations \ref{eq:k-x-oriented} or 
 \ref{eq:k-y-oriented}) and $l$ (equations \ref{eq:l-x-oriented} or 
 \ref{eq:l-y-oriented}). As a consequence, different pairs of matrix indices $i$
@@ -385,7 +386,7 @@ produced by a single equivalent source at all $N$ observation points.
 The matrix-vector product $\tensor{A} \hat{\mathbf{p}}^{k}$ (equation 
 \ref{eq:delta_p_k_fast_eqlayer}) required by the fast equivalent-layer 
 technique \citep{siqueira-etal2017} accounts for most of its total computation time 
-and can cause RAM memory shortage when large data sets are used.
+and can cause RAM memory shortage when processing large data sets.
 This computational load can be drastically reduced by exploring the well-defined structure of 
 matrix $\mathbf{A}$ (equation \ref{eq:predicted-data-vector}) for the particular case in which 
 its elements $a_{ij}$ are defined by equation \ref{eq:aij-regular-grids}. 
@@ -579,16 +580,16 @@ Another advantage of our method is concerned with the real $N \times N$ matrix $
 (equations \ref{eq:predicted-data-vector} and \ref{eq:BTTB_A}).
 In the fast equivalent-layer technique, the full matrix 
 is computed once and stored during the entire iterative process.
-On the other hand, our method computes only one column of $\mathbf{A}$ 
+On the other hand, our method calculates only one column of $\mathbf{A}$ 
 and uses it to compute the complex $2Q \times 2P$ matrix $\mathbf{L}$ 
 (equation \ref{eq:DFT_G}) via 2D FFT, which is stored during all iterations.
 Table \ref{tab:RAM-usage} shows the RAM memory usage needed to store the 
 full matrix $\mathbf{A}$, a single column of $\mathbf{A}$ and the full matrix 
 $\mathbf{L}$. These quantities were computed for different numbers of observations $N$. 
-Notice that $N = 1,000,000$ observations require nearly $7.6$ Terabytes of RAM memory 
+Notice that $N = 1,000,000$ observations require nearly $7.6$ TB of memory 
 to store the whole matrix $\mathbf{A}$.
 
-Figure \ref{fig:time_fast_eqlayer_bccb} compares the running time of the fast equivalent-layer technique 
+Figure \ref{fig:time_fast_eqlayer_bccb} compares the runtime of the fast equivalent-layer technique 
 \citep{siqueira-etal2017} and of our method, considering a constant number of iterations $N^{it} = 50$. 
 We used a PC with an Intel Core i7 4790@3.6GHz processor and 16 GB of RAM memory.
 The computational efficiency of our approach is significantly superior to that of the 
@@ -597,5 +598,5 @@ We could not perform this comparison with a number of observations greater than 
 due to limitations of our PC in storing the full matrix $\mathbf{A}$.
 Figure \ref{fig:time_bccb} shows the running time of our method with a number of observations 
 up to  $25$ millions. 
-These results shows that, while the running time of our method is $\approx 30.9$ seconds for 
-$N = 1,000,000$, the fast equivalent-layer technique spends $\approx 46.8$ seconds for $N = 22,500$.
+These results shows that, while the running time of our method is $\approx 30.9$ s for 
+$N = 1,000,000$, the fast equivalent-layer technique spends $\approx 46.8$ s for $N = 22,500$.

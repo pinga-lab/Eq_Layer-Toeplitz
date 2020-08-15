@@ -10,7 +10,7 @@
 
 % Computational performance
 
-\plot{Figure2}{width=\textwidth}{
+\plot{Figure2}{width=10cm}{
 	{Comparison between the number of flops (equations \ref{eq:float_fast_eqlayer} and \ref{eq:float_bccb}) 
 	associated with the fast equivalent-layer technique \citep{siqueira-etal2017} and our method, 
 	for $N$ varying from $5,000$ to $1,000,000$. All values are computed with $N^{it} = 50$ 
@@ -19,20 +19,20 @@
 }
 
 \plot{Figure3}{width=10cm}{
-	{Comparison between the running time of the fast equivalent-layer technique \citep{siqueira-etal2017} and our method.
+	{Comparison between the runtime of the fast equivalent-layer technique \citep{siqueira-etal2017} and our method.
 	The values were obtained for $N^{it} = 50$ iterations.}
 	\label{fig:time_fast_eqlayer_bccb}
 }
 
 \plot{Figure4}{width=10cm}{
-	{Running time of our method for a number of observations $N$ up to $25$ millions. 
+	{Runtime of our method for a number of observations $N$ up to $25$ millions. 
 	The values were obtained for $N^{it} = 50$ iterations.}
 	\label{fig:time_bccb}
 }
 
 % Application to synthetic data
 
-\plot{synthetic_data_med}{width=13.5cm}{
+\plot{Figure5}{width=13.5cm}{
 	{Application to synthetic data. 
 	Noise-corrupted gravity data (in color map) produced by three synthetic sources: 
 	a sphere with density contrast $-1.25\, \mathrm{g/cm^3}$ and 
@@ -42,18 +42,18 @@
 	\label{fig:synthetic_data}
 }
 
-\plot{deltas_gz_med}{width=6cm}{
+\plot{Figure6}{width=6cm}{
 	{Application to synthetic data. 
 	Residuals between the simulated data (Figure \ref{fig:synthetic_data}) and 
 	predicted data produced by: (a) the fast equivalent-layer technique \citep{siqueira-etal2017} and (b) our method. 
 	The mean ($-4.493 \times 10^{-5}$ mGal) and standard deviation ($0.093$ mGal) for residuals shown in a and b are exactly the same.
 	(c) Difference between a and b.
 	The computation times spent by the fast equivalent-layer technique and 
-	our method were $10.416$ and $0.177$ seconds, respectively.}
+	our method were $10.416$ s and $0.177$ s, respectively.}
 	\label{fig:comparison_datafits}
 }
 
-\plot{upward_fourier_med}{width=13.5cm}{
+\plot{Figure7}{width=13.5cm}{
 	{Application to synthetic data.
 	(a) Noise-free gravity data produced by the synthetic sources at $z = -300$ m.
 	Residuals between the data shown in a and the upward-continued 
@@ -64,11 +64,11 @@
 	(d) the classical Fourier approach (not shown), with 
 	mean $-0.030$ mGal and standard deviation $0.262$ mGal. 
 	The computation times spent by the fast equivalent-layer technique and 
-	our method were $8.697$ and $0.005$ seconds, respectively.}
+	our method were $8.697$ s and $0.005$ s, respectively.}
 	\label{fig:upward_comparison}
 }
 
-\plot{downward_fourier_med}{width=13.5cm}{
+\plot{Figure8}{width=13.5cm}{
 	{Application to synthetic data. 
 	(a) Noise-free gravity data produced by the synthetic sources at $z = -50$ m.
 	Residuals between the data shown in a and the downward-continued 
@@ -79,13 +79,13 @@
 	(d) the classical Fourier approach (not shown), with 
 	mean $-0.030$ mGal and standard deviation $0.262$ mGal.
 	The computation times spent by the fast equivalent-layer technique and 
-	our method were $8.795$ and $0.004$ seconds, respectively.}
+	our method were $8.795$ s and $0.004$ s, respectively.}
 	\label{fig:downward_comparison}
 }
 
 % Application to field data
 
-\plot{carajas_real_data}{width=13.5cm}{
+\plot{Figure9}{width=13.5cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
 	Observed gravity data on a regular grid of $500 \times 500$ points, totaling $N = 250,000$ 
 	observations. The inset shows the study area (red rectangle) which covers the southeast part of 
@@ -93,7 +93,7 @@
 	\label{fig:carajas_real_data}
 }
 
-\plot{Carajas_gz_predito}{width=8cm}{
+\plot{Figure10}{width=8cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
 	(a) Predicted data produced by our method. (b) Residuals between the observed  
 	(Figure \ref{fig:carajas_real_data}) and the predicted data (panel a), with mean 
@@ -101,10 +101,10 @@
 	\label{fig:carajas_gz_predito_val}
 }
 
-\plot{up5000_carajas_500x500}{width=13.5cm}{
+\plot{Figure11}{width=13.5cm}{
 	{Application to field data over the Caraj{\'a}s Province, Brazil. 
 	The upward-continued gravity data obtained with our method $5,000$ m above the 
 	observed data (Figure \ref{fig:carajas_real_data}).
-	The total computation time for processing of the $250,000$ observations was $0.216$ seconds.}
+	The total computation time for processing of the $250,000$ observations was $0.216$ s.}
 	\label{fig:up2000_carajas_500x500}
 }
