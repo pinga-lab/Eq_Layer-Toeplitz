@@ -54,7 +54,8 @@ chose to test only up to 22,500 obervation points.*
 ![](manuscript/Fig/Figure4.png)
 
 **Figure 3:** *time necessary to run 50 iterations of this method. We run up to 25,000,000 
-observation points. The time to processes 1,000,000 observation points was approximately 30.9.
+observation points. The time to processes 1,000,000 observation points was approximately 30.9
+seconds.*
 
 
 ## Reproducing the results
